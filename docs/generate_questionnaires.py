@@ -10,6 +10,7 @@ from docx.shared import Inches, Pt, RGBColor
 
 
 OUTPUT = Path(__file__).with_name("Barangay_Pili_Questionnaires_Portrait_Format.docx")
+SELF_MADE_OUTPUT = Path(__file__).with_name("Barangay_Pili_Self_Made_Questionnaire.docx")
 
 ISO_SECTIONS = [
     ("Functional Suitability", [
@@ -112,38 +113,38 @@ USE_SECTIONS = [
 ]
 
 CUSTOM_SECTIONS = [
-    ("Access and Account Experience", [
-        "I can access the system when I need barangay services.",
-        "Account registration and email verification are clear and manageable.",
-        "Logging in and recovering a forgotten password are easy to complete.",
-        "My resident profile information is easy to review and update.",
+    ("Administrator Management Functions", [
+        "How functional is our system in terms of creating, viewing, updating, archiving, and restoring resident records?",
+        "How functional is our system in terms of managing certificate and clearance types, including fees, processing days, and requirements?",
+        "How functional is our system in terms of creating, viewing, updating, suspending, archiving, and restoring user accounts?",
+        "How functional is our system in terms of creating, viewing, updating, and archiving barangay officials' records?",
+        "How functional is our system in terms of viewing requests, updating their status, and archiving completed or cancelled requests?",
+        "How functional is our system in terms of adding summons or blotter requests and updating their status?",
     ]),
-    ("Clearance and Certificate Requests", [
-        "The system clearly explains the requirements for each clearance or certificate.",
-        "The online request form asks only for information needed to process my transaction.",
-        "Uploading supporting documents and proof of payment is straightforward.",
-        "I can review the details of a request before and after submitting it.",
-        "The system makes requesting and releasing barangay documents more organized.",
+    ("Dashboard Information", [
+        "How functional is our system in terms of displaying the total number of registered residents?",
+        "How functional is our system in terms of displaying the total number of requests?",
+        "How functional is our system in terms of displaying the total number of pending requests?",
+        "How functional is our system in terms of displaying the total number of approved requests?",
+        "How functional is our system in terms of displaying the total number of monthly requests?",
+        "How functional is our system in terms of displaying requests by certificate or clearance type?",
+        "How functional is our system in terms of displaying recent requests?",
     ]),
-    ("Tracking and Notifications", [
-        "The request status labels are clear and easy to understand.",
-        "The system provides timely updates when the status of my request changes.",
-        "Email or SMS notifications contain enough information about the next step I should take.",
-        "The tracking feature reduces the need to visit or contact the barangay office for updates.",
+    ("Reports and Resident Services", [
+        "How functional is our system in terms of generating and printing monthly transaction reports?",
+        "How functional is our system in terms of summarizing issued clearances and certificates, total transactions, total collections, and certificate types in monthly reports?",
+        "How functional is our system in terms of allowing residents to request barangay clearances and certificates?",
+        "How functional is our system in terms of allowing residents to view the status of their requests?",
+        "How functional is our system in terms of displaying guidelines and requirements for requesting barangay clearances and certificates?",
     ]),
-    ("Other Barangay Services and Information", [
-        "Barangay announcements and bulletins are timely and easy to understand.",
-        "The borrowing feature clearly shows the item, quantity, schedule, and request status.",
-        "The summons feature presents hearing schedules and case-related updates clearly.",
-        "The system makes important barangay information easier for residents to access.",
+    ("Mobile Application Accessibility", [
+        "How functional is our system in terms of allowing users to access the platform through mobile devices?",
+        "How functional is our system in terms of providing convenient access to barangay services through the mobile application?",
     ]),
-    ("Privacy, Trust, and Overall Acceptance", [
-        "I trust the system to handle my personal and transaction information appropriately.",
-        "The system gives me confidence that my submitted information reaches the barangay office.",
-        "The system reduces the time and effort required for barangay transactions.",
-        "I prefer using this system over a purely manual request process.",
-        "I would use this system for future barangay transactions.",
-        "The system is beneficial to Barangay Pili residents and staff.",
+    ("SMS Notifications", [
+        "How functional is our system in terms of sending real-time SMS updates about request statuses?",
+        "How functional is our system in terms of sending SMS reminders to residents?",
+        "How functional is our system in terms of sending important barangay announcements through SMS?",
     ]),
 ]
 
@@ -390,8 +391,8 @@ def build_document():
     )
     add_questionnaire_section(
         doc,
-        "C. SELF-MADE QUESTIONNAIRE: SYSTEM-SPECIFIC USER ACCEPTANCE AND FEEDBACK",
-        "This researcher-developed questionnaire is tailored to the actual services and features of the Barangay Pili system. Select N/A for a module you did not use, such as borrowing or summons.",
+        "C. SELF-MADE QUESTIONNAIRE: OBJECTIVE-BASED SYSTEM FUNCTIONALITY EVALUATION",
+        "How functional is our system in terms of the following objectives and system functions? Select N/A only for a feature you did not use or observe.",
         CUSTOM_SECTIONS,
     )
 
@@ -467,6 +468,125 @@ def build_document():
     doc.save(OUTPUT)
 
 
+def build_self_made_document():
+    doc = Document()
+    section = doc.sections[0]
+    section.orientation = WD_ORIENT.PORTRAIT
+    section.page_width = Inches(8.5)
+    section.page_height = Inches(11)
+    section.top_margin = Inches(0.45)
+    section.bottom_margin = Inches(0.45)
+    section.left_margin = Inches(0.4)
+    section.right_margin = Inches(0.4)
+
+    normal = doc.styles["Normal"]
+    normal.font.name = "Times New Roman"
+    normal._element.rPr.rFonts.set(qn("w:eastAsia"), "Times New Roman")
+    normal.font.size = Pt(10)
+
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    p.paragraph_format.space_after = Pt(2)
+    style_run(p.add_run("BARANGAY PILI CLEARANCE AND CERTIFICATE MANAGEMENT SYSTEM"), 14, True, (31, 78, 54))
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    p.paragraph_format.space_after = Pt(1)
+    style_run(p.add_run("OBJECTIVE-BASED SYSTEM FUNCTIONALITY QUESTIONNAIRE"), 13, True)
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    p.paragraph_format.space_after = Pt(8)
+    style_run(p.add_run("Barangay Pili, Madridejos, Cebu"), 10, False)
+
+    add_heading(doc, "Purpose", level=1)
+    add_text(doc, "This researcher-developed questionnaire evaluates the functionality of the Barangay Pili Clearance and Certificate Management System based on its stated objectives. Participation is voluntary. Responses will be kept confidential and used only for academic system evaluation.")
+
+    add_heading(doc, "Respondent Profile", level=1)
+    profile = doc.add_table(rows=2, cols=4)
+    profile.alignment = WD_TABLE_ALIGNMENT.CENTER
+    profile.autofit = False
+    style_table_borders(profile)
+    profile_values = [
+        ["Respondent type", "☐ Resident/User   ☐ Barangay Staff/Admin   ☐ IT Expert", "Date", "________________"],
+        ["Age", "__________", "Sex", "________________"],
+    ]
+    profile_widths = [1.05, 4.0, 0.6, 1.75]
+    for row, values in zip(profile.rows, profile_values):
+        for index, (cell, value, width) in enumerate(zip(row.cells, values, profile_widths)):
+            set_cell_width(cell, width)
+            cell.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
+            if index in (0, 2):
+                set_cell_shading(cell, "D9E8DE")
+            p = cell.paragraphs[0]
+            p.paragraph_format.space_after = Pt(0)
+            style_run(p.add_run(value), 9.5, index in (0, 2))
+
+    add_heading(doc, "Rating Scale", level=1)
+    scale = doc.add_table(rows=2, cols=6)
+    scale.alignment = WD_TABLE_ALIGNMENT.CENTER
+    scale.autofit = False
+    style_table_borders(scale)
+    scale_values = [
+        ["5", "4", "3", "2", "1", "N/A"],
+        ["Very Functional", "Functional", "Moderately Functional", "Less Functional", "Not Functional", "Not Applicable"],
+    ]
+    for row_index, row in enumerate(scale.rows):
+        for cell, value in zip(row.cells, scale_values[row_index]):
+            set_cell_width(cell, 1.23)
+            cell.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
+            if row_index == 0:
+                set_cell_shading(cell, "1F4E36")
+            p = cell.paragraphs[0]
+            p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            p.paragraph_format.space_after = Pt(0)
+            style_run(p.add_run(value), 9, True, (255, 255, 255) if row_index == 0 else None)
+
+    add_text(doc, "Instructions: Put one check mark in the rating column that best represents your assessment of each system function. Select N/A only when you did not use or observe the feature described.", bold_label="Instructions:")
+    add_questionnaire_section(
+        doc,
+        "SELF-MADE QUESTIONNAIRE: OBJECTIVE-BASED SYSTEM FUNCTIONALITY EVALUATION",
+        "How functional is our system in terms of the following objectives and system functions? Select N/A only for a feature you did not use or observe.",
+        CUSTOM_SECTIONS,
+    )
+
+    add_heading(doc, "Written Feedback and Recommendations", level=1)
+    add_text(doc, "Please provide specific feedback about your experience with the system. Your responses will guide future improvements.")
+    feedback = doc.add_table(rows=1, cols=2)
+    feedback.alignment = WD_TABLE_ALIGNMENT.CENTER
+    feedback.autofit = False
+    style_table_borders(feedback)
+    for cell, label, width in zip(feedback.rows[0].cells, ["Guide Question", "Response"], [3.2, 4.2]):
+        set_cell_width(cell, width)
+        set_cell_shading(cell, "1F4E36")
+        p = cell.paragraphs[0]
+        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        p.paragraph_format.space_after = Pt(0)
+        style_run(p.add_run(label), 9, True, (255, 255, 255))
+    repeat_table_header(feedback.rows[0])
+    for index, question in enumerate(OPEN_ENDED, 1):
+        row = feedback.add_row()
+        prevent_row_split(row)
+        for cell, width in zip(row.cells, [3.2, 4.2]):
+            set_cell_width(cell, width)
+        p = row.cells[0].paragraphs[0]
+        p.paragraph_format.space_after = Pt(0)
+        style_run(p.add_run(f"{index}. {question}"), 9)
+        p = row.cells[1].paragraphs[0]
+        p.paragraph_format.space_after = Pt(34)
+        style_run(p.add_run(""), 9)
+        if index % 2 == 0:
+            set_cell_shading(row.cells[0], "EDF3EF")
+            set_cell_shading(row.cells[1], "EDF3EF")
+
+    for section in doc.sections:
+        footer = section.footer.paragraphs[0]
+        footer.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        style_run(footer.add_run("Barangay Pili Self-Made System Questionnaire"), 8, False, (90, 90, 90))
+
+    doc.save(SELF_MADE_OUTPUT)
+
+
 if __name__ == "__main__":
     build_document()
+    build_self_made_document()
     print(f"Created: {OUTPUT}")
+    print(f"Created: {SELF_MADE_OUTPUT}")

@@ -96,8 +96,11 @@
                     </a>
                   @else
                     <a href="{{ route('admin.residents', ['edit' => $r->id, 'status' => $status, 'search' => $search]) }}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
-                    <a href="{{ route('admin.residents.delete', ['id' => $r->id]) }}" class="btn btn-danger btn-sm"
-                       onclick="return confirm('Remove this resident?')"><i class="fas fa-trash"></i></a>
+                    <button type="button" class="btn btn-danger btn-sm" title="Archive"
+                            data-url="{{ route('admin.residents.delete', ['id' => $r->id]) }}"
+                            data-name="{{ $r->last_name }}, {{ $r->first_name }} {{ $r->middle_name }}"
+                            data-has-account="{{ $r->user ? '1' : '0' }}"
+                            onclick="openArchiveModal(this)"><i class="fas fa-trash"></i></button>
                   @endif
                 </div>
               </td>
@@ -201,4 +204,40 @@
     </form>
   </div>
 </div>
+
+<!-- Archive Confirmation Modal -->
+<div class="modal-overlay" id="archiveModal">
+  <div class="modal-box" style="max-width:440px;">
+    <div class="modal-header">
+      <h5><i class="fas fa-archive" style="color:var(--danger);margin-right:8px;"></i>Archive Resident</h5>
+      <button type="button" class="modal-close" onclick="closeModal('archiveModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p style="margin-bottom:12px;">Are you sure you want to archive <strong id="archiveResidentName"></strong>?</p>
+      <p id="archiveAccountNote" class="text-muted" style="font-size:13px;margin-bottom:12px;">
+        <i class="fas fa-user-lock"></i> Their linked user account will also be deactivated and they will no longer be able to log in.
+      </p>
+      <p class="text-muted" style="font-size:13px;margin:0;">
+        <i class="fas fa-info-circle"></i> You can restore this record anytime from the Archive page.
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" onclick="closeModal('archiveModal')">Cancel</button>
+      <a href="#" id="archiveConfirmBtn" class="btn btn-danger" style="text-decoration:none;">
+        <i class="fas fa-archive"></i> Archive
+      </a>
+    </div>
+  </div>
+</div>
+@endsection
+
+@section('scripts')
+<script>
+  function openArchiveModal(btn) {
+    document.getElementById('archiveResidentName').textContent = btn.dataset.name.trim();
+    document.getElementById('archiveAccountNote').style.display = btn.dataset.hasAccount === '1' ? '' : 'none';
+    document.getElementById('archiveConfirmBtn').href = btn.dataset.url;
+    openModal('archiveModal');
+  }
+</script>
 @endsection
