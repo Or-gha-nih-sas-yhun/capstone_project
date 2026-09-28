@@ -163,6 +163,51 @@
     </div>
   </div>
 
+  <!-- Archived Officials -->
+  <div class="card">
+    <div class="card-header">
+      <h5><i class="fas fa-user-tie" style="color:var(--primary);margin-right:8px;"></i>Archived Barangay Officials ({{ count($officials) }})</h5>
+    </div>
+    <div class="table-wrapper">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Position</th>
+            <th>Term</th>
+            <th>Archived Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if ($officials->isEmpty())
+            <tr><td colspan="5" class="text-center text-muted" style="padding:20px;">No archived officials.</td></tr>
+          @else
+            @foreach ($officials as $o)
+              <tr>
+                <td style="font-weight:600;">{{ $o->name }}</td>
+                <td><span class="badge bg-secondary">{{ $o->position }}</span></td>
+                <td>
+                  <small>
+                    {{ $o->term_start ? \Carbon\Carbon::parse($o->term_start)->format('M d, Y') : '—' }}
+                    –
+                    {{ $o->term_end ? \Carbon\Carbon::parse($o->term_end)->format('M d, Y') : '—' }}
+                  </small>
+                </td>
+                <td><small>{{ \Carbon\Carbon::parse($o->archived_at)->format('M d, Y h:i A') }}</small></td>
+                <td>
+                  <a href="{{ route('admin.archive.restore', ['type' => 'official', 'id' => $o->id]) }}" class="btn btn-success btn-sm" onclick="return confirm('Restore this official?')">
+                    <i class="fas fa-undo"></i> Restore
+                  </a>
+                </td>
+              </tr>
+            @endforeach
+          @endif
+        </tbody>
+      </table>
+    </div>
+  </div>
+
   <!-- Archived Users -->
   <div class="card">
     <div class="card-header">

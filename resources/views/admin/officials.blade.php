@@ -115,6 +115,11 @@
         </div>
       </div>
       <div class="modal-footer">
+        @if ($editOfficial)
+          <button type="button" class="btn btn-danger" style="margin-right:auto;" onclick="openModal('archiveOfficialModal')">
+            <i class="fas fa-archive"></i> Archive
+          </button>
+        @endif
         <a class="btn btn-secondary" style="text-decoration:none;" href="{{ route('admin.officials') }}">Cancel</a>
         <button type="submit" class="btn btn-primary">
           <i class="fas fa-save"></i> {{ $editOfficial ? 'Update' : 'Save' }}
@@ -123,4 +128,31 @@
     </form>
   </div>
 </div>
+
+@if ($editOfficial)
+<!-- Archive Confirmation Modal -->
+<div class="modal-overlay" id="archiveOfficialModal">
+  <div class="modal-box" style="max-width:440px;">
+    <div class="modal-header">
+      <h5><i class="fas fa-archive" style="color:var(--danger);margin-right:8px;"></i>Archive Official</h5>
+      <button type="button" class="modal-close" onclick="closeModal('archiveOfficialModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p style="margin-bottom:12px;">Are you sure you want to archive <strong>{{ $editOfficial->name }}</strong> ({{ $editOfficial->position }})?</p>
+      <p class="text-muted" style="font-size:13px;margin-bottom:12px;">
+        <i class="fas fa-file-signature"></i> They will no longer appear on printed certificates or the officials list.
+      </p>
+      <p class="text-muted" style="font-size:13px;margin:0;">
+        <i class="fas fa-info-circle"></i> You can restore this record anytime from the Archive page.
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" onclick="closeModal('archiveOfficialModal')">Cancel</button>
+      <a href="{{ route('admin.officials.archive', ['id' => $editOfficial->id]) }}" class="btn btn-danger" style="text-decoration:none;">
+        <i class="fas fa-archive"></i> Archive
+      </a>
+    </div>
+  </div>
+</div>
+@endif
 @endsection

@@ -13,11 +13,11 @@ class OfficialController extends Controller
     {
         $editId = $request->input('edit');
 
-        $officials = Official::orderBy('sort_order')->orderBy('name')->get();
+        $officials = Official::whereNull('archived_at')->orderBy('sort_order')->orderBy('name')->get();
 
         $editOfficial = null;
         if ($editId) {
-            $editOfficial = Official::findOrFail($editId);
+            $editOfficial = Official::whereNull('archived_at')->findOrFail($editId);
         }
 
         return view('admin.officials', compact('officials', 'editOfficial'));
@@ -67,6 +67,21 @@ class OfficialController extends Controller
         }
 
         return redirect()->route('admin.officials')->with('success', $msg);
+    }
+
+    public function archive($id)
+    {
+        $official = Official::findOrFail($id);
+
+        $official->update([
+            'status' => 'inactive',
+            'archived_at' => now(),
+            'archived_by' => Auth::id()
+        ]);
+
+        ActivityLog::log('ARCHIVE_OFFICIAL', 'Officials', "Archived official: {$official->name}");
+
+        return redirect()->route('admin.officials')->with('success', 'Official archived safely. You can restore it from Archive.');
     }
 
     public function delete($id)

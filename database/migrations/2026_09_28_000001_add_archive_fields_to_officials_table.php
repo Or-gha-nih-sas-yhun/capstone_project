@@ -1,4 +1,3 @@
-https://github.com/Or-gha-nih-sas-yhun/capstone_project
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -13,8 +12,9 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::table('requests', function (Blueprint $table) {
-            $table->dateTime('expected_release_date')->nullable()->after('released_at');
+        Schema::table('officials', function (Blueprint $table) {
+            $table->dateTime('archived_at')->nullable()->after('sort_order');
+            $table->integer('archived_by')->nullable()->after('archived_at');
         });
     }
 
@@ -25,8 +25,8 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::table('requests', function (Blueprint $table) {
-            $table->dropColumn('expected_release_date');
+        Schema::table('officials', function (Blueprint $table) {
+            $table->dropColumn(['archived_at', 'archived_by']);
         });
     }
 };

@@ -7,6 +7,7 @@ use App\Models\Resident;
 use App\Models\Certificate;
 use App\Models\Request as CertificateRequest;
 use App\Models\Summon;
+use App\Models\Official;
 use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 
@@ -19,8 +20,9 @@ class ArchiveController extends Controller
         $requests = CertificateRequest::with(['resident', 'certificate'])->whereNotNull('archived_at')->orderBy('archived_at', 'desc')->get();
         $users = User::whereIn('role', ['admin', 'staff'])->whereNotNull('archived_at')->orderBy('archived_at', 'desc')->get();
         $summons = Summon::whereNotNull('archived_at')->orderBy('archived_at', 'desc')->get();
+        $officials = Official::whereNotNull('archived_at')->orderBy('archived_at', 'desc')->get();
 
-        return view('admin.archive', compact('residents', 'certificates', 'requests', 'users', 'summons'));
+        return view('admin.archive', compact('residents', 'certificates', 'requests', 'users', 'summons', 'officials'));
     }
 
     public function restore($type, $id)
@@ -78,6 +80,15 @@ class ArchiveController extends Controller
                 'archived_by' => null
             ]);
             $name = $summon->case_number;
+            $restored = true;
+        } elseif ($type === 'official') {
+            $official = Official::findOrFail($id);
+            $official->update([
+                'status' => 'active',
+                'archived_at' => null,
+                'archived_by' => null
+            ]);
+            $name = $official->name;
             $restored = true;
         }
 

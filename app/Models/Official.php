@@ -16,7 +16,9 @@ class Official extends Model
         'term_end',
         'photo',
         'status',
-        'sort_order'
+        'sort_order',
+        'archived_at',
+        'archived_by'
     ];
 
     /**
@@ -24,13 +26,14 @@ class Official extends Model
      */
     public static function getActiveOfficials()
     {
-        $officials = self::whereRaw('LOWER(status) = ?', ['active'])
+        $officials = self::whereNull('archived_at')
+            ->whereRaw('LOWER(status) = ?', ['active'])
             ->orderBy('sort_order')
             ->orderBy('name')
             ->get();
 
         if ($officials->isEmpty()) {
-            $officials = self::orderBy('sort_order')->orderBy('name')->get();
+            $officials = self::whereNull('archived_at')->orderBy('sort_order')->orderBy('name')->get();
         }
 
         return $officials;

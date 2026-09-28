@@ -168,6 +168,7 @@ Route::middleware(['auth', 'role:staff,admin'])->prefix('admin')->name('admin.')
     // Officials Management
     Route::get('/officials', [OfficialController::class, 'index'])->name('officials');
     Route::post('/officials/store', [OfficialController::class, 'store'])->name('officials.store');
+    Route::get('/officials/archive/{id}', [OfficialController::class, 'archive'])->name('officials.archive');
     Route::get('/officials/delete/{id}', [OfficialController::class, 'delete'])->name('officials.delete');
 
     // Admin Only sections
