@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Official online services portal for Barangay Pili. Request certificates, track status, and view announcements.">
   <link rel="icon" type="image/png" href="{{ asset('assets/images/pili_logo.png?v=2') }}">
-  <link rel="shortcut icon" href="{{ asset('favicon.ico?v=2') }}">
+  <link rel="shortcut icon" href="{{ asset('assets/images/pili_logo.png?v=2') }}">
   <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">

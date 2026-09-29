@@ -6,7 +6,7 @@
   <title>@yield('title', 'Dashboard') — {{ config('app.name', 'Barangay Pili') }} System</title>
   <meta name="description" content="Barangay Pili Clearance and Certificate Processing System">
   <link rel="icon" type="image/png" href="{{ asset('assets/images/pili_logo.png') }}">
-  <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
+  <link rel="shortcut icon" href="{{ asset('assets/images/pili_logo.png') }}">
   <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   @yield('styles')
@@ -174,9 +174,7 @@
       <!-- Topbar -->
       <header class="topbar no-print">
         <div class="topbar-left">
-          <button id="sidebar-toggle" style="background:none;border:none;cursor:pointer;font-size:20px;color:#374151;">
-            <i class="fas fa-bars"></i>
-          </button>
+          <!-- Hamburger menu removed -->
           @if(str_contains(request()->header('User-Agent', ''), 'BrgyPiliApp') && Auth::user()->role === 'resident')
             <img src="{{ asset('assets/images/pili_logo.png') }}" alt="Barangay Pili logo" style="width:34px;height:34px;object-fit:contain;margin-right:8px;">
           @endif
@@ -280,10 +278,7 @@
         <i class="fas fa-money-bill-wave"></i>
         <span>Payments</span>
       </a>
-      <button class="mobile-nav-item" onclick="document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebar-overlay').classList.toggle('show');">
-        <i class="fas fa-bars"></i>
-        <span>More</span>
-      </button>
+
       <button class="mobile-nav-item" style="color:#dc2626;" onclick="document.getElementById('logoutModal').style.display='flex'">
         <i class="fas fa-sign-out-alt"></i>
         <span>Logout</span>
@@ -305,10 +300,7 @@
         <i class="fas fa-bullhorn"></i>
         <span>Notices</span>
       </a>
-      <button class="mobile-nav-item" onclick="document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebar-overlay').classList.toggle('show');">
-        <i class="fas fa-bars"></i>
-        <span>More</span>
-      </button>
+
       <button class="mobile-nav-item" style="color:#dc2626;" onclick="document.getElementById('logoutModal').style.display='flex'">
         <i class="fas fa-sign-out-alt"></i>
         <span>Logout</span>
