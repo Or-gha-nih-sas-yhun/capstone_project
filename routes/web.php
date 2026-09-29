@@ -118,6 +118,7 @@ Route::middleware(['auth', 'role:resident'])->prefix('resident')->name('resident
 
     // Borrow Tents/Chairs
     Route::get('/borrows', [BorrowRequestController::class, 'residentIndex'])->name('borrows');
+    Route::get('/borrows/check-availability', [BorrowRequestController::class, 'checkAvailability'])->name('borrows.check_availability');
     Route::post('/borrows/store', [BorrowRequestController::class, 'store'])->name('borrows.store');
 });
 
