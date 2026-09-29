@@ -159,7 +159,7 @@
         @if ($requests->isEmpty())
           <tr>
             <td colspan="8" class="text-center" style="padding:40px;">
-              <div style="font-size:40px;margin-bottom:10px;">📭</div>
+              <div style="font-size:40px;margin-bottom:10px;color:var(--primary);"><i class="fas fa-inbox"></i></div>
               <p class="text-muted">No requests yet.</p>
               <a href="{{ route('resident.request') }}" class="btn btn-primary" style="margin-top:8px;">
                 <i class="fas fa-plus"></i> Make a Request
@@ -220,7 +220,7 @@
   <div class="request-cards" style="padding:12px;">
     @if ($requests->isEmpty())
       <div style="text-align:center;padding:40px 16px;">
-        <div style="font-size:48px;margin-bottom:12px;">📭</div>
+        <div style="font-size:48px;margin-bottom:12px;color:var(--primary);"><i class="fas fa-inbox"></i></div>
         <p class="text-muted" style="margin-bottom:16px;">No requests yet.</p>
         <a href="{{ route('resident.request') }}" class="btn btn-primary">
           <i class="fas fa-plus"></i> Make a Request

@@ -30,7 +30,7 @@
 <body>
 <div class="track-page">
   <div class="track-header">
-    <div style="font-size:48px;margin-bottom:12px;">🔍</div>
+    <div style="font-size:48px;margin-bottom:12px;color:#b91c1c;"><i class="fas fa-search-location"></i></div>
     <h1>Track Your Request</h1>
     <p>Enter your tracking number to view the status of your request.</p>
   </div>

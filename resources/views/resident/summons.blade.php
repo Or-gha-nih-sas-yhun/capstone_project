@@ -41,7 +41,7 @@
         @if ($summons->isEmpty())
           <tr>
             <td colspan="8" class="text-center" style="padding:40px;">
-              <div style="font-size:40px;margin-bottom:10px;">🕊️</div>
+              <div style="font-size:40px;margin-bottom:10px;color:var(--primary);"><i class="fas fa-balance-scale"></i></div>
               <p class="text-muted">You do not have any registered summons or blotters active.</p>
             </td>
           </tr>
@@ -131,7 +131,7 @@
   <div class="summon-cards mobile-card-list">
     @if ($summons->isEmpty())
       <div style="text-align:center;padding:40px 16px;">
-        <div style="font-size:40px;margin-bottom:10px;">🕊️</div>
+        <div style="font-size:40px;margin-bottom:10px;color:var(--primary);"><i class="fas fa-balance-scale"></i></div>
         <p class="text-muted">You do not have any registered summons or blotters active.</p>
       </div>
     @else

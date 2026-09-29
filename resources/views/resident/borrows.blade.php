@@ -72,7 +72,7 @@
         @if ($borrows->isEmpty())
           <tr>
             <td colspan="7" class="text-center" style="padding:40px;">
-              <div style="font-size:40px;margin-bottom:10px;">⛺🪑</div>
+              <div style="font-size:40px;margin-bottom:10px;color:var(--primary);"><i class="fas fa-campground"></i> <i class="fas fa-chair"></i></div>
               <p class="text-muted">You have no active borrow requests yet.</p>
               <button type="button" class="btn btn-primary" onclick="openBorrowModal()" style="margin-top:8px;">
                 <i class="fas fa-plus"></i> Request Borrow Equipment
@@ -134,7 +134,7 @@
   <div class="borrow-cards mobile-card-list">
     @if ($borrows->isEmpty())
       <div style="text-align:center;padding:40px 16px;">
-        <div style="font-size:40px;margin-bottom:10px;">⛺🪑</div>
+        <div style="font-size:40px;margin-bottom:10px;color:var(--primary);"><i class="fas fa-campground"></i> <i class="fas fa-chair"></i></div>
         <p class="text-muted" style="margin-bottom:16px;">You have no active borrow requests yet.</p>
         <button type="button" class="btn btn-primary" onclick="openBorrowModal()">
           <i class="fas fa-plus"></i> Request Borrow Equipment

@@ -113,7 +113,7 @@
                      onchange="updateFee({{ $c->fee }}, '{{ htmlspecialchars($c->requirements ?? '', ENT_QUOTES) }}')">
               <div class="cert-card {{ old('certificate_id') == $c->id ? 'selected' : '' }}" id="cert-{{ $c->id }}">
                 <span class="cert-check-indicator"><i class="fas fa-check"></i></span>
-                <div style="font-size:26px; margin-bottom:6px;">📄</div>
+                <div style="font-size:22px; margin-bottom:6px; color:var(--primary);"><i class="fas fa-file-alt"></i></div>
                 <div style="font-size:13px; font-weight:700; color:#1e293b; margin-bottom:4px; line-height:1.3;">
                   {{ $c->name }}
                 </div>
