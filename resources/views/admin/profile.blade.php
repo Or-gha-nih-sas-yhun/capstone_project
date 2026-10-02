@@ -10,8 +10,8 @@
       <div style="padding:28px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
         <div
           style="width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));
-                      border:4px solid #fff;display:flex;align-items:center;justify-content:center;
-                      font-size:32px;font-weight:800;color:#fff;box-shadow: 0 4px 6px rgba(0,0,0,0.15); overflow:hidden; flex-shrink: 0;">
+                        border:4px solid #fff;display:flex;align-items:center;justify-content:center;
+                        font-size:32px;font-weight:800;color:#fff;box-shadow: 0 4px 6px rgba(0,0,0,0.15); overflow:hidden; flex-shrink: 0;">
           @if ($user->photo)
             <img src="{{ asset('assets/uploads/' . $user->photo) }}" alt="Profile photo"
               style="width:100%;height:100%;object-fit:cover;">
@@ -20,7 +20,7 @@
           @endif
         </div>
         <div>
-          <div style="font-size:22px;font-weight:800;">@Admin</div>
+          <div style="font-size:22px;font-weight:800;">Admin</div>
           <div style="color:#6b7280;font-size:14px;margin-bottom:8px;">{{ $user->email }}</div>
           <div style="display:flex;flex-wrap:wrap;gap:16px;font-size:13px;color:#374151;">
             <span><i class="fas fa-shield-alt" style="color:var(--primary);margin-right:4px;"></i>System
