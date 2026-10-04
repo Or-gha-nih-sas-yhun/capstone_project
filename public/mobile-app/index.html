@@ -1,0 +1,1937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Barangay Pili — Mobile Resident Portal</title>
+  <link rel="icon" type="image/png" href="../assets/images/pili_logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    /* ── CSS Design Tokens ─────────────────────────────────── */
+    :root {
+      --primary: #b91c1c;         /* Government Red */
+      --primary-dark: #881337;    /* Deep Maroon */
+      --primary-light: #fef2f2;   /* Subtle Red Tint */
+      --primary-border: #fecaca;  /* Soft Red Border */
+      --accent: #dc2626;          /* Vibrant Red */
+      
+      --neutral-50: #f8fafc;
+      --neutral-100: #f1f5f9;
+      --neutral-200: #e2e8f0;
+      --neutral-300: #cbd5e1;
+      --neutral-400: #94a3b8;
+      --neutral-500: #64748b;
+      --neutral-600: #475569;
+      --neutral-700: #334155;
+      --neutral-800: #1e293b;
+      --neutral-900: #0f172a;
+
+      --status-pending-bg: #fef3c7;
+      --status-pending-color: #92400e;
+      --status-processing-bg: #e0f2fe;
+      --status-processing-color: #075985;
+      --status-approved-bg: #dcfce7;
+      --status-approved-color: #166534;
+      --status-ready-bg: #ede9fe;
+      --status-ready-color: #5b21b6;
+      --status-completed-bg: #ecfdf5;
+      --status-completed-color: #065f46;
+      --status-rejected-bg: #fee2e2;
+      --status-rejected-color: #991b1b;
+
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 22px;
+      --radius-full: 9999px;
+
+      --shadow-xs: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-sm: 0 2px 6px rgba(15, 23, 42, 0.05);
+      --shadow-md: 0 6px 16px rgba(15, 23, 42, 0.08);
+      --shadow-lg: 0 12px 28px rgba(15, 23, 42, 0.12);
+
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: #0f172a;
+      color: var(--neutral-800);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 10px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Android Frame Container ───────────────────────────── */
+    .app-viewport-wrapper {
+      width: 100%;
+      max-width: 412px;
+      height: 870px;
+      max-height: 94vh;
+      background: #ffffff;
+      border-radius: 36px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.6), 0 0 0 10px #1e293b;
+      border: 3px solid #334155;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 0;
+        background: #ffffff;
+      }
+      .app-viewport-wrapper {
+        max-width: 100%;
+        height: 100vh;
+        max-height: 100vh;
+        border-radius: 0;
+        box-shadow: none;
+        border: none;
+      }
+    }
+
+    /* Android Status Bar */
+    .android-status-bar {
+      height: 32px;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--neutral-700);
+      z-index: 99;
+      flex-shrink: 0;
+    }
+    .android-status-bar.red-header {
+      background: var(--primary);
+      color: #ffffff;
+    }
+    .status-icons {
+      display: flex;
+      gap: 6px;
+      font-size: 11px;
+    }
+
+    /* Screen Viewport & Transitions */
+    .app-screen-container {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      position: relative;
+      background: var(--neutral-50);
+      display: flex;
+      flex-direction: column;
+      scroll-behavior: smooth;
+    }
+
+    .screen {
+      display: none;
+      width: 100%;
+      min-height: 100%;
+      flex-direction: column;
+      animation: fadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .screen.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── App Top Header ────────────────────────────────────── */
+    .app-topbar {
+      height: 56px;
+      background: #ffffff;
+      border-bottom: 1px solid var(--neutral-200);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      position: sticky;
+      top: 0;
+      z-index: 80;
+      flex-shrink: 0;
+    }
+    .app-topbar.brand-header {
+      background: linear-gradient(135deg, var(--primary) 0%, #991b1b 100%);
+      color: #ffffff;
+      border-bottom: none;
+    }
+    .topbar-left, .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .topbar-title {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .topbar-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+      font-size: 16px;
+      position: relative;
+    }
+    .topbar-btn:active {
+      background: rgba(0,0,0,0.06);
+    }
+    .brand-header .topbar-btn:active {
+      background: rgba(255,255,255,0.15);
+    }
+    .btn-badge {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 9px;
+      height: 9px;
+      background: #fbbf24;
+      border: 1.5px solid #ffffff;
+      border-radius: 50%;
+    }
+
+    /* ── Bottom Navigation Bar ─────────────────────────────── */
+    .app-bottom-nav {
+      height: 64px;
+      background: #ffffff;
+      border-top: 1px solid var(--neutral-200);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0 6px;
+      flex-shrink: 0;
+      z-index: 90;
+      box-shadow: 0 -4px 16px rgba(0,0,0,0.04);
+    }
+    .nav-tab-item {
+      flex: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      background: none;
+      border: none;
+      color: var(--neutral-500);
+      cursor: pointer;
+      font-family: inherit;
+      text-decoration: none;
+      position: relative;
+      transition: all 0.15s ease;
+    }
+    .nav-tab-item i {
+      font-size: 19px;
+      transition: transform 0.15s ease;
+    }
+    .nav-tab-item span {
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .nav-tab-item.active {
+      color: var(--primary);
+    }
+    .nav-tab-item.active i {
+      transform: translateY(-2px);
+    }
+    .nav-tab-item.active span {
+      font-weight: 700;
+    }
+    .nav-badge {
+      position: absolute;
+      top: 8px;
+      right: 24%;
+      background: var(--primary);
+      color: #fff;
+      font-size: 9.5px;
+      font-weight: 700;
+      padding: 1px 5px;
+      border-radius: var(--radius-full);
+      border: 1.5px solid #ffffff;
+      line-height: 1;
+    }
+
+    /* ── Typography & Components ───────────────────────────── */
+    h1, h2, h3, h4, h5 {
+      color: var(--neutral-900);
+      font-weight: 700;
+      letter-spacing: -0.015em;
+    }
+    p {
+      color: var(--neutral-600);
+      font-size: 13.5px;
+      line-height: 1.5;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 20px;
+      font-size: 14.5px;
+      font-weight: 700;
+      font-family: inherit;
+      border-radius: var(--radius-md);
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+    .btn:active {
+      transform: scale(0.98);
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(185, 28, 28, 0.22);
+    }
+    .btn-primary:active {
+      background: var(--primary-dark);
+    }
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--neutral-700);
+      border-color: var(--neutral-300);
+    }
+    .btn-secondary:active {
+      background: var(--neutral-100);
+    }
+    .btn-outline-primary {
+      background: transparent;
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+    .btn-outline-primary:active {
+      background: var(--primary-light);
+    }
+    .btn-sm {
+      padding: 8px 14px;
+      font-size: 12.5px;
+      border-radius: var(--radius-sm);
+    }
+    .btn-block {
+      width: 100%;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-label {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--neutral-700);
+      margin-bottom: 6px;
+    }
+    .form-control, .form-select {
+      width: 100%;
+      height: 48px;
+      padding: 0 14px;
+      font-size: 15px;
+      font-family: inherit;
+      background: #ffffff;
+      border: 1.5px solid var(--neutral-300);
+      border-radius: var(--radius-md);
+      color: var(--neutral-900);
+      transition: border-color 0.15s ease;
+    }
+    .form-control:focus, .form-select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(185, 28, 28, 0.12);
+    }
+    textarea.form-control {
+      height: auto;
+      padding: 12px 14px;
+      resize: vertical;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 9px;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: var(--radius-full);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .badge-pending    { background: var(--status-pending-bg); color: var(--status-pending-color); }
+    .badge-processing { background: var(--status-processing-bg); color: var(--status-processing-color); }
+    .badge-approved   { background: var(--status-approved-bg); color: var(--status-approved-color); }
+    .badge-ready      { background: var(--status-ready-bg); color: var(--status-ready-color); }
+    .badge-completed  { background: var(--status-completed-bg); color: var(--status-completed-color); }
+    .badge-rejected   { background: var(--status-rejected-bg); color: var(--status-rejected-color); }
+
+    /* Cards */
+    .card {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--neutral-200);
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* ── Modals & Bottom Sheets ────────────────────────────── */
+    .modal-backdrop {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeIn 0.15s ease;
+    }
+    .modal-dialog {
+      background: #ffffff;
+      width: 100%;
+      max-width: 330px;
+      border-radius: var(--radius-xl);
+      padding: 24px 20px;
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+    }
+    .modal-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 22px;
+    }
+    .modal-icon.success {
+      background: #dcfce7;
+      color: #166534;
+    }
+    .modal-icon.danger {
+      background: #fee2e2;
+      color: var(--primary);
+    }
+    .modal-icon.warning {
+      background: #fef3c7;
+      color: #b45309;
+    }
+
+    /* ── Screen Specific Styles ────────────────────────────── */
+
+    /* 1. Splash Screen */
+    #screen-splash {
+      background: linear-gradient(180deg, #ffffff 0%, var(--primary-light) 60%, #ffe4e6 100%);
+      justify-content: space-between;
+      align-items: center;
+      padding: 60px 24px 40px;
+      text-align: center;
+    }
+    .splash-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: auto;
+      margin-bottom: auto;
+    }
+    .splash-logo-box {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: #ffffff;
+      padding: 12px;
+      box-shadow: 0 12px 30px rgba(185, 28, 28, 0.15);
+      border: 3px solid #ffffff;
+      margin-bottom: 24px;
+      animation: pulseLogo 2s infinite ease-in-out;
+    }
+    @keyframes pulseLogo {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+    }
+    .splash-logo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .splash-title {
+      font-size: 26px;
+      font-weight: 900;
+      color: var(--primary);
+      margin-bottom: 6px;
+      letter-spacing: -0.02em;
+    }
+    .splash-sub {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--neutral-600);
+      max-width: 240px;
+    }
+    .splash-footer {
+      font-size: 11.5px;
+      color: var(--neutral-400);
+      font-weight: 500;
+    }
+
+    /* 2. Login Screen */
+    #screen-login {
+      background: #ffffff;
+      padding: 32px 20px 24px;
+    }
+    .auth-brand-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .auth-brand-logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: var(--shadow-sm);
+    }
+    .auth-brand-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    /* 4. Home Dashboard */
+    .home-banner-card {
+      background: linear-gradient(135deg, var(--primary) 0%, #991b1b 100%);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+      color: #ffffff;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(185, 28, 28, 0.25);
+    }
+    .home-banner-card::after {
+      content: '';
+      position: absolute;
+      right: -20px;
+      bottom: -20px;
+      width: 130px;
+      height: 130px;
+      background: radial-gradient(circle, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 70%);
+      border-radius: 50%;
+    }
+    .quick-actions-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .quick-action-btn {
+      background: #ffffff;
+      border: 1px solid var(--neutral-200);
+      border-radius: var(--radius-md);
+      padding: 14px 8px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: var(--shadow-xs);
+      transition: all 0.15s ease;
+    }
+    .quick-action-btn:active {
+      transform: scale(0.96);
+      background: var(--primary-light);
+      border-color: var(--primary-border);
+    }
+    .quick-action-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+    .quick-action-btn span {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--neutral-800);
+      line-height: 1.25;
+    }
+
+    /* Service Grid */
+    .services-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .service-card-item {
+      background: #ffffff;
+      border: 1px solid var(--neutral-200);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      box-shadow: var(--shadow-xs);
+      transition: all 0.15s ease;
+    }
+    .service-card-item:active {
+      background: #f8fafc;
+      border-color: var(--neutral-300);
+      transform: translateX(2px);
+    }
+    .service-icon-box {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    /* 6. Requests Cards */
+    .requests-tab-bar {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 12px 16px 6px;
+      background: #ffffff;
+      border-bottom: 1px solid var(--neutral-200);
+      scrollbar-width: none;
+    }
+    .requests-tab-bar::-webkit-scrollbar { display: none; }
+    .req-filter-chip {
+      padding: 6px 12px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 600;
+      background: var(--neutral-100);
+      color: var(--neutral-600);
+      border: 1px solid transparent;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .req-filter-chip.active {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .request-list-card {
+      background: #ffffff;
+      border: 1px solid var(--neutral-200);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow-xs);
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+    .request-list-card:active {
+      transform: scale(0.99);
+      border-color: var(--neutral-300);
+    }
+    .req-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+    .req-ref-num {
+      font-size: 11px;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      color: var(--neutral-500);
+      margin-top: 2px;
+    }
+
+    /* 7. Tracker Timeline */
+    .tracker-timeline {
+      padding: 10px 0 10px 8px;
+    }
+    .timeline-step {
+      display: flex;
+      gap: 16px;
+      position: relative;
+      padding-bottom: 24px;
+    }
+    .timeline-step:last-child {
+      padding-bottom: 0;
+    }
+    .timeline-step::before {
+      content: '';
+      position: absolute;
+      left: 13px;
+      top: 26px;
+      bottom: 0;
+      width: 2px;
+      background: var(--neutral-200);
+    }
+    .timeline-step.completed::before {
+      background: #16a34a;
+    }
+    .timeline-step:last-child::before {
+      display: none;
+    }
+    .step-marker {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--neutral-200);
+      color: var(--neutral-500);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+      z-index: 2;
+    }
+    .timeline-step.completed .step-marker {
+      background: #16a34a;
+      color: #ffffff;
+    }
+    .timeline-step.active-step .step-marker {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 0 0 4px var(--primary-light);
+    }
+
+    /* 8. Notification Cards */
+    .notif-card {
+      background: #ffffff;
+      border: 1px solid var(--neutral-200);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: flex;
+      gap: 12px;
+      margin-bottom: 10px;
+      box-shadow: var(--shadow-xs);
+    }
+    .notif-card.unread {
+      border-left: 4px solid var(--primary);
+      background: #ffffff;
+    }
+    .notif-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    /* 10. Certificate Watermark Preview */
+    .cert-preview-sheet {
+      background: #fff;
+      border: 6px double #b91c1c;
+      padding: 24px 18px;
+      border-radius: 6px;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+      margin: 16px 0;
+    }
+    .cert-watermark-seal {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 220px;
+      height: 220px;
+      opacity: 0.08;
+      pointer-events: none;
+    }
+    .cert-seal-header {
+      text-align: center;
+      margin-bottom: 16px;
+      border-bottom: 1.5px solid #0f172a;
+      padding-bottom: 12px;
+    }
+
+    /* 11. Empty State Box */
+    .empty-state-box {
+      text-align: center;
+      padding: 48px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .empty-state-icon {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: var(--neutral-100);
+      color: var(--neutral-400);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Android Phone Mockup Frame -->
+  <div class="app-viewport-wrapper">
+    
+    <!-- Android Top Status Bar -->
+    <div class="android-status-bar" id="androidStatusBar">
+      <span id="statusBarTime">9:41</span>
+      <div class="status-icons">
+        <i class="fas fa-signal"></i>
+        <i class="fas fa-wifi"></i>
+        <i class="fas fa-battery-full"></i>
+      </div>
+    </div>
+
+    <!-- Active Screen Viewport -->
+    <div class="app-screen-container">
+
+      <!-- ========================================================
+           SCREEN 1: SPLASH SCREEN
+      ======================================================== -->
+      <section class="screen active" id="screen-splash">
+        <div></div>
+        <div class="splash-center">
+          <div class="splash-logo-box">
+            <img src="../assets/images/pili_logo.png" alt="Barangay Pili Seal">
+          </div>
+          <h1 class="splash-title">Barangay Pili</h1>
+          <p class="splash-sub">Clearance & Certificate Processing System</p>
+          <div style="margin-top: 32px; width: 100%;">
+            <button class="btn btn-primary btn-block" onclick="navigateTo('screen-login')">
+              Get Started <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+        <div class="splash-footer">
+          Municipality of Madridejos, Cebu · Resident Portal
+        </div>
+      </section>
+
+      <!-- ========================================================
+           SCREEN 2: LOGIN SCREEN
+      ======================================================== -->
+      <section class="screen" id="screen-login">
+        <div class="auth-brand-row">
+          <div class="auth-brand-logo">
+            <img src="../assets/images/pili_logo.png" alt="Logo">
+          </div>
+          <div>
+            <h2 style="font-size: 19px;">Barangay Pili</h2>
+            <p style="font-size: 12px; margin-top: 2px;">Resident e-Portal</p>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 24px;">
+          <h1 style="font-size: 24px; margin-bottom: 6px;">Welcome Back</h1>
+          <p>Sign in to access your barangay clearances and documents.</p>
+        </div>
+
+        <form id="loginForm" onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label class="form-label">Email or Username</label>
+            <div style="position: relative;">
+              <input type="text" id="loginUsername" class="form-control" placeholder="e.g. maria.santos" required value="maria.santos">
+              <i class="far fa-user" style="position: absolute; right: 14px; top: 16px; color: var(--neutral-400);"></i>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <div style="position: relative;">
+              <input type="password" id="loginPassword" class="form-control" placeholder="Enter password" required value="password123">
+              <i class="far fa-eye" id="togglePasswordBtn" onclick="togglePasswordVisibility('loginPassword', this)" style="position: absolute; right: 14px; top: 16px; color: var(--neutral-400); cursor: pointer;"></i>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; font-size: 13px;">
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--neutral-700);">
+              <input type="checkbox" checked style="accent-color: var(--primary);"> Remember Me
+            </label>
+            <a href="javascript:void(0)" onclick="showToast('Password reset link sent to your registered email.')" style="color: var(--primary); font-weight: 600; text-decoration: none;">Forgot Password?</a>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block" style="height: 50px;">
+            <i class="fas fa-sign-in-alt"></i> Login
+          </button>
+        </form>
+
+        <div style="text-align: center; margin-top: 32px; font-size: 13.5px; color: var(--neutral-600);">
+          Don't have an account? 
+          <a href="javascript:void(0)" onclick="navigateTo('screen-register')" style="color: var(--primary); font-weight: 700; text-decoration: none;">Register here</a>
+        </div>
+      </section>
+
+      <!-- ========================================================
+           SCREEN 3: REGISTRATION SCREEN
+      ======================================================== -->
+      <section class="screen" id="screen-register" style="background: #ffffff; padding: 20px 20px 32px;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+          <button class="topbar-btn" onclick="navigateTo('screen-login')" style="margin-left: -8px;">
+            <i class="fas fa-arrow-left"></i>
+          </button>
+          <h2 style="font-size: 20px;">Create Resident Account</h2>
+        </div>
+
+        <!-- Admin Approval Notice Banner -->
+        <div style="background: #fffbeb; border-left: 4px solid #f59e0b; padding: 12px 14px; border-radius: 8px; margin-bottom: 20px;">
+          <div style="display: flex; gap: 10px; align-items: flex-start;">
+            <i class="fas fa-shield-halved" style="color: #d97706; margin-top: 2px;"></i>
+            <div style="font-size: 12.5px; color: #92400e; line-height: 1.45;">
+              <strong>Admin Verification Required:</strong> Your account registration will be reviewed by Barangay Pili officials before login access is activated.
+            </div>
+          </div>
+        </div>
+
+        <form id="registerForm" onsubmit="handleRegister(event)">
+          <div class="form-group">
+            <label class="form-label">Full Name (First, Middle, Last) *</label>
+            <input type="text" class="form-control" placeholder="e.g. Maria Cruz Santos" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Barangay Pili Address (Purok/Street) *</label>
+            <input type="text" class="form-control" placeholder="e.g. Purok Mangga, Barangay Pili" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Contact Number (11-digits) *</label>
+            <input type="tel" class="form-control" placeholder="09123456789" required pattern="[0-9]{11}">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Email Address *</label>
+            <input type="email" class="form-control" placeholder="maria.santos@email.com" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Password *</label>
+            <input type="password" class="form-control" placeholder="Create secure password" required minlength="6">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Confirm Password *</label>
+            <input type="password" class="form-control" placeholder="Re-type password" required minlength="6">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Valid ID / Profile Photo (Optional)</label>
+            <input type="file" class="form-control" accept="image/*" style="padding-top: 10px;">
+            <small style="color: var(--neutral-500); font-size: 11px;">Upload Barangay ID or Government-issued ID for faster approval.</small>
+          </div>
+
+          <div style="margin: 20px 0;">
+            <label style="display: flex; align-items: flex-start; gap: 10px; font-size: 12.5px; color: var(--neutral-700); cursor: pointer;">
+              <input type="checkbox" required style="margin-top: 3px; accent-color: var(--primary);">
+              <span>I certify that all information provided is true and I accept the <a href="javascript:void(0)" style="color: var(--primary);">Terms and Conditions</a> of Barangay Pili.</span>
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block" style="height: 48px;">
+            <i class="fas fa-user-plus"></i> Create Account
+          </button>
+        </form>
+      </section>
+
+      <!-- ========================================================
+           SCREEN 4: HOME DASHBOARD
+      ======================================================== -->
+      <section class="screen" id="screen-home">
+        <!-- Dashboard Topbar -->
+        <header class="app-topbar brand-header">
+          <div class="topbar-left">
+            <div style="width: 32px; height: 32px; border-radius: 50%; background: #fff; padding: 2px;">
+              <img src="../assets/images/pili_logo.png" alt="Logo" style="width: 100%; height: 100%; object-fit: contain;">
+            </div>
+            <div>
+              <div style="font-size: 11px; opacity: 0.9;">Barangay Pili</div>
+              <div class="topbar-title">Hello, Maria!</div>
+            </div>
+          </div>
+          <div class="topbar-right">
+            <button class="topbar-btn" onclick="navigateTo('screen-notifications')" title="Notifications">
+              <i class="fas fa-bell"></i>
+              <span class="btn-badge"></span>
+            </button>
+          </div>
+        </header>
+
+        <div style="padding: 16px; flex: 1;">
+          <!-- Welcome Banner Card -->
+          <div class="home-banner-card">
+            <h3 style="color: #fff; font-size: 18px; margin-bottom: 4px;">Clearance e-Services</h3>
+            <p style="color: rgba(255,255,255,0.9); font-size: 13px; max-width: 260px;">
+              Request your barangay documents easily and track processing in real time.
+            </p>
+          </div>
+
+          <!-- Quick Actions -->
+          <div style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+            <h4 style="font-size: 14.5px;">Quick Actions</h4>
+          </div>
+          <div class="quick-actions-row">
+            <div class="quick-action-btn" onclick="openRequestModal('Barangay Clearance', 50)">
+              <div class="quick-action-icon"><i class="fas fa-file-shield"></i></div>
+              <span>Request Clearance</span>
+            </div>
+            <div class="quick-action-btn" onclick="openRequestModal('Certificate of Indigency', 0)">
+              <div class="quick-action-icon"><i class="fas fa-file-invoice"></i></div>
+              <span>Request Certificate</span>
+            </div>
+            <div class="quick-action-btn" onclick="navigateTo('screen-requests')">
+              <div class="quick-action-icon"><i class="fas fa-list-check"></i></div>
+              <span>View Requests</span>
+            </div>
+          </div>
+
+          <!-- Document Services List -->
+          <div style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+            <h4 style="font-size: 14.5px;">Document & Barangay Services</h4>
+            <span style="font-size: 11.5px; color: var(--neutral-500);">7 available</span>
+          </div>
+
+          <div class="services-grid">
+            <div class="service-card-item" onclick="openRequestModal('Barangay Clearance', 50)">
+              <div class="service-icon-box" style="background: #fee2e2; color: #b91c1c;">
+                <i class="fas fa-file-shield"></i>
+              </div>
+              <div style="flex: 1; min-width: 0;">
+                <div style="font-size: 14px; font-weight: 700; color: var(--neutral-900);">Barangay Clearance</div>
+                <div style="font-size: 12px; color: var(--neutral-500);">For employment, police clearance, ID requirement</div>
+              </div>
+              <span class="badge" style="background:#f1f5f9; color:#475569;">₱50.00</span>
+            </div>
+
+            <div class="service-card-item" onclick="openRequestModal('Certificate of Indigency', 0)">
+              <div class="service-icon-box" style="background: #dcfce7; color: #15803d;">
+                <i class="fas fa-hand-holding-heart"></i>
+              </div>
+              <div style="flex: 1; min-width: 0;">
+                <div style="font-size: 14px; font-weight: 700; color: var(--neutral-900);">Certificate of Indigency</div>
+                <div style="font-size: 12px; color: var(--neutral-500);">For medical assistance, scholarships, social services</div>
+              </div>
+              <span class="badge" style="background:#dcfce7; color:#15803d;">FREE</span>
+            </div>
+
+            <div class="service-card-item" onclick="openRequestModal('Certificate of Residency', 50)">
+              <div class="service-icon-box" style="background: #e0f2fe; color: #0369a1;">
+                <i class="fas fa-house-user"></i>
+              </div>
+              <div style="flex: 1; min-width: 0;">
+                <div style="font-size: 14px; font-weight: 700; color: var(--neutral-900);">Certificate of Residency</div>
+                <div style="font-size: 12px; color: var(--neutral-500);">Official proof of residing in Barangay Pili</div>
+              </div>
+              <span class="badge" style="background:#f1f5f9; color:#475569;">₱50.00</span>
+            </div>
+
+            <div class="service-card-item" onclick="openRequestModal('Business Clearance', 150)">
+              <div class="service-icon-box" style="background: #fef3c7; color: #b45309;">
+                <i class="fas fa-store"></i>
+              </div>
+              <div style="flex: 1; min-width: 0;">
+                <div style="font-size: 14px; font-weight: 700; color: var(--neutral-900);">Business Clearance</div>
+                <div style="font-size: 12px; color: var(--neutral-500);">For sari-sari store, commercial stall, renewal</div>
+              </div>
+              <span class="badge" style="background:#f1f5f9; color:#475569;">₱150.00</span>
+            </div>
+
+            <div class="service-card-item" onclick="openRequestModal('Blotter / Dispute Record', 0)">
+              <div class="service-icon-box" style="background: #f3e8ff; color: #7e22ce;">
+                <i class="fas fa-book-bookmark"></i>
+              </div>
+              <div style="flex: 1; min-width: 0;">
+                <div style="font-size: 14px; font-weight: 700; color: var(--neutral-900);">Blotter Record</div>
+                <div style="font-size: 12px; color: var(--neutral-500);">Incident logging and record keeping</div>
+              </div>
+              <span class="badge" style="background:#f1f5f9; color:#475569;">Record</span>
+            </div>
+
+            <div class="service-card-item" onclick="openRequestModal('Barangay Summons', 0)">
+              <div class="service-icon-box" style="background: #ffedd5; color: #c2410c;">
+                <i class="fas fa-gavel"></i>
+              </div>
+              <div style="flex: 1; min-width: 0;">
+                <div style="font-size: 14px; font-weight: 700; color: var(--neutral-900);">Summons & Mediation</div>
+                <div style="font-size: 12px; color: var(--neutral-500);">Lupong Tagapamayapa dispute conciliation</div>
+              </div>
+              <span class="badge" style="background:#f1f5f9; color:#475569;">Hearing</span>
+            </div>
+
+            <div class="service-card-item" onclick="openRequestModal('Borrow Equipment', 0)">
+              <div class="service-icon-box" style="background: #dbeafe; color: #1d4ed8;">
+                <i class="fas fa-campground"></i>
+              </div>
+              <div style="flex: 1; min-width: 0;">
+                <div style="font-size: 14px; font-weight: 700; color: var(--neutral-900);">Borrow Equipment</div>
+                <div style="font-size: 12px; color: var(--neutral-500);">Tents, tables, chairs for community occasions</div>
+              </div>
+              <span class="badge" style="background:#dcfce7; color:#15803d;">Available</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================
+           SCREEN 5: REQUEST DOCUMENT SCREEN
+      ======================================================== -->
+      <section class="screen" id="screen-request-doc">
+        <header class="app-topbar">
+          <div class="topbar-left">
+            <button class="topbar-btn" onclick="navigateTo('screen-home')" style="margin-left: -8px;">
+              <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="topbar-title">Request Document</div>
+          </div>
+        </header>
+
+        <div style="padding: 16px; flex: 1;">
+          <!-- Payment Notice Box -->
+          <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-left: 4px solid #2563eb; padding: 12px 14px; border-radius: 8px; margin-bottom: 18px;">
+            <div style="display: flex; gap: 10px;">
+              <i class="fas fa-info-circle" style="color: #2563eb; margin-top: 2px;"></i>
+              <div style="font-size: 12.5px; color: #1e40af; line-height: 1.45;">
+                <strong>Payment & Release:</strong> Processing fees (if applicable) are paid directly at the <strong>Barangay Pili Office</strong> upon claiming. No online payment required.
+              </div>
+            </div>
+          </div>
+
+          <form id="documentRequestForm" onsubmit="handleDocumentSubmit(event)">
+            <div class="form-group">
+              <label class="form-label">Document Type *</label>
+              <select id="reqDocType" class="form-select" onchange="handleDocTypeChange(this.value)">
+                <option value="Barangay Clearance" data-fee="50">Barangay Clearance (₱50.00)</option>
+                <option value="Certificate of Indigency" data-fee="0">Certificate of Indigency (FREE)</option>
+                <option value="Certificate of Residency" data-fee="50">Certificate of Residency (₱50.00)</option>
+                <option value="Business Clearance" data-fee="150">Business Clearance (₱150.00)</option>
+                <option value="Blotter / Dispute Record" data-fee="0">Blotter / Dispute Record (FREE)</option>
+                <option value="Barangay Summons" data-fee="0">Barangay Summons (FREE)</option>
+                <option value="Borrow Equipment" data-fee="0">Borrow Equipment (Tents / Chairs)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Purpose of Request *</label>
+              <textarea id="reqPurpose" class="form-control" rows="3" placeholder="e.g. For employment, scholarship, bank requirement, ID renewal..." required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Additional Information / Remarks (Optional)</label>
+              <input type="text" class="form-control" placeholder="e.g. Need 2 copies, urgent for Monday interview">
+            </div>
+
+            <!-- Meta Fee & Pickup Details Card -->
+            <div class="card" style="background: #f8fafc; padding: 14px; margin-bottom: 20px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="font-size: 12.5px; color: var(--neutral-600);">Processing Fee:</span>
+                <span id="docFeeDisplay" style="font-size: 16px; font-weight: 800; color: var(--primary);">₱50.00</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="font-size: 12.5px; color: var(--neutral-600);">Release Location:</span>
+                <span style="font-size: 12.5px; font-weight: 600; color: var(--neutral-800);">Brgy. Pili Hall</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 12.5px; color: var(--neutral-600);">Estimated Time:</span>
+                <span style="font-size: 12.5px; font-weight: 600; color: var(--neutral-800);">1–2 Business Days</span>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block" style="height: 50px;">
+              <i class="fas fa-paper-plane"></i> Submit Request
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <!-- ========================================================
+           SCREEN 6: MY REQUESTS SCREEN
+      ======================================================== -->
+      <section class="screen" id="screen-requests">
+        <header class="app-topbar">
+          <div class="topbar-left">
+            <div class="topbar-title">My Requests</div>
+          </div>
+          <div class="topbar-right">
+            <button class="btn btn-primary btn-sm" onclick="navigateTo('screen-request-doc')">
+              <i class="fas fa-plus"></i> New
+            </button>
+          </div>
+        </header>
+
+        <!-- Filter Chips -->
+        <div class="requests-tab-bar">
+          <div class="req-filter-chip active" onclick="filterRequests('all', this)">All</div>
+          <div class="req-filter-chip" onclick="filterRequests('Pending', this)">Pending</div>
+          <div class="req-filter-chip" onclick="filterRequests('Processing', this)">Processing</div>
+          <div class="req-filter-chip" onclick="filterRequests('Ready for Release', this)">Ready</div>
+          <div class="req-filter-chip" onclick="filterRequests('Completed', this)">Completed</div>
+          <div class="req-filter-chip" onclick="filterRequests('Rejected', this)">Rejected</div>
+        </div>
+
+        <div style="padding: 16px; flex: 1;" id="requestsListContainer">
+          <!-- Request Card 1 -->
+          <div class="request-list-card" data-status="Ready for Release" onclick="openRequestDetails('PILI-2026-0042', 'Barangay Clearance', 'Ready for Release', '₱50.00', 'Local Employment Application', 'Sep 12, 2026')">
+            <div class="req-card-top">
+              <div>
+                <div style="font-weight: 700; font-size: 15px;">Barangay Clearance</div>
+                <div class="req-ref-num">#PILI-2026-0042</div>
+              </div>
+              <span class="badge badge-ready">Ready for Release</span>
+            </div>
+            <div style="font-size: 12.5px; color: var(--neutral-600); margin-bottom: 10px;">
+              Purpose: Local Employment Application
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--neutral-400); border-top: 1px solid var(--neutral-100); padding-top: 8px;">
+              <span><i class="far fa-calendar-alt"></i> Sep 12, 2026</span>
+              <span style="color: var(--primary); font-weight: 600;">View Details <i class="fas fa-chevron-right" style="font-size: 10px;"></i></span>
+            </div>
+          </div>
+
+          <!-- Request Card 2 -->
+          <div class="request-list-card" data-status="Processing" onclick="openRequestDetails('PILI-2026-0038', 'Certificate of Indigency', 'Processing', 'FREE', 'Financial & Medical Assistance', 'Sep 10, 2026')">
+            <div class="req-card-top">
+              <div>
+                <div style="font-weight: 700; font-size: 15px;">Certificate of Indigency</div>
+                <div class="req-ref-num">#PILI-2026-0038</div>
+              </div>
+              <span class="badge badge-processing">Processing</span>
+            </div>
+            <div style="font-size: 12.5px; color: var(--neutral-600); margin-bottom: 10px;">
+              Purpose: Financial & Medical Assistance
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--neutral-400); border-top: 1px solid var(--neutral-100); padding-top: 8px;">
+              <span><i class="far fa-calendar-alt"></i> Sep 10, 2026</span>
+              <span style="color: var(--primary); font-weight: 600;">View Details <i class="fas fa-chevron-right" style="font-size: 10px;"></i></span>
+            </div>
+          </div>
+
+          <!-- Request Card 3 -->
+          <div class="request-list-card" data-status="Completed" onclick="openRequestDetails('PILI-2026-0019', 'Certificate of Residency', 'Completed', '₱50.00', 'Bank Account Opening', 'Aug 28, 2026', true)">
+            <div class="req-card-top">
+              <div>
+                <div style="font-weight: 700; font-size: 15px;">Certificate of Residency</div>
+                <div class="req-ref-num">#PILI-2026-0019</div>
+              </div>
+              <span class="badge badge-completed">Completed</span>
+            </div>
+            <div style="font-size: 12.5px; color: var(--neutral-600); margin-bottom: 10px;">
+              Purpose: Bank Account Opening
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--neutral-400); border-top: 1px solid var(--neutral-100); padding-top: 8px;">
+              <span><i class="far fa-calendar-alt"></i> Aug 28, 2026</span>
+              <span style="color: #059669; font-weight: 700;"><i class="fas fa-certificate"></i> View Certificate</span>
+            </div>
+          </div>
+
+          <!-- Empty placeholder if filtered -->
+          <div id="requestsEmptyBox" class="empty-state-box" style="display: none;">
+            <div class="empty-state-icon"><i class="far fa-folder-open"></i></div>
+            <h4 style="font-size: 16px; margin-bottom: 4px;">No requests found</h4>
+            <p style="font-size: 13px; margin-bottom: 16px;">You have no requests matching this status.</p>
+            <button class="btn btn-outline-primary btn-sm" onclick="navigateTo('screen-request-doc')">Request a Document</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================
+           SCREEN 7: REQUEST DETAILS & TRACKER SCREEN
+      ======================================================== -->
+      <section class="screen" id="screen-request-details">
+        <header class="app-topbar">
+          <div class="topbar-left">
+            <button class="topbar-btn" onclick="navigateTo('screen-requests')" style="margin-left: -8px;">
+              <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="topbar-title">Request Tracker</div>
+          </div>
+          <div class="topbar-right">
+            <span id="detailBadgeHeader" class="badge badge-ready">Ready for Release</span>
+          </div>
+        </header>
+
+        <div style="padding: 16px; flex: 1;">
+          <!-- Summary Header Card -->
+          <div class="card" style="margin-bottom: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+              <div>
+                <h3 style="font-size: 18px;" id="detailDocTitle">Barangay Clearance</h3>
+                <div class="req-ref-num" id="detailRefNumber">#PILI-2026-0042</div>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; background: var(--neutral-50); padding: 12px; border-radius: var(--radius-md); font-size: 12.5px;">
+              <div>
+                <span style="color: var(--neutral-500); display: block; font-size: 11px;">Request Date:</span>
+                <strong id="detailReqDate">Sep 12, 2026</strong>
+              </div>
+              <div>
+                <span style="color: var(--neutral-500); display: block; font-size: 11px;">Processing Fee:</span>
+                <strong id="detailFee">₱50.00</strong>
+              </div>
+              <div style="grid-column: span 2;">
+                <span style="color: var(--neutral-500); display: block; font-size: 11px;">Stated Purpose:</span>
+                <span id="detailPurpose">Local Employment Application</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Progress Tracker Timeline -->
+          <div class="card" style="margin-bottom: 16px;">
+            <h4 style="font-size: 14.5px; margin-bottom: 14px;">Processing Progress</h4>
+
+            <div class="tracker-timeline">
+              <div class="timeline-step completed">
+                <div class="step-marker"><i class="fas fa-check"></i></div>
+                <div>
+                  <div style="font-size: 13.5px; font-weight: 700;">Submitted</div>
+                  <div style="font-size: 11.5px; color: var(--neutral-500);">Application received by Barangay Pili</div>
+                </div>
+              </div>
+
+              <div class="timeline-step completed">
+                <div class="step-marker"><i class="fas fa-check"></i></div>
+                <div>
+                  <div style="font-size: 13.5px; font-weight: 700;">Processing & Verification</div>
+                  <div style="font-size: 11.5px; color: var(--neutral-500);">Barangay record checked · No pending dispute</div>
+                </div>
+              </div>
+
+              <div class="timeline-step completed">
+                <div class="step-marker"><i class="fas fa-check"></i></div>
+                <div>
+                  <div style="font-size: 13.5px; font-weight: 700;">Approved</div>
+                  <div style="font-size: 11.5px; color: var(--neutral-500);">Signed by Punong Barangay & Staff</div>
+                </div>
+              </div>
+
+              <div class="timeline-step active-step" id="timelineStepReady">
+                <div class="step-marker"><i class="fas fa-box-archive"></i></div>
+                <div>
+                  <div style="font-size: 13.5px; font-weight: 700; color: var(--primary);">Ready for Release</div>
+                  <div style="font-size: 11.5px; color: var(--neutral-600);">Document is printed at Barangay Pili Hall</div>
+                </div>
+              </div>
+
+              <div class="timeline-step" id="timelineStepComplete">
+                <div class="step-marker"><i class="fas fa-flag-checkered"></i></div>
+                <div>
+                  <div style="font-size: 13.5px; font-weight: 600; color: var(--neutral-400);">Completed</div>
+                  <div style="font-size: 11.5px; color: var(--neutral-400);">Released to resident upon dry seal</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Important Instructions Callout -->
+          <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: var(--radius-md); padding: 14px; margin-bottom: 16px;">
+            <div style="display: flex; gap: 10px;">
+              <i class="fas fa-bullhorn" style="color: var(--primary); margin-top: 2px;"></i>
+              <div style="font-size: 12.5px; color: #991b1b; line-height: 1.45;">
+                <strong>Claiming Instructions:</strong> Please visit Barangay Pili Hall during office hours (8:00 AM – 5:00 PM). Present 1 valid ID and reference number <strong>#PILI-2026-0042</strong>.
+              </div>
+            </div>
+          </div>
+
+          <!-- View Certificate Button if Completed/Ready -->
+          <button id="btnViewCertPreview" class="btn btn-outline-primary btn-block" onclick="navigateTo('screen-certificate')" style="height: 46px;">
+            <i class="fas fa-certificate"></i> Preview Certificate Information
+          </button>
+        </div>
+      </section>
+
+      <!-- ========================================================
+           SCREEN 8: NOTIFICATIONS SCREEN
+      ======================================================== -->
+      <section class="screen" id="screen-notifications">
+        <header class="app-topbar">
+          <div class="topbar-left">
+            <div class="topbar-title">Notifications</div>
+          </div>
+          <div class="topbar-right">
+            <button class="topbar-btn" onclick="markAllNotifsRead()" title="Mark all read">
+              <i class="fas fa-check-double" style="font-size: 14px; color: var(--neutral-500);"></i>
+            </button>
+          </div>
+        </header>
+
+        <div style="padding: 16px; flex: 1;">
+          <div class="notif-card unread">
+            <div class="notif-icon" style="background: #ede9fe; color: #6d28d9;">
+              <i class="fas fa-box-archive"></i>
+            </div>
+            <div style="flex: 1;">
+              <div style="display: flex; justify-content: space-between;">
+                <div style="font-size: 13.5px; font-weight: 700;">Document Ready for Release</div>
+                <span style="font-size: 11px; color: var(--neutral-400);">10m ago</span>
+              </div>
+              <p style="font-size: 12.5px; margin: 3px 0 0;">Your Barangay Clearance (#PILI-2026-0042) is now ready for claiming at Barangay Pili Hall.</p>
+            </div>
+          </div>
+
+          <div class="notif-card unread">
+            <div class="notif-icon" style="background: #dcfce7; color: #15803d;">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div style="flex: 1;">
+              <div style="display: flex; justify-content: space-between;">
+                <div style="font-size: 13.5px; font-weight: 700;">Request Approved</div>
+                <span style="font-size: 11px; color: var(--neutral-400);">2h ago</span>
+              </div>
+              <p style="font-size: 12.5px; margin: 3px 0 0;">Barangay Clearance application has been approved by the Barangay Captain.</p>
+            </div>
+          </div>
+
+          <div class="notif-card">
+            <div class="notif-icon" style="background: #fee2e2; color: #b91c1c;">
+              <i class="fas fa-bullhorn"></i>
+            </div>
+            <div style="flex: 1;">
+              <div style="display: flex; justify-content: space-between;">
+                <div style="font-size: 13.5px; font-weight: 700;">Public Advisory: Free Medical Mission</div>
+                <span style="font-size: 11px; color: var(--neutral-400);">1d ago</span>
+              </div>
+              <p style="font-size: 12.5px; margin: 3px 0 0;">Free medical checkup and dental clinic this Saturday at Barangay Pili Covered Court.</p>
+            </div>
+          </div>
+
+          <div class="notif-card">
+            <div class="notif-icon" style="background: #e0f2fe; color: #0284c7;">
+              <i class="fas fa-paper-plane"></i>
+            </div>
+            <div style="flex: 1;">
+              <div style="display: flex; justify-content: space-between;">
+                <div style="font-size: 13.5px; font-weight: 700;">Request Submitted</div>
+                <span style="font-size: 11px; color: var(--neutral-400);">2d ago</span>
+              </div>
+              <p style="font-size: 12.5px; margin: 3px 0 0;">Your Certificate of Indigency request #PILI-2026-0038 was received successfully.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================
+           SCREEN 9: PROFILE SCREEN
+      ======================================================== -->
+      <section class="screen" id="screen-profile">
+        <header class="app-topbar">
+          <div class="topbar-left">
+            <div class="topbar-title">Resident Profile</div>
+          </div>
+          <div class="topbar-right">
+            <button class="topbar-btn" onclick="showLogoutModal()" title="Logout">
+              <i class="fas fa-sign-out-alt" style="color: var(--primary);"></i>
+            </button>
+          </div>
+        </header>
+
+        <div style="padding: 16px; flex: 1;">
+          <!-- Resident Card -->
+          <div class="card" style="text-align: center; padding: 24px 16px; margin-bottom: 20px;">
+            <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), #e11d48); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 800; margin: 0 auto 12px; box-shadow: 0 4px 12px rgba(185, 28, 28, 0.25);">
+              MS
+            </div>
+            <h3 style="font-size: 18px; margin-bottom: 2px;">Maria Cruz Santos</h3>
+            <div style="font-size: 12px; color: var(--neutral-500); margin-bottom: 8px;">Resident ID: BRGY-PILI-2024-0891</div>
+            <span class="badge badge-approved" style="font-size: 10px;"><i class="fas fa-certificate"></i> Verified Resident</span>
+
+            <div style="margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--neutral-100); display: grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: left; font-size: 12px;">
+              <div>
+                <span style="color: var(--neutral-400); display: block;">Address:</span>
+                <strong>Purok Mangga, Brgy. Pili</strong>
+              </div>
+              <div>
+                <span style="color: var(--neutral-400); display: block;">Contact:</span>
+                <strong>0917 123 4567</strong>
+              </div>
+              <div>
+                <span style="color: var(--neutral-400); display: block;">Civil Status:</span>
+                <strong>Single</strong>
+              </div>
+              <div>
+                <span style="color: var(--neutral-400); display: block;">Voter Status:</span>
+                <strong>Registered</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Profile Options List -->
+          <div class="card" style="padding: 6px 0; margin-bottom: 20px;">
+            <div class="service-card-item" onclick="showToast('Profile editing is open.')" style="border: none; border-radius: 0; box-shadow: none; border-bottom: 1px solid var(--neutral-100);">
+              <i class="fas fa-user-pen" style="color: var(--primary); font-size: 16px; width: 24px;"></i>
+              <div style="flex: 1; font-size: 14px; font-weight: 600;">Edit Profile Information</div>
+              <i class="fas fa-chevron-right" style="font-size: 12px; color: var(--neutral-400);"></i>
+            </div>
+
+            <div class="service-card-item" onclick="showToast('Password change form opened.')" style="border: none; border-radius: 0; box-shadow: none; border-bottom: 1px solid var(--neutral-100);">
+              <i class="fas fa-lock" style="color: var(--neutral-600); font-size: 16px; width: 24px;"></i>
+              <div style="flex: 1; font-size: 14px; font-weight: 600;">Change Password</div>
+              <i class="fas fa-chevron-right" style="font-size: 12px; color: var(--neutral-400);"></i>
+            </div>
+
+            <div class="service-card-item" onclick="showToast('Barangay Pili Hall: (032) 123-4567')" style="border: none; border-radius: 0; box-shadow: none; border-bottom: 1px solid var(--neutral-100);">
+              <i class="fas fa-circle-question" style="color: var(--neutral-600); font-size: 16px; width: 24px;"></i>
+              <div style="flex: 1; font-size: 14px; font-weight: 600;">Help & Barangay Support</div>
+              <i class="fas fa-chevron-right" style="font-size: 12px; color: var(--neutral-400);"></i>
+            </div>
+
+            <div class="service-card-item" onclick="showToast('Privacy Policy: Data Privacy Act of 2012')" style="border: none; border-radius: 0; box-shadow: none; border-bottom: 1px solid var(--neutral-100);">
+              <i class="fas fa-shield-halved" style="color: var(--neutral-600); font-size: 16px; width: 24px;"></i>
+              <div style="flex: 1; font-size: 14px; font-weight: 600;">Privacy Policy</div>
+              <i class="fas fa-chevron-right" style="font-size: 12px; color: var(--neutral-400);"></i>
+            </div>
+
+            <div class="service-card-item" onclick="showLogoutModal()" style="border: none; border-radius: 0; box-shadow: none; color: var(--primary);">
+              <i class="fas fa-arrow-right-from-bracket" style="color: var(--primary); font-size: 16px; width: 24px;"></i>
+              <div style="flex: 1; font-size: 14px; font-weight: 700;">Log Out</div>
+              <i class="fas fa-chevron-right" style="font-size: 12px; color: var(--primary);"></i>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================
+           SCREEN 10: CERTIFICATE / DOCUMENT PREVIEW SCREEN
+      ======================================================== -->
+      <section class="screen" id="screen-certificate">
+        <header class="app-topbar">
+          <div class="topbar-left">
+            <button class="topbar-btn" onclick="navigateTo('screen-request-details')" style="margin-left: -8px;">
+              <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="topbar-title">Document Preview</div>
+          </div>
+        </header>
+
+        <div style="padding: 16px; flex: 1;">
+          <!-- Document Preview Notice -->
+          <div style="background: #f8fafc; border: 1px solid var(--neutral-200); padding: 12px; border-radius: var(--radius-md); font-size: 12px; color: var(--neutral-600); margin-bottom: 14px;">
+            <i class="fas fa-circle-info" style="color: var(--primary); margin-right: 4px;"></i>
+            <strong>Official Release Notice:</strong> This digital preview confirms approval. The official embossed physical document with dry seal must be claimed in-person at Barangay Pili Hall.
+          </div>
+
+          <!-- Certificate Sheet -->
+          <div class="cert-preview-sheet">
+            <img src="../assets/images/pili_logo.png" alt="Watermark" class="cert-watermark-seal">
+
+            <div class="cert-seal-header">
+              <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: #475569;">Republic of the Philippines</div>
+              <div style="font-size: 11px; font-weight: 700; color: #0f172a;">Province of Cebu · Municipality of Madridejos</div>
+              <div style="font-size: 13px; font-weight: 900; color: #b91c1c; margin-top: 2px;">BARANGAY PILI</div>
+              <div style="font-size: 10px; color: #64748b;">OFFICE OF THE PUNONG BARANGAY</div>
+            </div>
+
+            <div style="text-align: center; margin: 16px 0;">
+              <h2 style="font-size: 16px; text-transform: uppercase; color: #b91c1c; letter-spacing: 0.05em; border-bottom: 2px solid #b91c1c; display: inline-block; padding-bottom: 2px;">
+                BARANGAY CLEARANCE
+              </h2>
+            </div>
+
+            <div style="font-size: 12px; line-height: 1.6; color: #1e293b; text-align: justify; margin-bottom: 20px;">
+              <p style="margin-bottom: 10px;"><strong>TO WHOM IT MAY CONCERN:</strong></p>
+              <p>This is to certify that <strong>MARIA CRUZ SANTOS</strong>, of legal age, Filipino, Single, is a bona fide resident of Barangay Pili, Madridejos, Cebu, with good moral character.</p>
+              <p style="margin-top: 8px;">Issued upon request for <strong>LOCAL EMPLOYMENT APPLICATION</strong>.</p>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 24px; font-size: 11px;">
+              <div>
+                <div>Control #: <strong>PILI-2026-0042</strong></div>
+                <div>Date Issued: <strong>Sep 12, 2026</strong></div>
+                <div style="color: #059669; font-weight: 700; margin-top: 4px;"><i class="fas fa-stamp"></i> APPROVED DIGITAL RECORD</div>
+              </div>
+              <div style="text-align: center;">
+                <div style="font-weight: 800; border-top: 1px solid #334155; padding-top: 2px;">HON. BARANGAY CAPTAIN</div>
+                <div style="font-size: 9.5px; color: #64748b;">Punong Barangay</div>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn btn-secondary btn-block" onclick="navigateTo('screen-requests')">
+            <i class="fas fa-arrow-left"></i> Back to My Requests
+          </button>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ========================================================
+         PERSISTENT 4-TAB BOTTOM NAVIGATION
+    ======================================================== -->
+    <nav class="app-bottom-nav" id="mainBottomNav">
+      <button class="nav-tab-item active" id="tabHome" onclick="switchMainTab('screen-home', this)">
+        <i class="fas fa-house"></i>
+        <span>Home</span>
+      </button>
+      <button class="nav-tab-item" id="tabRequests" onclick="switchMainTab('screen-requests', this)">
+        <i class="fas fa-file-lines"></i>
+        <span>Requests</span>
+      </button>
+      <button class="nav-tab-item" id="tabNotifs" onclick="switchMainTab('screen-notifications', this)">
+        <i class="fas fa-bell"></i>
+        <span>Notifications</span>
+        <span class="nav-badge" id="bottomNavBadge">2</span>
+      </button>
+      <button class="nav-tab-item" id="tabProfile" onclick="switchMainTab('screen-profile', this)">
+        <i class="fas fa-user"></i>
+        <span>Profile</span>
+      </button>
+    </nav>
+
+    <!-- ========================================================
+         MODALS (Confirmation, Logout, Success)
+    ======================================================== -->
+
+    <!-- Request Success Modal -->
+    <div class="modal-backdrop" id="modalRequestSuccess">
+      <div class="modal-dialog">
+        <div class="modal-icon success">
+          <i class="fas fa-check"></i>
+        </div>
+        <h3 style="font-size: 18px; margin-bottom: 8px;">Request Submitted</h3>
+        <p style="font-size: 13.5px; margin-bottom: 20px;">
+          Your document request has been submitted successfully to Barangay Pili. Tracking reference: <strong id="modalRefText">#PILI-2026-0045</strong>.
+        </p>
+        <button class="btn btn-primary btn-block" onclick="closeRequestSuccessModal()">
+          View in My Requests
+        </button>
+      </div>
+    </div>
+
+    <!-- Registration Pending Modal -->
+    <div class="modal-backdrop" id="modalRegisterSuccess">
+      <div class="modal-dialog">
+        <div class="modal-icon warning">
+          <i class="fas fa-user-clock"></i>
+        </div>
+        <h3 style="font-size: 18px; margin-bottom: 8px;">Registration Submitted</h3>
+        <p style="font-size: 13px; color: var(--neutral-600); margin-bottom: 20px;">
+          Your account has been created and is currently awaiting <strong>Admin Approval</strong> by Barangay Pili officials. You will receive an SMS/email once verified.
+        </p>
+        <button class="btn btn-primary btn-block" onclick="closeRegisterModal()">
+          Back to Login
+        </button>
+      </div>
+    </div>
+
+    <!-- Logout Confirmation Modal -->
+    <div class="modal-backdrop" id="modalLogout">
+      <div class="modal-dialog">
+        <div class="modal-icon danger">
+          <i class="fas fa-arrow-right-from-bracket"></i>
+        </div>
+        <h3 style="font-size: 18px; margin-bottom: 6px;">Log Out?</h3>
+        <p style="font-size: 13px; margin-bottom: 22px;">
+          Are you sure you want to log out of Barangay Pili resident portal?
+        </p>
+        <div style="display: flex; gap: 10px;">
+          <button class="btn btn-secondary" style="flex: 1;" onclick="closeLogoutModal()">Cancel</button>
+          <button class="btn btn-primary" style="flex: 1; background: var(--primary);" onclick="confirmLogout()">Log Out</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification Popup -->
+    <div id="toastPopup" style="position: absolute; bottom: 80px; left: 20px; right: 20px; background: #0f172a; color: #fff; padding: 12px 16px; border-radius: 10px; font-size: 13px; font-weight: 500; display: none; z-index: 300; box-shadow: var(--shadow-lg); text-align: center;">
+      Notification message
+    </div>
+
+  </div>
+
+  <!-- ── Interactive App Logic & User Flows ────────────────── -->
+  <script>
+    // Navigation State
+    let currentScreen = 'screen-splash';
+    const mainTabs = ['screen-home', 'screen-requests', 'screen-notifications', 'screen-profile'];
+
+    function navigateTo(screenId) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      const target = document.getElementById(screenId);
+      if (target) {
+        target.classList.add('active');
+        currentScreen = screenId;
+        // Scroll to top
+        document.querySelector('.app-screen-container').scrollTop = 0;
+      }
+
+      // Show or hide bottom nav depending on auth or inner screen
+      const bottomNav = document.getElementById('mainBottomNav');
+      const statusBar = document.getElementById('androidStatusBar');
+
+      if (screenId === 'screen-splash' || screenId === 'screen-login' || screenId === 'screen-register') {
+        bottomNav.style.display = 'none';
+        statusBar.classList.remove('red-header');
+      } else {
+        bottomNav.style.display = 'flex';
+        // Red header only on home
+        if (screenId === 'screen-home') {
+          statusBar.classList.add('red-header');
+        } else {
+          statusBar.classList.remove('red-header');
+        }
+      }
+
+      // Update bottom nav highlights
+      updateTabHighlight(screenId);
+    }
+
+    function switchMainTab(screenId, btnElement) {
+      navigateTo(screenId);
+    }
+
+    function updateTabHighlight(screenId) {
+      document.querySelectorAll('.nav-tab-item').forEach(btn => btn.classList.remove('active'));
+      if (screenId === 'screen-home') document.getElementById('tabHome').classList.add('active');
+      if (screenId === 'screen-requests' || screenId === 'screen-request-details' || screenId === 'screen-certificate' || screenId === 'screen-request-doc') {
+        document.getElementById('tabRequests').classList.add('active');
+      }
+      if (screenId === 'screen-notifications') document.getElementById('tabNotifs').classList.add('active');
+      if (screenId === 'screen-profile') document.getElementById('tabProfile').classList.add('active');
+    }
+
+    // Toggle Password Visibility
+    function togglePasswordVisibility(inputId, icon) {
+      const input = document.getElementById(inputId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    }
+
+    // Login Handler
+    function handleLogin(e) {
+      e.preventDefault();
+      const u = document.getElementById('loginUsername').value.trim();
+      const p = document.getElementById('loginPassword').value.trim();
+      if (!u || !p) {
+        showToast('Please enter both username and password.');
+        return;
+      }
+      showToast('Welcome, Maria! Logged in successfully.');
+      navigateTo('screen-home');
+    }
+
+    // Registration Handler
+    function handleRegister(e) {
+      e.preventDefault();
+      document.getElementById('modalRegisterSuccess').style.display = 'flex';
+    }
+
+    function closeRegisterModal() {
+      document.getElementById('modalRegisterSuccess').style.display = 'none';
+      navigateTo('screen-login');
+    }
+
+    // Open Request with Document Pre-filled
+    function openRequestModal(docName, fee) {
+      const sel = document.getElementById('reqDocType');
+      if (sel) {
+        for (let i = 0; i < sel.options.length; i++) {
+          if (sel.options[i].value.toLowerCase().includes(docName.toLowerCase().split(' ')[0])) {
+            sel.selectedIndex = i;
+            break;
+          }
+        }
+      }
+      handleDocTypeChange(docName);
+      navigateTo('screen-request-doc');
+    }
+
+    function handleDocTypeChange(val) {
+      const sel = document.getElementById('reqDocType');
+      const opt = sel.options[sel.selectedIndex];
+      const fee = opt ? opt.getAttribute('data-fee') : '50';
+      const feeNum = parseFloat(fee);
+      document.getElementById('docFeeDisplay').textContent = feeNum > 0 ? `₱${feeNum.toFixed(2)}` : 'FREE';
+    }
+
+    // Document Form Submission
+    function handleDocumentSubmit(e) {
+      e.preventDefault();
+      const docType = document.getElementById('reqDocType').value;
+      const purpose = document.getElementById('reqPurpose').value;
+      const ref = 'PILI-2026-00' + Math.floor(10 + Math.random() * 89);
+
+      document.getElementById('modalRefText').textContent = '#' + ref;
+      document.getElementById('modalRequestSuccess').style.display = 'flex';
+      
+      // Prepend to requests list
+      const container = document.getElementById('requestsListContainer');
+      const newCard = document.createElement('div');
+      newCard.className = 'request-list-card';
+      newCard.setAttribute('data-status', 'Pending');
+      newCard.onclick = () => openRequestDetails(ref, docType, 'Pending', document.getElementById('docFeeDisplay').textContent, purpose, 'Today');
+      newCard.innerHTML = `
+        <div class="req-card-top">
+          <div>
+            <div style="font-weight: 700; font-size: 15px;">${docType}</div>
+            <div class="req-ref-num">#${ref}</div>
+          </div>
+          <span class="badge badge-pending">Pending</span>
+        </div>
+        <div style="font-size: 12.5px; color: var(--neutral-600); margin-bottom: 10px;">
+          Purpose: ${purpose}
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--neutral-400); border-top: 1px solid var(--neutral-100); padding-top: 8px;">
+          <span><i class="far fa-calendar-alt"></i> Just now</span>
+          <span style="color: var(--primary); font-weight: 600;">View Details <i class="fas fa-chevron-right" style="font-size: 10px;"></i></span>
+        </div>
+      `;
+      container.insertBefore(newCard, container.firstChild);
+    }
+
+    function closeRequestSuccessModal() {
+      document.getElementById('modalRequestSuccess').style.display = 'none';
+      document.getElementById('documentRequestForm').reset();
+      navigateTo('screen-requests');
+    }
+
+    // Filter Requests Chips
+    function filterRequests(status, chip) {
+      document.querySelectorAll('.req-filter-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+
+      const cards = document.querySelectorAll('.request-list-card');
+      let visible = 0;
+      cards.forEach(card => {
+        const cStatus = card.getAttribute('data-status');
+        if (status === 'all' || cStatus === status) {
+          card.style.display = 'block';
+          visible++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      const emptyBox = document.getElementById('requestsEmptyBox');
+      emptyBox.style.display = visible === 0 ? 'flex' : 'none';
+    }
+
+    // Open Request Tracker Details
+    function openRequestDetails(ref, title, status, fee, purpose, date, isCompleted = false) {
+      document.getElementById('detailRefNumber').textContent = '#' + ref;
+      document.getElementById('detailDocTitle').textContent = title;
+      document.getElementById('detailReqDate').textContent = date;
+      document.getElementById('detailFee').textContent = fee;
+      document.getElementById('detailPurpose').textContent = purpose;
+
+      const badgeHeader = document.getElementById('detailBadgeHeader');
+      badgeHeader.textContent = status;
+      badgeHeader.className = 'badge ' + (
+        status === 'Pending' ? 'badge-pending' :
+        status === 'Processing' ? 'badge-processing' :
+        status === 'Ready for Release' ? 'badge-ready' :
+        status === 'Completed' ? 'badge-completed' : 'badge-rejected'
+      );
+
+      // Adjust timeline step
+      const stepReady = document.getElementById('timelineStepReady');
+      const stepComplete = document.getElementById('timelineStepComplete');
+      const btnCert = document.getElementById('btnViewCertPreview');
+
+      if (status === 'Completed') {
+        stepReady.className = 'timeline-step completed';
+        stepComplete.className = 'timeline-step completed';
+        btnCert.style.display = 'block';
+      } else if (status === 'Ready for Release') {
+        stepReady.className = 'timeline-step active-step';
+        stepComplete.className = 'timeline-step';
+        btnCert.style.display = 'block';
+      } else {
+        stepReady.className = 'timeline-step';
+        stepComplete.className = 'timeline-step';
+        btnCert.style.display = 'none';
+      }
+
+      navigateTo('screen-request-details');
+    }
+
+    // Notifications Mark Read
+    function markAllNotifsRead() {
+      document.querySelectorAll('.notif-card.unread').forEach(c => c.classList.remove('unread'));
+      const badge = document.getElementById('bottomNavBadge');
+      if (badge) badge.style.display = 'none';
+      showToast('All notifications marked as read.');
+    }
+
+    // Logout Modal Handlers
+    function showLogoutModal() {
+      document.getElementById('modalLogout').style.display = 'flex';
+    }
+    function closeLogoutModal() {
+      document.getElementById('modalLogout').style.display = 'none';
+    }
+    function confirmLogout() {
+      closeLogoutModal();
+      showToast('You have successfully logged out.');
+      navigateTo('screen-login');
+    }
+
+    // Toast Utility
+    function showToast(msg) {
+      const t = document.getElementById('toastPopup');
+      t.textContent = msg;
+      t.style.display = 'block';
+      setTimeout(() => { t.style.display = 'none'; }, 2400);
+    }
+
+    // Android Time Clock
+    function updateClock() {
+      const now = new Date();
+      let h = now.getHours();
+      let m = now.getMinutes();
+      m = m < 10 ? '0' + m : m;
+      document.getElementById('statusBarTime').textContent = `${h}:${m}`;
+    }
+    updateClock();
+    setInterval(updateClock, 30000);
+  </script>
+</body>
+</html>
