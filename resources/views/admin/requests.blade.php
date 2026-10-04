@@ -89,6 +89,17 @@
                       <i class="fas fa-print"></i>
                     </a>
                   @endif
+                  @if (in_array($r->status, ['rejected', 'released']))
+                    <form method="POST" action="{{ route('admin.requests.update_status') }}" style="display:inline;">
+                      @csrf
+                      <input type="hidden" name="request_id" value="{{ $r->id }}">
+                      <input type="hidden" name="action" value="archive">
+                      <button type="submit" class="btn btn-outline-secondary btn-sm" title="Archive Record"
+                        onclick="return confirm('Archive this request? It will be preserved in the archive for administrative history.')">
+                        <i class="fas fa-archive"></i>
+                      </button>
+                    </form>
+                  @endif
                 </div>
               </td>
             </tr>
@@ -237,16 +248,29 @@
             </div>
           </form>
         @else
-          @if (in_array($viewedRequest->status, ['approved', 'released']))
-            <a href="{{ route('print.certificate', ['id' => $viewedRequest->id]) }}" target="_blank"
-              class="btn btn-outline-primary">
-              <i class="fas fa-up-right-from-square"></i> Preview Certificate
-            </a>
-            <a href="{{ route('print.certificate', ['id' => $viewedRequest->id, 'print' => 1]) }}" target="_blank"
-              class="btn btn-primary">
-              <i class="fas fa-print"></i> Print Document
-            </a>
-          @endif
+          <hr style="margin-bottom:16px;">
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+            @if (in_array($viewedRequest->status, ['approved', 'released']))
+              <a href="{{ route('print.certificate', ['id' => $viewedRequest->id]) }}" target="_blank"
+                class="btn btn-outline-primary">
+                <i class="fas fa-up-right-from-square"></i> Preview Certificate
+              </a>
+              <a href="{{ route('print.certificate', ['id' => $viewedRequest->id, 'print' => 1]) }}" target="_blank"
+                class="btn btn-primary">
+                <i class="fas fa-print"></i> Print Document
+              </a>
+            @endif
+            {{-- Archive button for rejected/released: preserved for history --}}
+            <form method="POST" action="{{ route('admin.requests.update_status') }}" style="display:inline;">
+              @csrf
+              <input type="hidden" name="request_id" value="{{ $viewedRequest->id }}">
+              <input type="hidden" name="action" value="archive">
+              <button type="submit" class="btn btn-secondary"
+                onclick="return confirm('Archive this request? It will be preserved in the archive for administrative history, reports, and accountability.')">
+                <i class="fas fa-archive"></i> Archive Record
+              </button>
+            </form>
+          </div>
         @endif
 
         <!-- Manual Payment Collection Form (if fee > 0 and unpaid/waived status can be changed) -->
