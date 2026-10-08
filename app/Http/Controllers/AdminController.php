@@ -18,25 +18,55 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
-        // 1. Fetch Stats
+        $sixtyYearsAgo = now()->subYears(60)->format('Y-m-d');
+        $thisMonthStart = now()->startOfMonth();
+        $lastMonthStart = now()->subMonth()->startOfMonth();
+        $lastMonthEnd   = now()->subMonth()->endOfMonth();
+
+        // ── Core Stats ───────────────────────────────────────────
         $stats = [
-            'residents' => Resident::where('status', 'active')->whereNull('archived_at')->count(),
-            'total_req' => CertificateRequest::count(),
-            'pending' => CertificateRequest::where('status', 'pending')->count(),
-            'approved' => CertificateRequest::where('status', 'approved')->count(),
-            'released' => CertificateRequest::where('status', 'released')->count(),
-            'revenue' => Payment::where('payment_status', 'paid')->sum('amount'),
-            'pending_residents' => Resident::where('status', 'active')
+            'residents'          => Resident::where('status', 'active')->whereNull('archived_at')->count(),
+            'total_req'          => CertificateRequest::count(),
+            'pending'            => CertificateRequest::where('status', 'pending')->count(),
+            'approved'           => CertificateRequest::where('status', 'approved')->count(),
+            'released'           => CertificateRequest::where('status', 'released')->count(),
+            'revenue'            => Payment::where('payment_status', 'paid')->sum('amount'),
+            'pending_residents'  => Resident::where('status', 'active')
                 ->whereNull('archived_at')
-                ->whereHas('user', function ($query) {
-                    $query->where('status', 'inactive');
-                })->count()
+                ->whereHas('user', fn($q) => $q->where('status', 'inactive'))
+                ->count(),
+            // Today
+            'today_requests'     => CertificateRequest::whereDate('requested_at', today())->count(),
+            'today_released'     => CertificateRequest::where('status', 'released')->whereDate('updated_at', today())->count(),
+            // This month
+            'month_revenue'      => Payment::where('payment_status', 'paid')
+                ->where('created_at', '>=', $thisMonthStart)->sum('amount'),
+            'last_month_revenue' => Payment::where('payment_status', 'paid')
+                ->whereBetween('created_at', [$lastMonthStart, $lastMonthEnd])->sum('amount'),
+            'month_requests'     => CertificateRequest::where('requested_at', '>=', $thisMonthStart)->count(),
+            // Classification counts
+            'pwd'                => Resident::whereNull('archived_at')->where('is_pwd', true)->count(),
+            'senior'             => Resident::whereNull('archived_at')->where('birthdate', '<=', $sixtyYearsAgo)->count(),
+            'single_parent'      => Resident::whereNull('archived_at')->where('is_single_parent', true)->count(),
+            // Completion rate
+            'rejected'           => CertificateRequest::where('status', 'rejected')->count(),
         ];
 
-        // 2. Monthly Requests (last 6 months)
+        // Revenue trend % vs last month
+        $stats['revenue_trend'] = $stats['last_month_revenue'] > 0
+            ? round((($stats['month_revenue'] - $stats['last_month_revenue']) / $stats['last_month_revenue']) * 100, 1)
+            : ($stats['month_revenue'] > 0 ? 100 : 0);
+
+        // Completion rate (released / total)
+        $stats['completion_rate'] = $stats['total_req'] > 0
+            ? round(($stats['released'] / $stats['total_req']) * 100, 1)
+            : 0;
+
+        // ── Monthly Requests (last 6 months) ─────────────────────
         $monthlyDataQuery = CertificateRequest::select(
             DB::raw("DATE_FORMAT(requested_at, '%b') as month"),
             DB::raw("COUNT(*) as total"),
+            DB::raw("SUM(CASE WHEN status='released' THEN 1 ELSE 0 END) as released"),
             DB::raw("DATE_FORMAT(requested_at, '%Y-%m') as sort_key")
         )
         ->where('requested_at', '>=', now()->subMonths(6))
@@ -45,11 +75,12 @@ class AdminController extends Controller
         ->get();
 
         $monthly = [
-            'labels' => $monthlyDataQuery->pluck('month')->toArray(),
-            'data' => $monthlyDataQuery->pluck('total')->toArray()
+            'labels'   => $monthlyDataQuery->pluck('month')->toArray(),
+            'data'     => $monthlyDataQuery->pluck('total')->toArray(),
+            'released' => $monthlyDataQuery->pluck('released')->toArray(),
         ];
 
-        // 3. Requests by Certificate Type
+        // ── Requests by Certificate Type ─────────────────────────
         $byTypeDataQuery = Certificate::withCount(['requests'])
             ->where('status', 'active')
             ->orderBy('requests_count', 'desc')
@@ -57,16 +88,47 @@ class AdminController extends Controller
 
         $byType = [
             'labels' => $byTypeDataQuery->pluck('name')->toArray(),
-            'data' => $byTypeDataQuery->pluck('requests_count')->toArray()
+            'data'   => $byTypeDataQuery->pluck('requests_count')->toArray(),
         ];
 
-        // 4. Recent Requests (limit 5)
+        // ── Monthly Revenue (last 6 months) ──────────────────────
+        $revenueQuery = Payment::select(
+            DB::raw("DATE_FORMAT(created_at, '%b') as month"),
+            DB::raw("SUM(amount) as total"),
+            DB::raw("DATE_FORMAT(created_at, '%Y-%m') as sort_key")
+        )
+        ->where('payment_status', 'paid')
+        ->where('created_at', '>=', now()->subMonths(6))
+        ->groupBy('month', 'sort_key')
+        ->orderBy('sort_key', 'asc')
+        ->get();
+
+        $revenueChart = [
+            'labels' => $revenueQuery->pluck('month')->toArray(),
+            'data'   => $revenueQuery->pluck('total')->toArray(),
+        ];
+
+        // ── Top Requested Certificate ─────────────────────────────
+        $topCert = Certificate::withCount('requests')
+            ->orderBy('requests_count', 'desc')
+            ->first();
+
+        // ── Recent Requests (limit 8) ─────────────────────────────
         $recentRequests = CertificateRequest::with(['resident', 'certificate'])
             ->orderBy('requested_at', 'desc')
-            ->limit(5)
+            ->limit(8)
             ->get();
 
-        return view('admin.dashboard', compact('stats', 'monthly', 'byType', 'recentRequests'));
+        // ── Recent Activity Log ───────────────────────────────────
+        $recentActivity = ActivityLog::with('user')
+            ->orderBy('created_at', 'desc')
+            ->limit(6)
+            ->get();
+
+        return view('admin.dashboard', compact(
+            'stats', 'monthly', 'byType', 'recentRequests',
+            'revenueChart', 'topCert', 'recentActivity'
+        ));
     }
 
     public function profileForm()
