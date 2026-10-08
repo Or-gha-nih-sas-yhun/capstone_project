@@ -8,7 +8,7 @@
 
   .page-content {
     padding: 12px 16px;
-    height: calc(100vh - 64px);
+    height: calc(100vh - var(--topbar-h));
     overflow: hidden;
     display: flex;
     flex-direction: column;
