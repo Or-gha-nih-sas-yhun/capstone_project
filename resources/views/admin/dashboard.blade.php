@@ -175,17 +175,7 @@
 
 @section('content')
 
-{{-- ── Hero ──────────────────────────────────────────────── --}}
-<div class="dash-hero">
-  <div>
-    <h1><i class="fas fa-tachometer-alt"></i> Administrative Dashboard</h1>
-    <p>Monitor requests, collections, and activity in real time.</p>
-  </div>
-  <div class="hero-meta">
-    <div class="hero-meta-item"><i class="fas fa-calendar-day"></i> {{ now()->format('M j, Y') }}</div>
-    <div class="hero-meta-item"><i class="fas fa-inbox"></i> {{ $stats['today_requests'] }} requests today</div>
-  </div>
-</div>
+
 
 {{-- ── Primary KPI Cards ─────────────────────────────────── --}}
 <div class="stats-primary">
