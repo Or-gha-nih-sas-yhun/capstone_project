@@ -12,7 +12,7 @@
   --dark: #161616;
   --dark-2: #2a1a1a;
   --dark-3: #3f2a2a;
-  --gray: #6b7280;
+  --gray: #4b5563; /* Darkened for better contrast */
   --gray-light: #e5e7eb;
   --gray-lighter: #f3f4f6;
   --white: #ffffff;
@@ -141,7 +141,7 @@ img {
   gap: 12px;
   padding: 12px 20px;
   color: rgba(255, 255, 255, .9);
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   border-radius: 10px;
   transition: all var(--transition);
@@ -219,15 +219,18 @@ img {
 
 /* Topbar */
 .topbar {
-  height: var(--topbar-h);
+  min-height: var(--topbar-h);
+  height: auto;
   background: var(--white);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
+  padding: 10px 24px;
   position: sticky;
   top: 0;
   z-index: 100;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .topbar-left {
@@ -503,12 +506,12 @@ img {
 .table th,
 .datatable th {
   background: #f8fafc;
-  font-size: 11.5px;
+  font-size: 14px;
   font-weight: 700;
-  color: #475569;
+  color: #334155;
   text-transform: uppercase;
-  letter-spacing: .06em;
-  padding: 13px 18px;
+  letter-spacing: .05em;
+  padding: 14px 18px;
   border-top: 1px solid #e2e8f0;
   border-bottom: 2px solid #e2e8f0;
   white-space: nowrap;
@@ -518,12 +521,12 @@ img {
 
 .table td,
 .datatable td {
-  padding: 14px 18px;
+  padding: 16px 18px;
   border-bottom: 1px solid #f1f5f9;
-  font-size: 13.5px;
+  font-size: 15px;
   color: #1e293b;
   vertical-align: middle;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .table tbody tr,
@@ -749,19 +752,19 @@ img {
 
 .form-label {
   display: block;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--dark-3);
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .form-control,
 .form-select {
   width: 100%;
-  padding: 9px 13px;
+  padding: 10px 14px;
   border: 1.5px solid var(--gray-light);
   border-radius: 8px;
-  font-size: 13.5px;
+  font-size: 16px;
   font-family: 'Inter', sans-serif;
   color: var(--dark);
   background: var(--white);
@@ -794,16 +797,18 @@ textarea.form-control {
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 9px 18px;
+  gap: 8px;
+  padding: 10px 20px;
   border-radius: 8px;
-  font-size: 13.5px;
+  font-size: 15px;
   font-weight: 600;
   font-family: 'Inter', sans-serif;
   cursor: pointer;
   border: none;
   transition: all var(--transition);
-  white-space: nowrap;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.5;
 }
 
 .btn-sm {
@@ -885,14 +890,14 @@ textarea.form-control {
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 3px 9px;
+  gap: 6px;
+  padding: 4px 10px;
   border-radius: 6px;
-  font-size: 11.5px;
+  font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.02em;
-  line-height: 1.35;
-  white-space: nowrap;
+  line-height: 1.4;
+  white-space: normal;
   background: #f1f5f9;
   color: #475569;
   border: 1px solid #e2e8f0;
@@ -1012,11 +1017,11 @@ textarea.form-control {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 36px;
-  height: 36px;
-  padding: 0 13px;
+  min-width: 40px;
+  height: 40px;
+  padding: 0 14px;
   border-radius: 8px;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 600;
   color: #334155;
   background: #ffffff;
@@ -1922,17 +1927,17 @@ textarea.form-control {
 }
 
 .grid-2 {
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 16px;
 }
 
 .grid-3 {
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 16px;
 }
 
 .grid-4 {
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 16px;
 }
 

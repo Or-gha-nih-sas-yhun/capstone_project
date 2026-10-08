@@ -16,6 +16,7 @@ class ResidentManagementController extends Controller
         $search = $request->input('search');
         $status = $request->input('status', 'active');
         $editId = $request->input('edit');
+        $classification = $request->input('classification');
 
         $query = Resident::whereNull('archived_at');
 
@@ -24,7 +25,6 @@ class ResidentManagementController extends Controller
                 $q->where('status', 'inactive');
             });
         } else {
-            // Active residents whose user is active or don't have user account
             $query->where(function ($q) {
                 $q->whereHas('user', function ($qu) {
                     $qu->where('status', 'active');
@@ -41,7 +41,19 @@ class ResidentManagementController extends Controller
             });
         }
 
-        $residents = $query->orderBy('last_name')->orderBy('first_name')->paginate(8);
+        // Classification filter
+        $sixtyYearsAgo = now()->subYears(60)->format('Y-m-d');
+        if ($classification === 'pwd') {
+            $query->where('is_pwd', true);
+        } elseif ($classification === 'senior') {
+            $query->where('birthdate', '<=', $sixtyYearsAgo);
+        } elseif ($classification === 'single_parent') {
+            $query->where('is_single_parent', true);
+        } elseif ($classification === 'widowed') {
+            $query->where('civil_status', 'Widowed');
+        }
+
+        $residents = $query->orderBy('last_name')->orderBy('first_name')->paginate(15);
 
         $editResident = null;
         if ($editId) {
@@ -53,7 +65,18 @@ class ResidentManagementController extends Controller
                 $q->where('status', 'inactive');
             })->count();
 
-        return view('admin.residents', compact('residents', 'editResident', 'status', 'search', 'pendingCount'));
+        // Classification summary counts
+        $classificationCounts = [
+            'total'         => Resident::whereNull('archived_at')->count(),
+            'pwd'           => Resident::whereNull('archived_at')->where('is_pwd', true)->count(),
+            'senior'        => Resident::whereNull('archived_at')->where('birthdate', '<=', $sixtyYearsAgo)->count(),
+            'single_parent' => Resident::whereNull('archived_at')->where('is_single_parent', true)->count(),
+            'widowed'       => Resident::whereNull('archived_at')->where('civil_status', 'Widowed')->count(),
+            'married'       => Resident::whereNull('archived_at')->where('civil_status', 'Married')->count(),
+            'single'        => Resident::whereNull('archived_at')->where('civil_status', 'Single')->count(),
+        ];
+
+        return view('admin.residents', compact('residents', 'editResident', 'status', 'search', 'pendingCount', 'classificationCounts', 'classification'));
     }
 
     public function store(Request $request)
@@ -84,6 +107,10 @@ class ResidentManagementController extends Controller
             'civil_status', 'contact_number', 'email', 'address', 'purok',
             'occupation', 'voter_status', 'years_of_residency'
         ]);
+
+        // Checkbox fields (unchecked = 0 via hidden input)
+        $data['is_pwd']          = $request->input('is_pwd', 0) ? 1 : 0;
+        $data['is_single_parent'] = $request->input('is_single_parent', 0) ? 1 : 0;
 
         $id = $request->resident_id;
 

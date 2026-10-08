@@ -32,6 +32,15 @@
         <label class="form-label">Reporting Month</label>
         <input type="month" name="month" class="form-control" value="{{ $month }}">
       </div>
+      <div>
+        <label class="form-label">Filter Demographics by Purok</label>
+        <select name="purok" class="form-select">
+          <option value="">All Puroks</option>
+          @foreach($puroks as $purok)
+            <option value="{{ $purok }}" {{ $purokFilter === $purok ? 'selected' : '' }}>{{ $purok }}</option>
+          @endforeach
+        </select>
+      </div>
       <button type="submit" class="btn btn-primary"><i class="fas fa-filter"></i> Generate</button>
       <button type="button" class="btn btn-success" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
       <button type="submit" name="export" value="csv" class="btn btn-secondary"><i class="fas fa-file-csv"></i> Export CSV</button>
@@ -72,9 +81,9 @@
     </div>
   </div>
 
-  <section class="report-section" style="margin-bottom:24px;">
+  <section class="report-section" style="margin-bottom:24px; overflow-x: auto;">
     <h3 style="font-size:14px; font-weight:800; border-bottom:1px solid #e5e7eb; padding-bottom:6px; margin-bottom:10px; color:#374151;">Transactions Report</h3>
-    <table class="report-table" style="width:100%; border-collapse:collapse; font-size:12.5px;">
+    <table class="report-table" style="width:100%; border-collapse:collapse; font-size:12.5px; min-width: 600px;">
       <thead>
         <tr style="border-bottom:2px solid #e5e7eb; text-align:left; background:#f9fafb;">
           <th style="padding:8px;">Tracking No.</th>
@@ -106,9 +115,9 @@
     </table>
   </section>
 
-  <section class="report-section" style="margin-bottom:24px;">
+  <section class="report-section" style="margin-bottom:24px; overflow-x: auto;">
     <h3 style="font-size:14px; font-weight:800; border-bottom:1px solid #e5e7eb; padding-bottom:6px; margin-bottom:10px; color:#374151;">Breakdown by Certificate Types</h3>
-    <table class="report-table" style="width:100%; border-collapse:collapse; font-size:12.5px;">
+    <table class="report-table" style="width:100%; border-collapse:collapse; font-size:12.5px; min-width: 600px;">
       <thead>
         <tr style="border-bottom:2px solid #e5e7eb; text-align:left; background:#f9fafb;">
           <th style="padding:8px;">Certificate Type</th>
@@ -140,10 +149,39 @@
 
   <section class="report-section" style="margin-bottom:24px;">
     <h3 style="font-size:14px; font-weight:800; border-bottom:1px solid #e5e7eb; padding-bottom:6px; margin-bottom:10px; color:#374151;">Resident Demographics</h3>
-    <div style="display:flex; gap:24px;">
-      <div style="flex:1;">
+    <div style="display:flex; flex-wrap:wrap; gap:24px;">
+      <div style="flex: 1 1 250px; overflow-x: auto;">
+        <h4 style="font-size:12px; margin-bottom:8px; font-weight:700;">Special Classifications</h4>
+        <table class="report-table" style="width:100%; border-collapse:collapse; font-size:12.5px; min-width: 250px;">
+          <thead>
+            <tr style="border-bottom:2px solid #e5e7eb; text-align:left; background:#f9fafb;">
+              <th style="padding:8px;">Classification</th>
+              <th style="padding:8px;">Total Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:8px; font-weight: 600;">Total Registered Residents</td>
+              <td style="padding:8px; font-weight: 600;">{{ $demographics['total_registered'] }}</td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:8px;">PWD (Persons with Disabilities)</td>
+              <td style="padding:8px;">{{ $demographics['total_pwd'] }}</td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:8px;">Senior Citizens (60+ years)</td>
+              <td style="padding:8px;">{{ $demographics['total_senior'] }}</td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:8px;">Single Parents</td>
+              <td style="padding:8px;">{{ $demographics['total_single_parent'] }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="flex: 1 1 250px; overflow-x: auto;">
         <h4 style="font-size:12px; margin-bottom:8px; font-weight:700;">By Gender</h4>
-        <table class="report-table" style="width:100%; border-collapse:collapse; font-size:12.5px;">
+        <table class="report-table" style="width:100%; border-collapse:collapse; font-size:12.5px; min-width: 250px;">
           <thead>
             <tr style="border-bottom:2px solid #e5e7eb; text-align:left; background:#f9fafb;">
               <th style="padding:8px;">Gender</th>
@@ -160,9 +198,9 @@
           </tbody>
         </table>
       </div>
-      <div style="flex:1;">
+      <div style="flex: 1 1 250px; overflow-x: auto;">
         <h4 style="font-size:12px; margin-bottom:8px; font-weight:700;">By Civil Status</h4>
-        <table class="report-table" style="width:100%; border-collapse:collapse; font-size:12.5px;">
+        <table class="report-table" style="width:100%; border-collapse:collapse; font-size:12.5px; min-width: 250px;">
           <thead>
             <tr style="border-bottom:2px solid #e5e7eb; text-align:left; background:#f9fafb;">
               <th style="padding:8px;">Status</th>

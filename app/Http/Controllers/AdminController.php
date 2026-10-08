@@ -114,6 +114,8 @@ class AdminController extends Controller
     public function reports(Request $request)
     {
         $month = $request->input('month', date('Y-m'));
+        $purokFilter = $request->input('purok');
+        
         $start = $month . '-01';
         $end = date('Y-m-t', strtotime($start));
         $from = $start . ' 00:00:00';
@@ -181,12 +183,34 @@ class AdminController extends Controller
         $captain = Official::getCaptain();
         $captainName = $captain ? $captain->name : 'PUNONG BARANGAY';
 
+        $activeResidents = Resident::whereNull('archived_at');
+        if ($purokFilter) {
+            $activeResidents->where('purok', $purokFilter);
+        }
+        
+        $totalRegistered = (clone $activeResidents)->count();
+        $totalPwd = (clone $activeResidents)->where('is_pwd', true)->count();
+        $totalSingleParent = (clone $activeResidents)->where('is_single_parent', true)->count();
+        // Senior citizens: Age >= 60 (birthdate <= 60 years ago)
+        $sixtyYearsAgo = now()->subYears(60)->format('Y-m-d');
+        $totalSenior = (clone $activeResidents)->where('birthdate', '<=', $sixtyYearsAgo)->count();
+
         $demographics = [
-            'gender' => Resident::whereNull('archived_at')->select('gender', DB::raw('count(*) as total'))->groupBy('gender')->pluck('total', 'gender')->toArray(),
-            'civil_status' => Resident::whereNull('archived_at')->select('civil_status', DB::raw('count(*) as total'))->groupBy('civil_status')->pluck('total', 'civil_status')->toArray(),
+            'total_registered' => $totalRegistered,
+            'total_pwd' => $totalPwd,
+            'total_senior' => $totalSenior,
+            'total_single_parent' => $totalSingleParent,
+            'total_widowed'  => (clone $activeResidents)->where('civil_status', 'Widowed')->count(),
+            'total_married'  => (clone $activeResidents)->where('civil_status', 'Married')->count(),
+            'total_single'   => (clone $activeResidents)->where('civil_status', 'Single')->count(),
+            'gender'       => (clone $activeResidents)->select('gender', DB::raw('count(*) as total'))->groupBy('gender')->pluck('total', 'gender')->toArray(),
+            'civil_status' => (clone $activeResidents)->select('civil_status', DB::raw('count(*) as total'))->groupBy('civil_status')->pluck('total', 'civil_status')->toArray(),
         ];
 
-        return view('admin.reports', compact('transactions', 'byCert', 'totalAmount', 'month', 'start', 'captainName', 'demographics'));
+        // Get unique puroks for the filter dropdown
+        $puroks = Resident::select('purok')->whereNotNull('purok')->whereNull('archived_at')->distinct()->orderBy('purok')->pluck('purok');
+
+        return view('admin.reports', compact('transactions', 'byCert', 'totalAmount', 'month', 'start', 'captainName', 'demographics', 'puroks', 'purokFilter'));
     }
 
     public function activityLogs()

@@ -17,6 +17,8 @@ class Resident extends Model
         'gender',
         'birthdate',
         'civil_status',
+        'is_pwd',
+        'is_single_parent',
         'nationality',
         'religion',
         'occupation',
@@ -30,6 +32,11 @@ class Resident extends Model
         'status',
         'archived_at',
         'archived_by'
+    ];
+
+    protected $casts = [
+        'is_pwd'          => 'boolean',
+        'is_single_parent' => 'boolean',
     ];
 
     public function user()
