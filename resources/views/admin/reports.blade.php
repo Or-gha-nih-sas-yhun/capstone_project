@@ -138,6 +138,50 @@
     </table>
   </section>
 
+  <section class="report-section" style="margin-bottom:24px;">
+    <h3 style="font-size:14px; font-weight:800; border-bottom:1px solid #e5e7eb; padding-bottom:6px; margin-bottom:10px; color:#374151;">Resident Demographics</h3>
+    <div style="display:flex; gap:24px;">
+      <div style="flex:1;">
+        <h4 style="font-size:12px; margin-bottom:8px; font-weight:700;">By Gender</h4>
+        <table class="report-table" style="width:100%; border-collapse:collapse; font-size:12.5px;">
+          <thead>
+            <tr style="border-bottom:2px solid #e5e7eb; text-align:left; background:#f9fafb;">
+              <th style="padding:8px;">Gender</th>
+              <th style="padding:8px;">Total Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach($demographics['gender'] as $gender => $count)
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:8px;">{{ ucfirst($gender) }}</td>
+              <td style="padding:8px;">{{ $count }}</td>
+            </tr>
+            @endforeach
+          </tbody>
+        </table>
+      </div>
+      <div style="flex:1;">
+        <h4 style="font-size:12px; margin-bottom:8px; font-weight:700;">By Civil Status</h4>
+        <table class="report-table" style="width:100%; border-collapse:collapse; font-size:12.5px;">
+          <thead>
+            <tr style="border-bottom:2px solid #e5e7eb; text-align:left; background:#f9fafb;">
+              <th style="padding:8px;">Status</th>
+              <th style="padding:8px;">Total Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach($demographics['civil_status'] as $status => $count)
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:8px;">{{ ucfirst($status) }}</td>
+              <td style="padding:8px;">{{ $count }}</td>
+            </tr>
+            @endforeach
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
   <section class="report-section" style="margin-top:40px;">
     <div class="report-signatures" style="display:flex; justify-content:space-between; align-items:flex-start;">
       <div style="text-align:left;">

@@ -181,7 +181,12 @@ class AdminController extends Controller
         $captain = Official::getCaptain();
         $captainName = $captain ? $captain->name : 'PUNONG BARANGAY';
 
-        return view('admin.reports', compact('transactions', 'byCert', 'totalAmount', 'month', 'start', 'captainName'));
+        $demographics = [
+            'gender' => Resident::whereNull('archived_at')->select('gender', DB::raw('count(*) as total'))->groupBy('gender')->pluck('total', 'gender')->toArray(),
+            'civil_status' => Resident::whereNull('archived_at')->select('civil_status', DB::raw('count(*) as total'))->groupBy('civil_status')->pluck('total', 'civil_status')->toArray(),
+        ];
+
+        return view('admin.reports', compact('transactions', 'byCert', 'totalAmount', 'month', 'start', 'captainName', 'demographics'));
     }
 
     public function activityLogs()
