@@ -374,7 +374,6 @@
     <div class="card">
       <div class="card-header">
         <h5><i class="fas fa-history" style="color:var(--primary);margin-right:8px;"></i>Recent Activity</h5>
-        <a href="{{ route('admin.activity') }}" class="btn btn-outline-primary btn-sm">View All</a>
       </div>
       <div class="card-body">
         <ul class="activity-list">
