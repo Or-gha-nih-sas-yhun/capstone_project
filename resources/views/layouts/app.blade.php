@@ -181,7 +181,11 @@
           <span class="topbar-title">@yield('title', 'Dashboard')</span>
         </div>
         <div class="topbar-right">
-
+          <div class="zoom-controls" style="display:flex; align-items:center; gap: 4px; margin-right: 12px; background: #f3f4f6; padding: 2px; border-radius: 6px;">
+            <button type="button" class="btn btn-sm" onclick="adjustZoom(-0.1)" title="Zoom Out" style="padding: 4px 8px; background:transparent; border:none; color: #374151;"><i class="fas fa-search-minus"></i></button>
+            <button type="button" class="btn btn-sm" onclick="resetZoom()" title="Reset Zoom" style="padding: 4px 8px; background:transparent; border:none; color: #374151;"><i class="fas fa-search"></i></button>
+            <button type="button" class="btn btn-sm" onclick="adjustZoom(0.1)" title="Zoom In" style="padding: 4px 8px; background:transparent; border:none; color: #374151;"><i class="fas fa-search-plus"></i></button>
+          </div>
           @if(str_contains(request()->header('User-Agent', ''), 'BrgyPiliApp') && Auth::user()->role === 'resident')
             <button type="button" class="btn btn-outline-secondary btn-sm" title="Log out"
               onclick="document.getElementById('logoutModal').style.display='flex'">
@@ -318,6 +322,27 @@
   <script src="{{ asset('assets/js/main.js') }}"></script>
   @yield('scripts')
 
+  <script>
+    let currentZoom = parseFloat(localStorage.getItem('appZoom')) || 1;
+    function applyZoom() {
+      // Use CSS zoom
+      document.body.style.zoom = currentZoom;
+    }
+    function adjustZoom(step) {
+      currentZoom += step;
+      if (currentZoom < 0.6) currentZoom = 0.6;
+      if (currentZoom > 2.0) currentZoom = 2.0;
+      localStorage.setItem('appZoom', currentZoom);
+      applyZoom();
+    }
+    function resetZoom() {
+      currentZoom = 1;
+      localStorage.setItem('appZoom', currentZoom);
+      applyZoom();
+    }
+    // Apply immediately
+    applyZoom();
+  </script>
 
   {{-- Logout Confirmation Modal (works in all WebViews / APK) --}}
   <div id="logoutModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:9999; align-items:center; justify-content:center; padding:20px;">
