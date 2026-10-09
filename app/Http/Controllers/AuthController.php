@@ -19,7 +19,7 @@ class AuthController extends Controller
     // ── Standard (Resident) Login ─────────────────────────────
     public function showLogin()
     {
-        $adminDomain = config('app.admin_domain', env('ADMIN_DOMAIN', 'admin.brgypilieclearance.com'));
+        $adminDomain = config('barangay.admin_domain');
         if (request()->getHost() === $adminDomain) {
             return $this->showAdminLogin();
         }
@@ -38,7 +38,7 @@ class AuthController extends Controller
         ]);
 
         // Google reCAPTCHA verification (for web logins, exempts Android APK)
-        $isMobileApp = str_contains((string) $request->userAgent(), 'BrgyPiliApp');
+        $isMobileApp = is_mobile_app($request);
         if (!$isMobileApp && !$this->verifyRecaptcha($request)) {
             return back()->with('error', 'Please complete the Google reCAPTCHA security verification to proceed.')
                 ->withInput($request->only('email'));
@@ -78,7 +78,7 @@ class AuthController extends Controller
         return $this->redirectUser();
     }
 
-    // ── Dedicated Admin Auth (admin.brgypilieclearance.com or /admin/login) ────
+    // ── Dedicated Admin Auth (admin subdomain or /admin/login) ─────────────────
     public function showAdminLogin()
     {
         if (Auth::check()) {
@@ -369,11 +369,11 @@ class AuthController extends Controller
         $email = $user->email;
         try {
             Mail::send('emails.admin-login-otp', ['code' => $otp, 'user' => $user], function ($message) use ($email) {
-                $fromAddress = config('mail.from.address') ?: 'no-reply@brgypilieclearance.com';
-                $fromName = config('mail.from.name') ?: 'Barangay Pili Clearance';
+                $fromAddress = config('mail.from.address') ?: 'no-reply@' . config('barangay.domain');
+                $fromName = config('mail.from.name') ?: setting('brand.app_title', barangay_label());
                 $message->from($fromAddress, $fromName);
                 $message->to($email);
-                $message->subject('Admin Portal Verification Code - Barangay Pili');
+                $message->subject('Admin Portal Verification Code - ' . barangay_label());
             });
             Log::info("Admin 2FA OTP sent to {$email}: {$otp}");
         } catch (\Exception $e) {
@@ -394,7 +394,7 @@ class AuthController extends Controller
             'birthdate' => 'required|date|before_or_equal:today',
             'civil_status' => 'required|in:Single,Married,Widowed,Separated',
             'contact_number' => 'nullable|string',
-            'purok' => 'nullable|string',
+            'purok' => purok_rule(),
             'years_of_residency' => 'nullable|integer|min:0',
             'email' => 'required|email|unique:users,email',
             'username' => 'required|string|unique:users,username',
@@ -418,7 +418,7 @@ class AuthController extends Controller
                 'civil_status' => $request->civil_status,
                 'contact_number' => $request->contact_number,
                 'email' => $request->email,
-                'address' => 'Barangay Pili, Madridejos, Cebu', // Default fallback address
+                'address' => barangay_location(true), // Default fallback address
                 'purok' => $request->purok,
                 'voter_status' => 'Not Registered',
                 'years_of_residency' => $request->years_of_residency ?? 0,
@@ -461,7 +461,7 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $wasAdmin = Auth::check() && in_array(Auth::user()->role, ['admin', 'staff']);
-        $adminDomain = config('app.admin_domain', env('ADMIN_DOMAIN', 'admin.brgypilieclearance.com'));
+        $adminDomain = config('barangay.admin_domain');
         $isOnAdminDomain = request()->getHost() === $adminDomain;
 
         if (Auth::check()) {
@@ -520,11 +520,11 @@ class AuthController extends Controller
         $email = $request->email;
         try {
             Mail::send('emails.forgot-password', ['resetUrl' => $resetUrl], function ($message) use ($email) {
-                $fromAddress = config('mail.from.address') ?: 'no-reply@brgypilieclearance.com';
-                $fromName = config('mail.from.name') ?: 'Barangay Pili Clearance';
+                $fromAddress = config('mail.from.address') ?: 'no-reply@' . config('barangay.domain');
+                $fromName = config('mail.from.name') ?: setting('brand.app_title', barangay_label());
                 $message->from($fromAddress, $fromName);
                 $message->to($email);
-                $message->subject('Reset Password - Barangay Pili Clearance & Certificate System');
+                $message->subject('Reset Password - ' . setting('brand.app_title', barangay_label()));
             });
 
             Log::info("Password reset link requested for {$email}: {$resetUrl}");
@@ -646,11 +646,11 @@ class AuthController extends Controller
         $email = $user->email;
         try {
             Mail::send('emails.verify-email', ['code' => $code], function ($message) use ($email) {
-                $fromAddress = config('mail.from.address') ?: 'no-reply@brgypilieclearance.com';
-                $fromName = config('mail.from.name') ?: 'Barangay Pili Clearance';
+                $fromAddress = config('mail.from.address') ?: 'no-reply@' . config('barangay.domain');
+                $fromName = config('mail.from.name') ?: setting('brand.app_title', barangay_label());
                 $message->from($fromAddress, $fromName);
                 $message->to($email);
-                $message->subject('Verify Your Email Address - Barangay Pili Clearance & Certificate System');
+                $message->subject('Verify Your Email Address - ' . setting('brand.app_title', barangay_label()));
             });
             Log::info("Verification code sent to {$email}: {$code}");
         } catch (\Exception $e) {

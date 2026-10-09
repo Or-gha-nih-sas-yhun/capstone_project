@@ -112,9 +112,9 @@ class PaymentController extends Controller
             if ($autoApproved) {
                 $smsText = "Hi {$firstName}, payment of PHP {$amount} for document request ({$certReq->tracking_number}) is PAID. Your request is APPROVED and ready for pickup at the Barangay Hall. Bring a valid ID.";
             } elseif ($payment->payment_status === 'paid') {
-                $smsText = "Hi {$firstName}, payment of PHP {$amount} for document request ({$certReq->tracking_number}) has been recorded as PAID. - Barangay Pili";
+                $smsText = "Hi {$firstName}, payment of PHP {$amount} for document request ({$certReq->tracking_number}) has been recorded as PAID. - " . sms_signature();
             } elseif ($payment->payment_status === 'waived') {
-                $smsText = "Hi {$firstName}, the payment for document request ({$certReq->tracking_number}) has been WAIVED. No payment is required. - Barangay Pili";
+                $smsText = "Hi {$firstName}, the payment for document request ({$certReq->tracking_number}) has been WAIVED. No payment is required. - " . sms_signature();
             } else {
                 $smsText = "Hi {$firstName}, the payment for document request ({$certReq->tracking_number}) is marked UNPAID. Please visit the Barangay Hall for assistance.";
             }

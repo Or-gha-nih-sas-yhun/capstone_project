@@ -44,7 +44,19 @@ class Resident extends Model
 
     public function getFullNameAttribute()
     {
-        return trim($this->first_name . ' ' . $this->middle_name . ' ' . $this->last_name . ' ' . $this->suffix);
+        // Drop the blank parts before joining: concatenating with spaces and
+        // trimming only the ends left a double space inside the name whenever
+        // a middle name or suffix was missing, which showed up on printed
+        // certificates.
+        $parts = array_filter(
+            array_map(
+                fn ($part) => trim((string) $part),
+                [$this->first_name, $this->middle_name, $this->last_name, $this->suffix]
+            ),
+            fn ($part) => $part !== ''
+        );
+
+        return implode(' ', $parts);
     }
 
     public function getAgeAttribute()

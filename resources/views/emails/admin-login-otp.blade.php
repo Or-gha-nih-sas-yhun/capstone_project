@@ -141,12 +141,12 @@
     <div class="email-card">
       <div class="email-header">
         <span class="badge">Official Security Notice</span>
-        <h1>Barangay Pili Administrative Portal</h1>
+        <h1>{{ barangay_label() }} Administrative Portal</h1>
       </div>
       <div class="email-body">
         <h2>Two-Factor Authentication Code</h2>
         <p>Hello <strong>{{ $user->username }}</strong>,</p>
-        <p>A sign-in request to the <strong>Barangay Pili Administrative Portal</strong> was initiated with your credentials. Please use the one-time security code below to complete your login:</p>
+        <p>A sign-in request to the <strong>{{ barangay_label() }} Administrative Portal</strong> was initiated with your credentials. Please use the one-time security code below to complete your login:</p>
         
         <div class="otp-container">
           <div class="otp-label">Your One-Time Password (OTP)</div>
@@ -155,13 +155,13 @@
         </div>
 
         <div class="security-notice">
-          <p><strong>Security Warning:</strong> Never share this code with anyone. Barangay Pili IT and administrators will never ask for your verification code. If you did not initiate this sign-in attempt, someone may have obtained your password &mdash; please change your password immediately.</p>
+          <p><strong>Security Warning:</strong> Never share this code with anyone. {{ barangay_label() }} IT and administrators will never ask for your verification code. If you did not initiate this sign-in attempt, someone may have obtained your password &mdash; please change your password immediately.</p>
         </div>
 
         <table class="meta-table">
           <tr>
             <td>Portal:</td>
-            <td>admin.brgypilieclearance.com</td>
+            <td>{{ config('barangay.admin_domain') }}</td>
           </tr>
           <tr>
             <td>IP Address:</td>
@@ -174,7 +174,7 @@
         </table>
       </div>
       <div class="email-footer">
-        <p>&copy; {{ date('Y') }} Barangay Pili, Madridejos, Cebu. All rights reserved.</p>
+        <p>&copy; {{ date('Y') }} {{ barangay_location(true) }}. All rights reserved.</p>
         <p>Automated security notification &bull; Do not reply to this email.</p>
       </div>
     </div>

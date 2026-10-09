@@ -16,10 +16,12 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\SummonController;
 use App\Http\Controllers\BulletinController;
 use App\Http\Controllers\BorrowRequestController;
+use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\PurokController;
 
-$adminDomain = config('app.admin_domain', env('ADMIN_DOMAIN', 'admin.brgypilieclearance.com'));
+$adminDomain = config('barangay.admin_domain');
 
-// ── Admin Subdomain Routes (admin.brgypilieclearance.com) ──
+// ── Admin Subdomain Routes (config: barangay.admin_domain) ──
 Route::domain($adminDomain)->group(function () {
     Route::middleware('guest')->group(function () {
         Route::get('/', [AuthController::class, 'showAdminLogin'])->name('admin.subdomain.root');
@@ -50,7 +52,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 // ── Public Routes (Resident & General) ────────────────────
 Route::get('/', function () {
-    if (str_contains(request()->header('User-Agent'), 'BrgyPiliApp')) {
+    if (is_mobile_app()) {
         return redirect()->route('login');
     }
     $bulletins = \App\Models\BulletinAnnouncement::orderBy('is_pinned', 'desc')
@@ -186,6 +188,15 @@ Route::middleware(['auth', 'role:staff,admin'])->prefix('admin')->name('admin.')
         // Reports and Activity logs
         Route::get('/reports', [AdminController::class, 'reports'])->name('reports');
         Route::get('/activity-logs', [AdminController::class, 'activityLogs'])->name('activity_logs');
+
+        // Barangay configuration (identity, branding)
+        Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
+        Route::post('/settings', [SettingsController::class, 'update'])->name('settings.update');
+
+        // Purok / sitio list
+        Route::get('/puroks', [PurokController::class, 'index'])->name('puroks');
+        Route::post('/puroks/store', [PurokController::class, 'store'])->name('puroks.store');
+        Route::get('/puroks/delete/{id}', [PurokController::class, 'delete'])->name('puroks.delete');
     });
 });
 
@@ -193,9 +204,17 @@ Route::middleware(['auth', 'role:staff,admin'])->prefix('admin')->name('admin.')
 Route::middleware('auth')->get('/print/certificate/{id}', [PrintController::class, 'print'])->name('print.certificate');
 Route::middleware('auth')->get('/print/summon/{id}/{form_type}', [PrintController::class, 'printSummon'])->name('print.summon');
 
-// ── Temporary Secure Migration Trigger for Vercel ──────────────────
+// ── Migration Trigger for hosts without shell access ───────────────
+// Disabled unless MIGRATION_KEY is set in .env. The key was previously
+// hard-coded, which left this endpoint usable by anyone who read the source.
 Route::get('/run-migrations', function (\Illuminate\Http\Request $request) {
-    if ($request->query('key') !== 'pili2026') {
+    $expected = config('barangay.migration_key');
+
+    if (empty($expected)) {
+        abort(404);
+    }
+
+    if (! is_string($request->query('key')) || ! hash_equals($expected, $request->query('key'))) {
         abort(403, 'Unauthorized');
     }
     try {

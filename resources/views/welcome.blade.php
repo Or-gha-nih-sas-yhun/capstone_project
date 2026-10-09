@@ -2,16 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Welcome — Barangay Pili Digital Portal</title>
+  <title>Welcome — {{ barangay_label() }} Digital Portal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Official online services portal for Barangay Pili. Request certificates, track status, and view announcements.">
-  <link rel="icon" type="image/png" href="{{ asset('assets/images/pili_logo.png?v=2') }}">
-  <link rel="shortcut icon" href="{{ asset('assets/images/pili_logo.png?v=2') }}">
+  <meta name="description" content="Official online services portal for {{ barangay_label() }}. Request certificates, track status, and view announcements.">
+  <link rel="icon" type="image/png" href="{{ setting_image('brand.logo') }}">
+  <link rel="shortcut icon" href="{{ setting_image('brand.logo') }}">
   <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <script>
-    if (navigator.userAgent.includes('BrgyPiliApp')) {
+    var appTokens = ['{{ config('barangay.mobile_ua_token') }}', 'BrgyPiliApp'];
+    if (appTokens.some(function (t) { return t && navigator.userAgent.includes(t); })) {
       window.location.href = "{{ route('register') }}";
     }
   </script>
@@ -919,14 +920,14 @@
   <!-- Navbar -->
   <nav class="navbar">
     <div class="logo-container">
-      <img src="{{ asset('assets/images/pili_logo.png?v=2') }}" alt="Barangay Pili Logo" style="height: 48px; width: auto; object-fit: contain;">
+      <img src="{{ setting_image('brand.logo') }}" alt="{{ barangay_label() }} Logo" style="height: 48px; width: auto; object-fit: contain;">
     </div>
     <ul class="nav-links">
       <li><a href="#">HOME</a></li>
       <li><a href="#services">BARANGAY SERVICES</a></li>
       <li><a href="#tracking">TRACK APPLICATION</a></li>
       <li><a href="#bulletins">ANNOUNCEMENT</a></li>
-      <li><a href="{{ asset('downloads/barangay-pili-resident-portal-v1.0.3.apk') }}" download>DOWNLOAD APP</a></li>
+      <li><a href="{{ asset(setting('system.apk_path', 'downloads/barangay-pili-resident-portal-v1.0.3.apk')) }}" download>DOWNLOAD APP</a></li>
     </ul>
     <div class="nav-actions">
       <a href="{{ route('login') }}" class="btn-nav-secondary">Resident Login</a>
@@ -943,14 +944,14 @@
       <i class="fas fa-times"></i>
     </button>
     <div class="drawer-logo-container">
-      <img src="{{ asset('assets/images/pili_logo.png?v=2') }}" alt="Barangay Pili Logo" style="height: 54px; width: auto; object-fit: contain;">
+      <img src="{{ setting_image('brand.logo') }}" alt="{{ barangay_label() }} Logo" style="height: 54px; width: auto; object-fit: contain;">
     </div>
     <ul class="drawer-links">
       <li><a href="#">HOME</a></li>
       <li><a href="#services">BARANGAY SERVICES</a></li>
       <li><a href="#tracking">TRACK APPLICATION</a></li>
       <li><a href="#bulletins">ANNOUNCEMENT</a></li>
-      <li><a href="{{ asset('downloads/barangay-pili-resident-portal-v1.0.3.apk') }}" download>DOWNLOAD APP</a></li>
+      <li><a href="{{ asset(setting('system.apk_path', 'downloads/barangay-pili-resident-portal-v1.0.3.apk')) }}" download>DOWNLOAD APP</a></li>
     </ul>
     <div class="drawer-actions">
       <a href="{{ route('login') }}" class="btn-drawer-secondary">Resident Login</a>
@@ -971,7 +972,7 @@
     <div class="hero-grid-container">
       <div class="hero-content">
         <div style="font-weight: 700; color: var(--primary-color); letter-spacing: 2px; margin-bottom: 16px; font-size: 14px; text-transform: uppercase;">
-          BARANGAY PILI
+          {{ strtoupper(barangay_label()) }}
         </div>
         <h1>Modern Digital Services for Residents</h1>
         <p>Request certificates, submit applications, track requests, and receive announcements online.</p>
@@ -1047,7 +1048,7 @@
         <form method="POST" action="{{ route('track') }}" class="track-form">
           @csrf
           <label>Enter Tracking Number</label>
-          <input type="text" name="tracking" placeholder="e.g. PILI-20260730-XXXX" required>
+          <input type="text" name="tracking" placeholder="e.g. {{ setting('system.tracking_prefix', 'BRGY') }}-20260730-XXXX" required>
           <button type="submit" class="btn-track-submit"><i class="fas fa-search"></i> Track Application</button>
         </form>
       </div>
@@ -1058,7 +1059,7 @@
   <section class="section" id="bulletins" style="padding-top:0;">
     <div class="section-header">
       <h2>Announcements &amp; Advisories</h2>
-      <p>Stay up to date with official programs, schedules, and alerts from the Barangay Pili administration.</p>
+      <p>Stay up to date with official programs, schedules, and alerts from the {{ barangay_label() }} administration.</p>
     </div>
     <div class="bulletins-row">
 
@@ -1101,7 +1102,7 @@
         <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--text-muted);">
           <i class="fas fa-bullhorn" style="font-size: 40px; margin-bottom: 16px; display: block; opacity: 0.3;"></i>
           <p style="font-size: 16px; font-weight: 600;">No announcements yet.</p>
-          <p style="font-size: 14px;">Check back soon for updates from Barangay Pili.</p>
+          <p style="font-size: 14px;">Check back soon for updates from {{ barangay_label() }}.</p>
         </div>
       @endforelse
 
@@ -1113,7 +1114,7 @@
     <div class="footer-grid">
       <div class="footer-col" style="padding-right:40px;">
         <div style="margin-bottom:16px;">
-          <img src="{{ asset('assets/images/pili_logo.png?v=2') }}" alt="Barangay Pili Logo" style="height: 60px; width: auto; object-fit: contain;">
+          <img src="{{ setting_image('brand.logo') }}" alt="{{ barangay_label() }} Logo" style="height: 60px; width: auto; object-fit: contain;">
         </div>
         <p style="color:#94a3b8; font-size:14px; line-height:1.6;">Our mission is to establish a transparent, digital, and streamlined administrative portal empowering residents with reliable public service document deliveries and complaint conciliation facilities.</p>
       </div>
@@ -1130,11 +1131,11 @@
         <ul style="color:#94a3b8; font-size:14px; gap:12px; display:flex; flex-direction:column; list-style:none; padding:0; margin:0;">
           <li style="display:flex; align-items:flex-start; gap:10px;">
             <i class="fas fa-map-marker-alt" style="color:#b91c1c; margin-top:3px;"></i> 
-            <span style="line-height:1.4;">Barangay Pili, Madridejos, Cebu, Philippines</span>
+            <span style="line-height:1.4;">{{ barangay_location(true) }}, Philippines</span>
           </li>
           <li style="display:flex; align-items:flex-start; gap:10px;">
             <i class="fas fa-envelope" style="color:#b91c1c; margin-top:3px;"></i> 
-            <span style="line-height:1.4; word-break:break-all;">adminbrgypilieclearance@gmail.com</span>
+            <span style="line-height:1.4; word-break:break-all;">{{ setting('barangay.email', 'info@' . config('barangay.domain')) }}</span>
           </li>
           <li style="display:flex; align-items:flex-start; gap:10px;">
             <i class="fas fa-phone-alt" style="color:#b91c1c; margin-top:3px;"></i> 
@@ -1144,7 +1145,7 @@
       </div>
     </div>
     <div class="footer-bottom" style="justify-content:center;">
-      <div>&copy; 2026 Barangay Pili Online Services Portal. All Rights Reserved.</div>
+      <div>&copy; 2026 {{ barangay_label() }} Online Services Portal. All Rights Reserved.</div>
     </div>
   </footer>
 

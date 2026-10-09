@@ -171,11 +171,11 @@
           </div>
           <div class="form-group" style="grid-column:span 2;">
             <label class="form-label">Complete Address *</label>
-            <input type="text" name="address" class="form-control" required value="{{ old('address', $editResident ? $editResident->address : 'Barangay Pili, Madridejos, Cebu') }}">
+            <input type="text" name="address" class="form-control" required value="{{ old('address', $editResident ? $editResident->address : barangay_location(true)) }}">
           </div>
           <div class="form-group">
             <label class="form-label">Purok</label>
-            <input type="text" name="purok" class="form-control" value="{{ old('purok', $editResident ? $editResident->purok : '') }}">
+            @include('components.purok-select', ['value' => old('purok', $editResident ? $editResident->purok : '')])
           </div>
           <div class="form-group">
             <label class="form-label">Occupation</label>

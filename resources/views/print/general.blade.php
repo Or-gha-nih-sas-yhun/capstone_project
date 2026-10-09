@@ -8,35 +8,36 @@
   $purpose = $certReq->purpose;
   $certName = $certReq->certificate->name;
   $certLower = strtolower($certName);
+  $brgyLabel = barangay_label();
 
   // Generate body text depending on certificate type
   if (str_contains($certLower, 'clearance')) {
     $bodyText = "This is to certify that <strong>$fullName</strong>, {$age} years of age, {$civilStatus}, 
-      a resident of {$address}, Barangay Pili, is known to be a person of <strong>GOOD MORAL CHARACTER</strong> 
+      a resident of {$address}, {$brgyLabel}, is known to be a person of <strong>GOOD MORAL CHARACTER</strong> 
       and has no derogatory record on file in this barangay. This clearance is issued upon the request of the above-named 
       person for the purpose of <strong>" . strtoupper($purpose) . "</strong>.";
   } elseif (str_contains($certLower, 'indigency')) {
     $bodyText = "This is to certify that <strong>$fullName</strong>, {$age} years of age, {$civilStatus}, 
-      a resident of {$address}, Barangay Pili, belongs to the <strong>INDIGENT SECTOR</strong> of our community 
+      a resident of {$address}, {$brgyLabel}, belongs to the <strong>INDIGENT SECTOR</strong> of our community 
       and is financially incapable. This certification is issued upon request for the purpose of 
       <strong>" . strtoupper($purpose) . "</strong>.";
   } elseif (str_contains($certLower, 'residency')) {
     $bodyText = "This is to certify that <strong>$fullName</strong>, {$age} years of age, {$civilStatus}, 
-      is a <strong>BONA FIDE RESIDENT</strong> of {$address}, Barangay Pili, for 
+      is a <strong>BONA FIDE RESIDENT</strong> of {$address}, {$brgyLabel}, for 
       {$yearsOfResidency} year(s). This certification is issued upon request for the purpose of 
       <strong>" . strtoupper($purpose) . "</strong>.";
   } elseif (str_contains($certLower, 'business')) {
-    $bodyText = "This is to certify that <strong>$fullName</strong>, a resident of {$address}, Barangay Pili, 
+    $bodyText = "This is to certify that <strong>$fullName</strong>, a resident of {$address}, {$brgyLabel}, 
       has been granted <strong>BARANGAY BUSINESS CLEARANCE</strong> and has no pending case or complaint in this barangay. 
       This clearance is issued for the purpose of <strong>" . strtoupper($purpose) . "</strong>.";
   } elseif (str_contains($certLower, 'jobseeker')) {
     $bodyText = "This is to certify that <strong>$fullName</strong>, {$age} years of age, a resident of 
-      {$address}, Barangay Pili, is a <strong>FIRST TIME JOBSEEKER</strong> as defined under 
+      {$address}, {$brgyLabel}, is a <strong>FIRST TIME JOBSEEKER</strong> as defined under 
       Republic Act No. 11261. This certification is issued for the purpose of 
       <strong>" . strtoupper($purpose) . "</strong>.";
   } else {
     $bodyText = "This is to certify that <strong>$fullName</strong>, {$age} years of age, {$civilStatus}, 
-      a resident of {$address}, Barangay Pili, is hereby issued this <strong>{$certName}</strong> 
+      a resident of {$address}, {$brgyLabel}, is hereby issued this <strong>{$certName}</strong> 
       upon request for the purpose of <strong>" . strtoupper($purpose) . "</strong>.";
   }
 @endphp
@@ -347,18 +348,24 @@
     <!-- Header -->
     <div class="doc-header">
       <div class="header-seals">
-        <img src="{{ asset('assets/images/pili_logo.png') }}" alt="Barangay Pili Seal">
-        <img src="{{ asset('assets/images/municipality_logo.png') }}" alt="Municipality Seal">
+        <img src="{{ setting_image('brand.logo') }}" alt="{{ barangay_label() }} Seal">
+        <img src="{{ setting_image('brand.municipality_logo', 'assets/images/municipality_logo.png') }}" alt="{{ setting('barangay.municipality', 'Municipality') }} Seal">
       </div>
       <div class="republic">Republic of the Philippines</div>
-      <div class="province">Province of Cebu</div>
-      <div class="municipality">Municipality of Madridejos</div>
-      <div class="brgy-name">BARANGAY PILI</div>
-      <div style="font-size: 8px; color: #1a56db; margin-top: 2px;">Email: brgy.pili.mad@gmail.com</div>
+      @if(barangay_province_line())
+        <div class="province">{{ barangay_province_line() }}</div>
+      @endif
+      @if(barangay_municipality_line())
+        <div class="municipality">{{ barangay_municipality_line() }}</div>
+      @endif
+      <div class="brgy-name">{{ strtoupper(barangay_label()) }}</div>
+      @if(setting('barangay.email'))
+        <div style="font-size: 8px; color: #1a56db; margin-top: 2px;">Email: {{ setting('barangay.email') }}</div>
+      @endif
     </div>
 
     <!-- Office Title -->
-    <div class="office-title">Office of the Barangay Captain</div>
+    <div class="office-title">{{ barangay_office_title() }}</div>
 
     <!-- Left Sidebar with Officials -->
     <div class="sidebar">
@@ -438,13 +445,15 @@
 
     <!-- Main Content -->
     <div class="content">
-      <div class="watermark">BARANGAY PILI</div>
+      <div class="watermark">{{ strtoupper(barangay_label()) }}</div>
 
       <!-- Certificate Title -->
       <div class="cert-title">
-        <h1>BARANGAY CERTIFICATION</h1>
+        <h1>{{ $certReq->certificate->header_title ?: strtoupper(barangay_label() . ' Certification') }}</h1>
         <div style="font-size: 9px; margin-top: 2px; font-style: italic;">
-          @if(str_contains($certLower, 'jobseeker'))
+          @if(($customBody ?? null) !== null)
+            ({{ $certName }})
+          @elseif(str_contains($certLower, 'jobseeker'))
             (First Time Jobseekers Assistance Act- RA 11261)
           @elseif(str_contains($certLower, 'indigency'))
             (Certificate of Indigency)
@@ -458,8 +467,12 @@
       <div class="doc-body">
         <p><strong>To whom it may concern:</strong></p>
 
-        @if(str_contains($certLower, 'jobseeker'))
-          <p>This is to certify that <strong>{{ $fullName }}</strong>, {{ $age }} years old, a resident of Purok <strong>{{ $purok ?? '' }}</strong>, Barangay Pili, Madridejos, Cebu, is a qualified first time jobseeker under <strong>Republic Act No. 11261</strong>.</p>
+        @if(($customBody ?? null) !== null)
+          {{-- Barangay-authored wording. Resident values are escaped by
+               CertificateRenderer before substitution. --}}
+          {!! $customBody !!}
+        @elseif(str_contains($certLower, 'jobseeker'))
+          <p>This is to certify that <strong>{{ $fullName }}</strong>, {{ $age }} years old, a resident of Purok <strong>{{ $purok ?? '' }}</strong>, {{ barangay_location(true) }}, is a qualified first time jobseeker under <strong>Republic Act No. 11261</strong>.</p>
           <p>The holder was informed of the rights, duties, and responsibilities under the First Time Jobseekers Assistance Act and has executed the required undertaking before this barangay office.</p>
           <p>This certification is issued upon request for <strong>{{ strtoupper($purpose) }}</strong> and for lawful purposes it may serve.</p>
         @else
@@ -470,7 +483,7 @@
       <!-- Date and Signatures -->
       <div class="cert-footer">
         <div style="margin-top: 12px; font-size: 9px; line-height: 1.6;">
-          <p>Signed this <strong>{{ date('jS') }} day of {{ date('F Y') }}</strong>, in the Madridejos, Cebu</p>
+          <p>Signed this <strong>{{ date('jS') }} day of {{ date('F Y') }}</strong>, in {{ barangay_municipality_province() }}</p>
         </div>
 
         <div style="margin-top: 20px; text-align: center;">

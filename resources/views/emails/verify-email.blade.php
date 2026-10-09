@@ -87,11 +87,11 @@
   <div class="email-wrapper">
     <div class="email-content">
       <div class="email-header">
-        <h1>Barangay Pili Portal</h1>
+        <h1>{{ setting('brand.portal_name', barangay_label() . ' Portal') }}</h1>
       </div>
       <div class="email-body">
         <h2>Verify Your Email Address</h2>
-        <p>Thank you for registering an account with the Barangay Pili Clearance & Certificate System. To complete your registration, please verify your email address (Step 3) using the 6-digit verification code below:</p>
+        <p>Thank you for registering an account with the {{ setting('brand.app_title', barangay_label() . ' Clearance & Certificate System') }}. To complete your registration, please verify your email address (Step 3) using the 6-digit verification code below:</p>
         
         <div class="code-container">
           <div class="verification-code">{{ $code }}</div>
@@ -101,7 +101,7 @@
         <p>If you did not request this registration, please ignore this email.</p>
       </div>
       <div class="email-footer">
-        <p>&copy; {{ date('Y') }} Barangay Pili. All rights reserved.</p>
+        <p>&copy; {{ date('Y') }} {{ barangay_label() }}. All rights reserved.</p>
       </div>
     </div>
   </div>

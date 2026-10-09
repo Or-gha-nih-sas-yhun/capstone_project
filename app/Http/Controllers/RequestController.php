@@ -74,7 +74,7 @@ class RequestController extends Controller
                 'processed_at' => now(),
             ]);
             $msg = 'Request marked as processing.';
-            $smsText = "Hi {$firstName}, your document request ({$certReq->tracking_number}) is now being processed by Barangay Pili. We will notify you once it is ready.";
+            $smsText = "Hi {$firstName}, your document request ({$certReq->tracking_number}) is now being processed by " . sms_signature() . ". We will notify you once it is ready.";
 
         } elseif ($action === 'reject') {
             $certReq->update([
@@ -130,7 +130,7 @@ class RequestController extends Controller
                 ]);
             }
             $msg = 'Request released and marked as paid.';
-            $smsText = "Hi {$firstName}, your document ({$certReq->tracking_number}) has been successfully released. Thank you! - Barangay Pili";
+            $smsText = "Hi {$firstName}, your document ({$certReq->tracking_number}) has been successfully released. Thank you! - " . sms_signature();
 
         } elseif ($action === 'archive') {
             $certReq->update([
@@ -194,9 +194,9 @@ class RequestController extends Controller
             $amount = number_format((float) $request->amount, 2);
 
             if ($request->payment_status === 'paid') {
-                $smsText = "Hi {$firstName}, payment of PHP {$amount} for document request ({$certReq->tracking_number}) has been recorded as PAID. - Barangay Pili";
+                $smsText = "Hi {$firstName}, payment of PHP {$amount} for document request ({$certReq->tracking_number}) has been recorded as PAID. - " . sms_signature();
             } elseif ($request->payment_status === 'waived') {
-                $smsText = "Hi {$firstName}, the payment for document request ({$certReq->tracking_number}) has been WAIVED. No payment is required. - Barangay Pili";
+                $smsText = "Hi {$firstName}, the payment for document request ({$certReq->tracking_number}) has been WAIVED. No payment is required. - " . sms_signature();
             } else {
                 $smsText = "Hi {$firstName}, the payment for document request ({$certReq->tracking_number}) is marked UNPAID. Please visit the Barangay Hall for assistance.";
             }

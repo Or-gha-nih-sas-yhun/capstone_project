@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'Barangay Pili')
+@section('title', barangay_label())
 
 @section('content')
 <div style="max-width:700px;margin:0 auto;">
   <section style="background:#b91c1c;color:#fff;padding:24px;border-radius:0 0 18px 18px;margin:-24px -24px 22px;">
-    <div style="font-size:13px;opacity:.85;">Barangay Pili Resident Portal</div>
+    <div style="font-size:13px;opacity:.85;">{{ barangay_label() }} Resident Portal</div>
     <h2 style="margin:6px 0;font-size:24px;">Hello, {{ $resident->first_name }}!</h2>
     <p style="margin:0;font-size:14px;opacity:.95;">Request and monitor your barangay documents easily.</p>
   </section>

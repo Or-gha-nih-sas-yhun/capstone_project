@@ -10,7 +10,7 @@ class RoleMiddleware
 {
     public function handle(Request $request, Closure $next, ...$roles)
     {
-        $adminDomain = config('app.admin_domain', env('ADMIN_DOMAIN', 'admin.brgypilieclearance.com'));
+        $adminDomain = config('barangay.admin_domain');
         $adminLoginRoute = ($request->is('admin*') || $request->getHost() === $adminDomain) ? 'admin.login' : 'login';
 
         if (!Auth::check()) {

@@ -87,11 +87,11 @@
   <div class="email-wrapper">
     <div class="email-content">
       <div class="email-header">
-        <h1>Barangay Pili Portal</h1>
+        <h1>{{ setting('brand.portal_name', barangay_label() . ' Portal') }}</h1>
       </div>
       <div class="email-body">
         <h2>Confirm Your Password Change</h2>
-        <p>A request was made to change your Barangay Pili Portal account password. If you initiated this change, please use the 6-digit confirmation code below to authorize and complete the process:</p>
+        <p>A request was made to change your {{ setting('brand.portal_name', barangay_label() . ' Portal') }} account password. If you initiated this change, please use the 6-digit confirmation code below to authorize and complete the process:</p>
         
         <div class="code-container">
           <div class="verification-code">{{ $code }}</div>
@@ -100,7 +100,7 @@
         <p>This code is highly sensitive and should never be shared with anyone. If you did not request a password change, please log in to your account and review your security settings immediately.</p>
       </div>
       <div class="email-footer">
-        <p>&copy; {{ date('Y') }} Barangay Pili. All rights reserved.</p>
+        <p>&copy; {{ date('Y') }} {{ barangay_label() }}. All rights reserved.</p>
       </div>
     </div>
   </div>

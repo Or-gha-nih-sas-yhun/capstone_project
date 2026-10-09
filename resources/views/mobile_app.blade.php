@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Barangay Pili — Mobile Resident Portal</title>
-  <link rel="icon" type="image/png" href="{{ asset('assets/images/pili_logo.png') }}">
+  <title>{{ barangay_label() }} — Mobile Resident Portal</title>
+  <link rel="icon" type="image/png" href="{{ setting_image('brand.logo') }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -838,9 +838,9 @@
         <div></div>
         <div class="splash-center">
           <div class="splash-logo-box">
-            <img src="../assets/images/pili_logo.png" alt="Barangay Pili Seal">
+            <img src="{{ setting_image('brand.logo') }}" alt="{{ barangay_label() }} Seal">
           </div>
-          <h1 class="splash-title">Barangay Pili</h1>
+          <h1 class="splash-title">{{ barangay_label() }}</h1>
           <p class="splash-sub">Clearance & Certificate Processing System</p>
           <div style="margin-top: 32px; width: 100%;">
             <button class="btn btn-primary btn-block" onclick="navigateTo('screen-login')">
@@ -849,7 +849,7 @@
           </div>
         </div>
         <div class="splash-footer">
-          Municipality of Madridejos, Cebu · Resident Portal
+          {{ barangay_municipality_line() }}, Cebu · Resident Portal
         </div>
       </section>
 
@@ -859,10 +859,10 @@
       <section class="screen" id="screen-login">
         <div class="auth-brand-row">
           <div class="auth-brand-logo">
-            <img src="../assets/images/pili_logo.png" alt="Logo">
+            <img src="{{ setting_image('brand.logo') }}" alt="Logo">
           </div>
           <div>
-            <h2 style="font-size: 19px;">Barangay Pili</h2>
+            <h2 style="font-size: 19px;">{{ barangay_label() }}</h2>
             <p style="font-size: 12px; margin-top: 2px;">Resident e-Portal</p>
           </div>
         </div>
@@ -923,7 +923,7 @@
           <div style="display: flex; gap: 10px; align-items: flex-start;">
             <i class="fas fa-shield-halved" style="color: #d97706; margin-top: 2px;"></i>
             <div style="font-size: 12.5px; color: #92400e; line-height: 1.45;">
-              <strong>Admin Verification Required:</strong> Your account registration will be reviewed by Barangay Pili officials before login access is activated.
+              <strong>Admin Verification Required:</strong> Your account registration will be reviewed by {{ barangay_label() }} officials before login access is activated.
             </div>
           </div>
         </div>
@@ -935,8 +935,8 @@
           </div>
 
           <div class="form-group">
-            <label class="form-label">Barangay Pili Address (Purok/Street) *</label>
-            <input type="text" class="form-control" placeholder="e.g. Purok Mangga, Barangay Pili" required>
+            <label class="form-label">{{ barangay_label() }} Address (Purok/Street) *</label>
+            <input type="text" class="form-control" placeholder="e.g. Purok Mangga, {{ barangay_label() }}" required>
           </div>
 
           <div class="form-group">
@@ -968,7 +968,7 @@
           <div style="margin: 20px 0;">
             <label style="display: flex; align-items: flex-start; gap: 10px; font-size: 12.5px; color: var(--neutral-700); cursor: pointer;">
               <input type="checkbox" required style="margin-top: 3px; accent-color: var(--primary);">
-              <span>I certify that all information provided is true and I accept the <a href="javascript:void(0)" style="color: var(--primary);">Terms and Conditions</a> of Barangay Pili.</span>
+              <span>I certify that all information provided is true and I accept the <a href="javascript:void(0)" style="color: var(--primary);">Terms and Conditions</a> of {{ barangay_label() }}.</span>
             </label>
           </div>
 
@@ -986,10 +986,10 @@
         <header class="app-topbar brand-header">
           <div class="topbar-left">
             <div style="width: 32px; height: 32px; border-radius: 50%; background: #fff; padding: 2px;">
-              <img src="../assets/images/pili_logo.png" alt="Logo" style="width: 100%; height: 100%; object-fit: contain;">
+              <img src="{{ setting_image('brand.logo') }}" alt="Logo" style="width: 100%; height: 100%; object-fit: contain;">
             </div>
             <div>
-              <div style="font-size: 11px; opacity: 0.9;">Barangay Pili</div>
+              <div style="font-size: 11px; opacity: 0.9;">{{ barangay_label() }}</div>
               <div class="topbar-title">Hello, Maria!</div>
             </div>
           </div>
@@ -1064,7 +1064,7 @@
               </div>
               <div style="flex: 1; min-width: 0;">
                 <div style="font-size: 14px; font-weight: 700; color: var(--neutral-900);">Certificate of Residency</div>
-                <div style="font-size: 12px; color: var(--neutral-500);">Official proof of residing in Barangay Pili</div>
+                <div style="font-size: 12px; color: var(--neutral-500);">Official proof of residing in {{ barangay_label() }}</div>
               </div>
               <span class="badge" style="background:#f1f5f9; color:#475569;">₱50.00</span>
             </div>
@@ -1135,7 +1135,7 @@
             <div style="display: flex; gap: 10px;">
               <i class="fas fa-info-circle" style="color: #2563eb; margin-top: 2px;"></i>
               <div style="font-size: 12.5px; color: #1e40af; line-height: 1.45;">
-                <strong>Payment & Release:</strong> Processing fees (if applicable) are paid directly at the <strong>Barangay Pili Office</strong> upon claiming. No online payment required.
+                <strong>Payment & Release:</strong> Processing fees (if applicable) are paid directly at the <strong>{{ barangay_label() }} Office</strong> upon claiming. No online payment required.
               </div>
             </div>
           </div>
@@ -1172,7 +1172,7 @@
               </div>
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                 <span style="font-size: 12.5px; color: var(--neutral-600);">Release Location:</span>
-                <span style="font-size: 12.5px; font-weight: 600; color: var(--neutral-800);">Brgy. Pili Hall</span>
+                <span style="font-size: 12.5px; font-weight: 600; color: var(--neutral-800);">{{ setting('brand.short_name', barangay_label()) }} Hall</span>
               </div>
               <div style="display: flex; justify-content: space-between; align-items: center;">
                 <span style="font-size: 12.5px; color: var(--neutral-600);">Estimated Time:</span>
@@ -1213,11 +1213,11 @@
 
         <div style="padding: 16px; flex: 1;" id="requestsListContainer">
           <!-- Request Card 1 -->
-          <div class="request-list-card" data-status="Ready for Release" onclick="openRequestDetails('PILI-2026-0042', 'Barangay Clearance', 'Ready for Release', '₱50.00', 'Local Employment Application', 'Sep 12, 2026')">
+          <div class="request-list-card" data-status="Ready for Release" onclick="openRequestDetails('{{ setting('system.tracking_prefix', 'BRGY') }}-2026-0042', 'Barangay Clearance', 'Ready for Release', '₱50.00', 'Local Employment Application', 'Sep 12, 2026')">
             <div class="req-card-top">
               <div>
                 <div style="font-weight: 700; font-size: 15px;">Barangay Clearance</div>
-                <div class="req-ref-num">#PILI-2026-0042</div>
+                <div class="req-ref-num">#{{ setting('system.tracking_prefix', 'BRGY') }}-2026-0042</div>
               </div>
               <span class="badge badge-ready">Ready for Release</span>
             </div>
@@ -1231,11 +1231,11 @@
           </div>
 
           <!-- Request Card 2 -->
-          <div class="request-list-card" data-status="Processing" onclick="openRequestDetails('PILI-2026-0038', 'Certificate of Indigency', 'Processing', 'FREE', 'Financial & Medical Assistance', 'Sep 10, 2026')">
+          <div class="request-list-card" data-status="Processing" onclick="openRequestDetails('{{ setting('system.tracking_prefix', 'BRGY') }}-2026-0038', 'Certificate of Indigency', 'Processing', 'FREE', 'Financial & Medical Assistance', 'Sep 10, 2026')">
             <div class="req-card-top">
               <div>
                 <div style="font-weight: 700; font-size: 15px;">Certificate of Indigency</div>
-                <div class="req-ref-num">#PILI-2026-0038</div>
+                <div class="req-ref-num">#{{ setting('system.tracking_prefix', 'BRGY') }}-2026-0038</div>
               </div>
               <span class="badge badge-processing">Processing</span>
             </div>
@@ -1249,11 +1249,11 @@
           </div>
 
           <!-- Request Card 3 -->
-          <div class="request-list-card" data-status="Completed" onclick="openRequestDetails('PILI-2026-0019', 'Certificate of Residency', 'Completed', '₱50.00', 'Bank Account Opening', 'Aug 28, 2026', true)">
+          <div class="request-list-card" data-status="Completed" onclick="openRequestDetails('{{ setting('system.tracking_prefix', 'BRGY') }}-2026-0019', 'Certificate of Residency', 'Completed', '₱50.00', 'Bank Account Opening', 'Aug 28, 2026', true)">
             <div class="req-card-top">
               <div>
                 <div style="font-weight: 700; font-size: 15px;">Certificate of Residency</div>
-                <div class="req-ref-num">#PILI-2026-0019</div>
+                <div class="req-ref-num">#{{ setting('system.tracking_prefix', 'BRGY') }}-2026-0019</div>
               </div>
               <span class="badge badge-completed">Completed</span>
             </div>
@@ -1298,7 +1298,7 @@
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
               <div>
                 <h3 style="font-size: 18px;" id="detailDocTitle">Barangay Clearance</h3>
-                <div class="req-ref-num" id="detailRefNumber">#PILI-2026-0042</div>
+                <div class="req-ref-num" id="detailRefNumber">#{{ setting('system.tracking_prefix', 'BRGY') }}-2026-0042</div>
               </div>
             </div>
 
@@ -1327,7 +1327,7 @@
                 <div class="step-marker"><i class="fas fa-check"></i></div>
                 <div>
                   <div style="font-size: 13.5px; font-weight: 700;">Submitted</div>
-                  <div style="font-size: 11.5px; color: var(--neutral-500);">Application received by Barangay Pili</div>
+                  <div style="font-size: 11.5px; color: var(--neutral-500);">Application received by {{ barangay_label() }}</div>
                 </div>
               </div>
 
@@ -1344,7 +1344,7 @@
                 <div class="step-marker"><i class="fas fa-box-archive"></i></div>
                 <div>
                   <div style="font-size: 13.5px; font-weight: 700; color: var(--primary);">Ready for Release</div>
-                  <div style="font-size: 11.5px; color: var(--neutral-600);">Document is printed at Barangay Pili Hall</div>
+                  <div style="font-size: 11.5px; color: var(--neutral-600);">Document is printed at {{ setting('barangay.hall_name', barangay_label() . ' Hall') }}</div>
                 </div>
               </div>
 
@@ -1363,7 +1363,7 @@
             <div style="display: flex; gap: 10px;">
               <i class="fas fa-bullhorn" style="color: var(--primary); margin-top: 2px;"></i>
               <div style="font-size: 12.5px; color: #991b1b; line-height: 1.45;">
-                <strong>Claiming Instructions:</strong> Please visit Barangay Pili Hall during office hours (8:00 AM – 5:00 PM). Present 1 valid ID and reference number <strong>#PILI-2026-0042</strong>.
+                <strong>Claiming Instructions:</strong> Please visit {{ setting('barangay.hall_name', barangay_label() . ' Hall') }} during office hours (8:00 AM – 5:00 PM). Present 1 valid ID and reference number <strong>#{{ setting('system.tracking_prefix', 'BRGY') }}-2026-0042</strong>.
               </div>
             </div>
           </div>
@@ -1400,7 +1400,7 @@
                 <div style="font-size: 13.5px; font-weight: 700;">Document Ready for Release</div>
                 <span style="font-size: 11px; color: var(--neutral-400);">10m ago</span>
               </div>
-              <p style="font-size: 12.5px; margin: 3px 0 0;">Your Barangay Clearance (#PILI-2026-0042) is now ready for claiming at Barangay Pili Hall.</p>
+              <p style="font-size: 12.5px; margin: 3px 0 0;">Your Barangay Clearance (#{{ setting('system.tracking_prefix', 'BRGY') }}-2026-0042) is now ready for claiming at {{ setting('barangay.hall_name', barangay_label() . ' Hall') }}.</p>
             </div>
           </div>
 
@@ -1426,7 +1426,7 @@
                 <div style="font-size: 13.5px; font-weight: 700;">Public Advisory: Free Medical Mission</div>
                 <span style="font-size: 11px; color: var(--neutral-400);">1d ago</span>
               </div>
-              <p style="font-size: 12.5px; margin: 3px 0 0;">Free medical checkup and dental clinic this Saturday at Barangay Pili Covered Court.</p>
+              <p style="font-size: 12.5px; margin: 3px 0 0;">Free medical checkup and dental clinic this Saturday at {{ barangay_label() }} Covered Court.</p>
             </div>
           </div>
 
@@ -1439,7 +1439,7 @@
                 <div style="font-size: 13.5px; font-weight: 700;">Request Submitted</div>
                 <span style="font-size: 11px; color: var(--neutral-400);">2d ago</span>
               </div>
-              <p style="font-size: 12.5px; margin: 3px 0 0;">Your Certificate of Indigency request #PILI-2026-0038 was received successfully.</p>
+              <p style="font-size: 12.5px; margin: 3px 0 0;">Your Certificate of Indigency request #{{ setting('system.tracking_prefix', 'BRGY') }}-2026-0038 was received successfully.</p>
             </div>
           </div>
         </div>
@@ -1467,13 +1467,13 @@
               MS
             </div>
             <h3 style="font-size: 18px; margin-bottom: 2px;">Maria Cruz Santos</h3>
-            <div style="font-size: 12px; color: var(--neutral-500); margin-bottom: 8px;">Resident ID: BRGY-PILI-2024-0891</div>
+            <div style="font-size: 12px; color: var(--neutral-500); margin-bottom: 8px;">Resident ID: {{ setting('system.tracking_prefix', 'BRGY') }}-2024-0891</div>
             <span class="badge badge-approved" style="font-size: 10px;"><i class="fas fa-certificate"></i> Verified Resident</span>
 
             <div style="margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--neutral-100); display: grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: left; font-size: 12px;">
               <div>
                 <span style="color: var(--neutral-400); display: block;">Address:</span>
-                <strong>Purok Mangga, Brgy. Pili</strong>
+                <strong>Purok Mangga, {{ setting('brand.short_name', barangay_label()) }}</strong>
               </div>
               <div>
                 <span style="color: var(--neutral-400); display: block;">Contact:</span>
@@ -1504,7 +1504,7 @@
               <i class="fas fa-chevron-right" style="font-size: 12px; color: var(--neutral-400);"></i>
             </div>
 
-            <div class="service-card-item" onclick="showToast('Barangay Pili Hall: (032) 123-4567')" style="border: none; border-radius: 0; box-shadow: none; border-bottom: 1px solid var(--neutral-100);">
+            <div class="service-card-item" onclick="showToast('{{ setting('barangay.hall_name', barangay_label() . ' Hall') }}: (032) 123-4567')" style="border: none; border-radius: 0; box-shadow: none; border-bottom: 1px solid var(--neutral-100);">
               <i class="fas fa-circle-question" style="color: var(--neutral-600); font-size: 16px; width: 24px;"></i>
               <div style="flex: 1; font-size: 14px; font-weight: 600;">Help & Barangay Support</div>
               <i class="fas fa-chevron-right" style="font-size: 12px; color: var(--neutral-400);"></i>
@@ -1542,17 +1542,17 @@
           <!-- Document Preview Notice -->
           <div style="background: #f8fafc; border: 1px solid var(--neutral-200); padding: 12px; border-radius: var(--radius-md); font-size: 12px; color: var(--neutral-600); margin-bottom: 14px;">
             <i class="fas fa-circle-info" style="color: var(--primary); margin-right: 4px;"></i>
-            <strong>Official Release Notice:</strong> This digital preview confirms approval. The official embossed physical document with dry seal must be claimed in-person at Barangay Pili Hall.
+            <strong>Official Release Notice:</strong> This digital preview confirms approval. The official embossed physical document with dry seal must be claimed in-person at {{ setting('barangay.hall_name', barangay_label() . ' Hall') }}.
           </div>
 
           <!-- Certificate Sheet -->
           <div class="cert-preview-sheet">
-            <img src="../assets/images/pili_logo.png" alt="Watermark" class="cert-watermark-seal">
+            <img src="{{ setting_image('brand.logo') }}" alt="Watermark" class="cert-watermark-seal">
 
             <div class="cert-seal-header">
               <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: #475569;">Republic of the Philippines</div>
-              <div style="font-size: 11px; font-weight: 700; color: #0f172a;">Province of Cebu · Municipality of Madridejos</div>
-              <div style="font-size: 13px; font-weight: 900; color: #b91c1c; margin-top: 2px;">BARANGAY PILI</div>
+              <div style="font-size: 11px; font-weight: 700; color: #0f172a;">{{ barangay_province_line() }} · {{ barangay_municipality_line() }}</div>
+              <div style="font-size: 13px; font-weight: 900; color: #b91c1c; margin-top: 2px;">{{ strtoupper(barangay_label()) }}</div>
               <div style="font-size: 10px; color: #64748b;">OFFICE OF THE PUNONG BARANGAY</div>
             </div>
 
@@ -1564,13 +1564,13 @@
 
             <div style="font-size: 12px; line-height: 1.6; color: #1e293b; text-align: justify; margin-bottom: 20px;">
               <p style="margin-bottom: 10px;"><strong>TO WHOM IT MAY CONCERN:</strong></p>
-              <p>This is to certify that <strong>MARIA CRUZ SANTOS</strong>, of legal age, Filipino, Single, is a bona fide resident of Barangay Pili, Madridejos, Cebu, with good moral character.</p>
+              <p>This is to certify that <strong>MARIA CRUZ SANTOS</strong>, of legal age, Filipino, Single, is a bona fide resident of {{ barangay_location(true) }}, with good moral character.</p>
               <p style="margin-top: 8px;">Issued upon request for <strong>LOCAL EMPLOYMENT APPLICATION</strong>.</p>
             </div>
 
             <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 24px; font-size: 11px;">
               <div>
-                <div>Control #: <strong>PILI-2026-0042</strong></div>
+                <div>Control #: <strong>{{ setting('system.tracking_prefix', 'BRGY') }}-2026-0042</strong></div>
                 <div>Date Issued: <strong>Sep 12, 2026</strong></div>
                 <div style="color: #059669; font-weight: 700; margin-top: 4px;"><i class="fas fa-stamp"></i> APPROVED DIGITAL RECORD</div>
               </div>
@@ -1624,7 +1624,7 @@
         </div>
         <h3 style="font-size: 18px; margin-bottom: 8px;">Request Submitted</h3>
         <p style="font-size: 13.5px; margin-bottom: 20px;">
-          Your document request has been submitted successfully to Barangay Pili. Tracking reference: <strong id="modalRefText">#PILI-2026-0045</strong>.
+          Your document request has been submitted successfully to {{ barangay_label() }}. Tracking reference: <strong id="modalRefText">#{{ setting('system.tracking_prefix', 'BRGY') }}-2026-0045</strong>.
         </p>
         <button class="btn btn-primary btn-block" onclick="closeRequestSuccessModal()">
           View in My Requests
@@ -1640,7 +1640,7 @@
         </div>
         <h3 style="font-size: 18px; margin-bottom: 8px;">Registration Submitted</h3>
         <p style="font-size: 13px; color: var(--neutral-600); margin-bottom: 20px;">
-          Your account has been created and is currently awaiting <strong>Admin Approval</strong> by Barangay Pili officials. You will receive an SMS/email once verified.
+          Your account has been created and is currently awaiting <strong>Admin Approval</strong> by {{ barangay_label() }} officials. You will receive an SMS/email once verified.
         </p>
         <button class="btn btn-primary btn-block" onclick="closeRegisterModal()">
           Back to Login
@@ -1656,7 +1656,7 @@
         </div>
         <h3 style="font-size: 18px; margin-bottom: 6px;">Log Out?</h3>
         <p style="font-size: 13px; margin-bottom: 22px;">
-          Are you sure you want to log out of Barangay Pili resident portal?
+          Are you sure you want to log out of {{ barangay_label() }} resident portal?
         </p>
         <div style="display: flex; gap: 10px;">
           <button class="btn btn-secondary" style="flex: 1;" onclick="closeLogoutModal()">Cancel</button>
@@ -1789,7 +1789,7 @@
       e.preventDefault();
       const docType = document.getElementById('reqDocType').value;
       const purpose = document.getElementById('reqPurpose').value;
-      const ref = 'PILI-2026-00' + Math.floor(10 + Math.random() * 89);
+      const ref = '{{ setting('system.tracking_prefix', 'BRGY') }}-2026-00' + Math.floor(10 + Math.random() * 89);
 
       document.getElementById('modalRefText').textContent = '#' + ref;
       document.getElementById('modalRequestSuccess').style.display = 'flex';

@@ -29,7 +29,9 @@ class CertificateController extends Controller
             $editCertificate = Certificate::findOrFail($editId);
         }
 
-        return view('admin.certificates', compact('certificates', 'editCertificate', 'search'));
+        $tokens = \App\Services\CertificateRenderer::tokens();
+
+        return view('admin.certificates', compact('certificates', 'editCertificate', 'search', 'tokens'));
     }
 
     public function store(Request $request)
@@ -42,6 +44,9 @@ class CertificateController extends Controller
             'processing_days' => 'required|integer|min:1',
             'requirements' => 'nullable|string',
             'description' => 'nullable|string',
+            'body_template' => 'nullable|string|max:5000',
+            'header_title' => 'nullable|string|max:150',
+            'signatory_position' => 'nullable|string|max:150',
         ]);
 
         $id = $request->certificate_id;
@@ -59,8 +64,19 @@ class CertificateController extends Controller
             $templateFile = 'certificate_clearance.php';
         }
 
-        $data = $request->only(['name', 'category', 'fee', 'processing_days', 'requirements', 'description']);
+        $data = $request->only([
+            'name', 'category', 'fee', 'processing_days', 'requirements', 'description',
+            'body_template', 'header_title', 'signatory_position',
+        ]);
         $data['template_file'] = $templateFile;
+
+        // An empty textarea means "use the built-in wording", so store NULL
+        // rather than an empty string the renderer would have to special-case.
+        foreach (['body_template', 'header_title', 'signatory_position'] as $optional) {
+            if (isset($data[$optional]) && trim($data[$optional]) === '') {
+                $data[$optional] = null;
+            }
+        }
 
         if ($id > 0) {
             $cert = Certificate::findOrFail($id);

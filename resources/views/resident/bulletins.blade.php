@@ -5,7 +5,7 @@
 @section('content')
 <div style="margin-bottom:24px;">
   <h2 style="font-size:24px; font-weight:800; color:var(--dark); margin:0;">Barangay Public Bulletin</h2>
-  <p class="text-muted" style="margin:4px 0 0;">Stay updated with the latest events, advisories, and activities in Barangay Pili.</p>
+  <p class="text-muted" style="margin:4px 0 0;">Stay updated with the latest events, advisories, and activities in {{ barangay_label() }}.</p>
 </div>
 
 <!-- Announcements list -->

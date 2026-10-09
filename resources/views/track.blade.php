@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Track Request — Barangay Pili</title>
+<title>Track Request — {{ barangay_label() }}</title>
 <meta name="description" content="Track your barangay clearance or certificate request status.">
-<link rel="icon" type="image/png" href="{{ asset('assets/images/pili_logo.png') }}">
+<link rel="icon" type="image/png" href="{{ setting_image('brand.logo') }}">
 <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -41,7 +41,7 @@
         @csrf
         <label class="form-label" style="font-weight:700;font-size:14px;">Tracking Number</label>
         <div style="display:flex;gap:10px;margin-top:6px;">
-          <input type="text" name="tracking" class="form-control" placeholder="e.g. PILI-20250514-ABCDEF"
+          <input type="text" name="tracking" class="form-control" placeholder="e.g. {{ setting('system.tracking_prefix', 'BRGY') }}-20250514-ABCDEF"
                  value="{{ $tracking }}" required
                  style="font-family:monospace;font-size:15px;letter-spacing:.5px;">
           <button type="submit" class="btn btn-primary" style="white-space:nowrap;">
@@ -145,7 +145,7 @@
 
   <div style="margin-top:24px;color:rgba(255,255,255,.5);font-size:13px;text-align:center;">
     <a href="{{ route('login') }}" style="color:rgba(255,255,255,.6);">← Back to Login</a>
-    &nbsp;·&nbsp; Barangay Pili Digital Services
+    &nbsp;·&nbsp; {{ barangay_label() }} Digital Services
   </div>
 </div>
 <script src="{{ asset('assets/js/main.js') }}"></script>

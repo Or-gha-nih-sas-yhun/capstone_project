@@ -117,7 +117,12 @@ function printDocument(elId) {
   const content = document.getElementById(elId).innerHTML;
   const win = window.open('', '_blank');
   win.document.write('<html><head><title>Print</title>');
-  win.document.write('<link rel="stylesheet" href="' + window.location.origin + '/Brgy.pili_clearance/assets/css/style.css">');
+  // Carry over whatever stylesheets this page already uses. The previous
+  // version pointed at a fixed /Brgy.pili_clearance/ dev path, which 404'd
+  // on any real deployment and left the print window unstyled.
+  document.querySelectorAll('link[rel="stylesheet"]').forEach(function (link) {
+    win.document.write('<link rel="stylesheet" href="' + link.href + '">');
+  });
   win.document.write('</head><body onload="window.print();window.close()">');
   win.document.write(content);
   win.document.write('</body></html>');

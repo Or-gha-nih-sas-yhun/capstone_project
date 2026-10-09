@@ -69,7 +69,7 @@ class ResidentManagementController extends Controller
             'contact_number' => 'nullable|string|max:20',
             'email' => 'nullable|email',
             'address' => 'required|string|max:255',
-            'purok' => 'nullable|string|max:100',
+            'purok' => purok_rule(),
             'occupation' => 'nullable|string|max:150',
             'voter_status' => 'required|in:Registered,Not Registered',
             'years_of_residency' => 'required|integer|min:0',
@@ -112,7 +112,7 @@ class ResidentManagementController extends Controller
             if ($previousStatus !== 'active') {
                 SmsService::notifyResident(
                     $resident,
-                    "Hi {$resident->first_name}, your Barangay Pili resident account has been APPROVED. You may now log in to the resident portal.",
+                    "Hi {$resident->first_name}, your " . sms_signature() . " resident account has been APPROVED. You may now log in to the resident portal.",
                     "resident account approval {$resident->id}"
                 );
             }
@@ -146,7 +146,7 @@ class ResidentManagementController extends Controller
         if (!$wasAlreadyRejected) {
             SmsService::notifyResident(
                 $resident,
-                "Hi {$resident->first_name}, your Barangay Pili resident registration was not approved. Please visit the Barangay Hall for verification or assistance.",
+                "Hi {$resident->first_name}, your " . sms_signature() . " resident registration was not approved. Please visit the Barangay Hall for verification or assistance.",
                 "resident registration rejection {$resident->id}"
             );
         }

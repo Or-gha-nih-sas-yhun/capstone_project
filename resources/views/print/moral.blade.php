@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Certificate of Good Moral — Barangay Pili</title>
+  <title>Certificate of Good Moral — {{ barangay_label() }}</title>
   <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
@@ -69,27 +69,12 @@
   </div>
 
   <div class="page">
-    <div class="watermark">
-      <img src="{{ asset('assets/images/pili_logo.png') }}" style="width: 100%; height: 100%; object-fit: contain;" alt="Watermark">
-    </div>
+    @include('print.partials.watermark')
 
     <!-- HEADER -->
-    <div class="top-header">
-      <div class="logo">
-        <img src="{{ asset('assets/images/pili_logo.png') }}" alt="Pili Barangay Logo">
-      </div>
-      <div class="header-text">
-        <div class="republic">Republic of the Philippines</div>
-        <div class="province">Province of Cebu</div>
-        <div class="municipality">Municipality of Madridejos</div>
-        <div class="barangay">BARANGAY PILI</div>
-      </div>
-      <div class="logo">
-        <img src="{{ asset('assets/images/municipality_logo.png') }}" alt="Municipality Logo">
-      </div>
-    </div>
+    @include('print.partials.letterhead', ['republic' => true])
 
-    <div class="office-title">Office of the Barangay Captain</div>
+    <div class="office-title">{{ barangay_office_title() }}</div>
     <div class="header-line"></div>
 
     <!-- MAIN CONTENT -->
@@ -184,7 +169,7 @@
 
           <p class="indent-para">
             This is to certify that <span class="underline-value" style="min-width: 180px;">{{ strtoupper($certReq->resident->full_name) }}</span>, 
-            a resident of {{ $certReq->resident->address }}, Barangay Pili, Madridejos, Cebu, is personally known to this office as a person of good moral character, law-abiding, peace-loving, and a socially responsible citizen of our community.
+            a resident of {{ $certReq->resident->address }}, {{ barangay_location(true) }}, is personally known to this office as a person of good moral character, law-abiding, peace-loving, and a socially responsible citizen of our community.
           </p>
 
           <p class="indent-para">
@@ -197,7 +182,7 @@
           </p>
 
           <p class="indent-para" style="font-weight: bold;">
-            Issued this {{ date('jS') }} day of {{ date('F Y') }}, at Pili, Madridejos, Cebu.
+            Issued this {{ date('jS') }} day of {{ date('F Y') }}, at {{ barangay_location() }}.
           </p>
 
           <!-- SIGNATURES -->
@@ -232,7 +217,7 @@
 
             <div style="margin-top: 10px;">
               <div>Issued on {{ date('m/d/Y') }}</div>
-              <div>Issued at Pili, Madridejos, Cebu</div>
+              <div>Issued at {{ barangay_location() }}</div>
             </div>
           </div>
 

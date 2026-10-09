@@ -149,7 +149,7 @@ class BorrowRequestController extends Controller
                 $reasonText = $borrow->remarks ? ' Reason: ' . Str::limit($borrow->remarks, 100) : '';
                 $smsText = "Hi {$firstName}, your equipment borrow request #{$borrow->id} has been REJECTED.{$reasonText} Please contact the Barangay Hall for assistance.";
             } else {
-                $smsText = "Hi {$firstName}, your equipment borrow request #{$borrow->id} has been marked RETURNED and completed. Thank you! - Barangay Pili";
+                $smsText = "Hi {$firstName}, your equipment borrow request #{$borrow->id} has been marked RETURNED and completed. Thank you! - " . sms_signature();
             }
 
             SmsService::notifyResident(

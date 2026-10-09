@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Security Verification (2FA) &mdash; Barangay Pili</title>
-  <meta name="description" content="Email OTP Two-Factor Authentication for Barangay Pili Admin Portal">
+  <title>Admin Security Verification (2FA) &mdash; {{ barangay_label() }}</title>
+  <meta name="description" content="Email OTP Two-Factor Authentication for {{ barangay_label() }} Admin Portal">
   @php
     $assetBase = (str_contains(request()->getHost(), 'admin.') && !str_contains(request()->getHost(), 'localhost')) 
-      ? 'https://brgypilieclearance.com' 
+      ? 'https://' . config('barangay.domain') 
       : '';
   @endphp
-  <link rel="icon" type="image/png" href="{{ $assetBase ? $assetBase . '/assets/images/pili_logo.png' : asset('assets/images/pili_logo.png') }}">
+  <link rel="icon" type="image/png" href="{{ $assetBase ? $assetBase . '/' . setting('brand.logo', 'assets/images/pili_logo.png') : setting_image('brand.logo') }}">
   <link rel="shortcut icon" href="{{ $assetBase ? $assetBase . '/favicon.ico' : asset('favicon.ico') }}">
   <link rel="stylesheet" href="{{ $assetBase ? $assetBase . '/assets/css/style.css' : asset('assets/css/style.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -57,11 +57,11 @@
       <!-- Left panel -->
       <div class="auth-left">
         <div class="brgy-seal" style="text-align: left; margin-bottom: 24px;">
-          <img src="{{ $assetBase ? $assetBase . '/assets/images/pili_logo.png' : asset('assets/images/pili_logo.png') }}" alt="Barangay Logo"
+          <img src="{{ $assetBase ? $assetBase . '/' . setting('brand.logo', 'assets/images/pili_logo.png') : setting_image('brand.logo') }}" alt="Barangay Logo"
             style="width: 120px; height: auto; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));">
         </div>
 
-        <h1>Barangay Pili<br>Two-Factor Security</h1>
+        <h1>{{ barangay_label() }}<br>Two-Factor Security</h1>
         <p>Protecting official administrative systems with multi-factor authentication.</p>
 
         <div class="feature-list">
@@ -72,7 +72,7 @@
         </div>
 
         <div style="margin-top:32px;padding-top:20px;border-top:1px solid rgba(255,255,255,.2);font-size:12px;opacity:.8;">
-          <i class="fas fa-shield-halved"></i> admin.brgypilieclearance.com &bull; Two-Factor Authentication
+          <i class="fas fa-shield-halved"></i> {{ config('barangay.admin_domain') }} &bull; Two-Factor Authentication
         </div>
       </div>
 

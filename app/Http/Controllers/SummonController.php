@@ -97,11 +97,11 @@ class SummonController extends Controller
         $scheduleText = $summon->case_type === 'summon' && $summon->schedule_date
             ? ' Hearing schedule: ' . $summon->schedule_date->format('M d, Y h:i A') . '.'
             : '';
-        $smsText = "Barangay Pili: Your {$caseType} {$summon->case_number} has been recorded. Status: Pending.{$scheduleText} Keep this case number and contact the Barangay Hall for assistance.";
+        $smsText = sms_signature() . ": Your {$caseType} {$summon->case_number} has been recorded. Status: Pending.{$scheduleText} Keep this case number and contact the Barangay Hall for assistance.";
         $this->sendCaseSms($summon, $smsText);
 
         // ── Dispatch Email Notifications ─────────────────────────────────
-        $adminEmail = 'admin@brgy-pili.gov.ph';
+        $adminEmail = setting('system.admin_email', config('mail.from.address'));
         
         // 1. Notify Admin
         try {
@@ -213,7 +213,7 @@ class SummonController extends Controller
             $scheduleText = $rescheduled && $summon->schedule_date
                 ? ' New hearing schedule: ' . $summon->schedule_date->format('M d, Y h:i A') . '.'
                 : '';
-            $smsText = "Barangay Pili case {$summon->case_number} was updated to {$statusLabel}.{$scheduleText} Please check the resident portal or contact the Barangay Hall.";
+            $smsText = sms_signature() . " case {$summon->case_number} was updated to {$statusLabel}.{$scheduleText} Please check the resident portal or contact the Barangay Hall.";
 
             $this->sendCaseSms($summon, $smsText);
         }

@@ -2,35 +2,60 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use App\Models\Certificate;
-use App\Models\Official;
-use App\Models\Resident;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
+/**
+ * Baseline data every barangay deployment needs: staff accounts and the
+ * standard certificate types issued under the Local Government Code.
+ *
+ * Nothing here is specific to one barangay. Sample officials and residents
+ * for demos live in DemoDataSeeder, which is not run by default:
+ *
+ *     php artisan db:seed --class=DemoDataSeeder
+ */
 class DatabaseSeeder extends Seeder
 {
     public function run()
     {
-        // 1. Seed Users (without resident link first)
-        User::create([
-            'username' => 'admin',
-            'email' => 'admin@brgy-pili.gov.ph',
-            'password' => Hash::make('password'),
-            'role' => 'admin',
-            'status' => 'active',
-        ]);
+        $this->seedUsers();
+        $this->seedCertificates();
 
-        User::create([
-            'username' => 'staff1',
-            'email' => 'staff@brgy-pili.gov.ph',
-            'password' => Hash::make('password'),
-            'role' => 'staff',
-            'status' => 'active',
-        ]);
+        $this->command->info('Baseline data seeded.');
+        $this->command->line('Next: php artisan barangay:setup');
+    }
 
-        // 2. Seed Certificates
+    private function seedUsers(): void
+    {
+        // Derived from the deployment's own domain rather than a fixed
+        // barangay address, so a new deployment does not inherit another
+        // barangay's email domain.
+        $domain = config('barangay.domain', 'localhost');
+
+        $accounts = [
+            ['username' => 'admin', 'role' => 'admin'],
+            ['username' => 'staff1', 'role' => 'staff'],
+        ];
+
+        foreach ($accounts as $account) {
+            User::firstOrCreate(
+                ['username' => $account['username']],
+                [
+                    'email'    => $account['username'] . '@' . $domain,
+                    'password' => Hash::make('password'),
+                    'role'     => $account['role'],
+                    'status'   => 'active',
+                ]
+            );
+        }
+
+        $this->command->warn('Default accounts use the password "password" — change them before going live.');
+    }
+
+    private function seedCertificates(): void
+    {
         $certs = [
             [
                 'name' => 'Barangay Clearance',
@@ -40,17 +65,17 @@ class DatabaseSeeder extends Seeder
                 'processing_days' => 1,
                 'template_file' => 'certificate_clearance.php',
                 'requirements' => 'Valid ID, Proof of residency',
-                'status' => 'active'
+                'status' => 'active',
             ],
             [
                 'name' => 'Certificate of Residency',
-                'description' => 'Certifies that the person is a legitimate resident of Barangay Pili',
+                'description' => 'Certifies that the person is a legitimate resident of this barangay',
                 'category' => 'Certification',
                 'fee' => 50.00,
                 'processing_days' => 1,
                 'template_file' => 'certificate_residency.php',
                 'requirements' => 'Valid ID',
-                'status' => 'active'
+                'status' => 'active',
             ],
             [
                 'name' => 'Certificate of Indigency',
@@ -60,7 +85,7 @@ class DatabaseSeeder extends Seeder
                 'processing_days' => 1,
                 'template_file' => 'certificate_indigency.php',
                 'requirements' => 'Valid ID, Proof of indigency',
-                'status' => 'active'
+                'status' => 'active',
             ],
             [
                 'name' => 'Business Clearance',
@@ -70,7 +95,7 @@ class DatabaseSeeder extends Seeder
                 'processing_days' => 3,
                 'template_file' => 'certificate_clearance.php',
                 'requirements' => 'Valid ID, Business documents',
-                'status' => 'active'
+                'status' => 'active',
             ],
             [
                 'name' => 'Certificate of Good Moral Character',
@@ -80,7 +105,7 @@ class DatabaseSeeder extends Seeder
                 'processing_days' => 1,
                 'template_file' => 'certificate_moral.php',
                 'requirements' => 'Valid ID',
-                'status' => 'active'
+                'status' => 'active',
             ],
             [
                 'name' => 'First Time Jobseeker Certificate',
@@ -90,84 +115,14 @@ class DatabaseSeeder extends Seeder
                 'processing_days' => 1,
                 'template_file' => 'certificate.php',
                 'requirements' => 'Valid ID, Barangay Certificate',
-                'status' => 'active'
-            ]
+                'status' => 'active',
+            ],
         ];
 
         foreach ($certs as $c) {
-            Certificate::create($c);
-        }
-
-        // 3. Seed Officials
-        $officials = [
-            ['name' => 'HON. JUAN DELA CRUZ', 'position' => 'Barangay Captain', 'sort_order' => 1, 'status' => 'active'],
-            ['name' => 'HON. MARIA SANTOS', 'position' => 'Barangay Kagawad', 'sort_order' => 2, 'status' => 'active'],
-            ['name' => 'HON. PEDRO REYES', 'position' => 'Barangay Kagawad', 'sort_order' => 3, 'status' => 'active'],
-            ['name' => 'HON. ANA GARCIA', 'position' => 'Barangay Kagawad', 'sort_order' => 4, 'status' => 'active'],
-            ['name' => 'HON. JOSE LIM', 'position' => 'Barangay Kagawad', 'sort_order' => 5, 'status' => 'active'],
-            ['name' => 'HON. LUCIA CRUZ', 'position' => 'Barangay Kagawad', 'sort_order' => 6, 'status' => 'active'],
-            ['name' => 'HON. ROBERTO TAN', 'position' => 'Barangay Kagawad', 'sort_order' => 7, 'status' => 'active'],
-            ['name' => 'HON. ELENA MENDOZA', 'position' => 'Barangay Kagawad', 'sort_order' => 8, 'status' => 'active'],
-            ['name' => 'HON. ANTONIO FLORES', 'position' => 'SK Chairman', 'sort_order' => 9, 'status' => 'active'],
-            ['name' => 'MS. CARMEN VILLANUEVA', 'position' => 'Barangay Secretary', 'sort_order' => 10, 'status' => 'active'],
-            ['name' => 'MR. MARCO BAUTISTA', 'position' => 'Barangay Treasurer', 'sort_order' => 11, 'status' => 'active'],
-        ];
-
-        foreach ($officials as $o) {
-            Official::create($o);
-        }
-
-        // 4. Seed Residents and link users
-        $residents = [
-            [
-                'first_name' => 'Juan',
-                'middle_name' => 'Santos',
-                'last_name' => 'Dela Cruz',
-                'gender' => 'Male',
-                'birthdate' => '1990-03-15',
-                'civil_status' => 'Married',
-                'contact_number' => '09171234567',
-                'email' => 'juan@email.com',
-                'address' => '123 Rizal Street, Barangay Pili',
-                'purok' => 'Purok 1',
-                'voter_status' => 'Registered',
-                'years_of_residency' => 10,
-                'status' => 'active'
-            ],
-            [
-                'first_name' => 'Maria',
-                'middle_name' => 'Reyes',
-                'last_name' => 'Santos',
-                'gender' => 'Female',
-                'birthdate' => '1995-07-22',
-                'civil_status' => 'Single',
-                'contact_number' => '09281234567',
-                'email' => 'maria@email.com',
-                'address' => '456 Mabini Street, Barangay Pili',
-                'purok' => 'Purok 2',
-                'voter_status' => 'Registered',
-                'years_of_residency' => 5,
-                'status' => 'active'
-            ],
-            [
-                'first_name' => 'Pedro',
-                'middle_name' => 'Cruz',
-                'last_name' => 'Garcia',
-                'gender' => 'Male',
-                'birthdate' => '1985-11-08',
-                'civil_status' => 'Married',
-                'contact_number' => '09391234567',
-                'email' => 'pedro@email.com',
-                'address' => '789 Bonifacio Street, Barangay Pili',
-                'purok' => 'Purok 3',
-                'voter_status' => 'Registered',
-                'years_of_residency' => 15,
-                'status' => 'active'
-            ]
-        ];
-
-        foreach ($residents as $r) {
-            Resident::create($r);
+            // Keeps the seeder safe to re-run on an existing deployment and
+            // avoids duplicating a type the barangay has already edited.
+            Certificate::firstOrCreate(['name' => $c['name']], $c);
         }
     }
 }

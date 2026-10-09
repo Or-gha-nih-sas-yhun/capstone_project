@@ -84,7 +84,7 @@
                   {{ Str::limit($s->nature_of_complaint ?? 'Dispute / Incident', 25) }}
                 </div>
                 <div style="font-size:11px; color:var(--gray);" title="Location">
-                  <i class="fas fa-map-marker-alt" style="margin-right:4px;"></i> {{ $s->incident_location ?? 'Barangay Pili' }}
+                  <i class="fas fa-map-marker-alt" style="margin-right:4px;"></i> {{ $s->incident_location ?? barangay_label() }}
                 </div>
                 <div style="font-size:11px; color:var(--gray);">
                   <i class="fas fa-calendar-alt" style="margin-right:4px;"></i> {{ $s->incident_date ? \Carbon\Carbon::parse($s->incident_date)->format('M d, Y') : 'Date Unspecified' }}
@@ -231,7 +231,7 @@
           </div>
           <div class="form-group" style="margin:0;">
             <label class="form-label">Incident Location (Purok/Place)</label>
-            <input type="text" name="incident_location" class="form-control" placeholder="e.g. Purok 3, Barangay Pili">
+            <input type="text" name="incident_location" class="form-control" placeholder="e.g. Purok 3, {{ barangay_label() }}">
           </div>
         </div>
 

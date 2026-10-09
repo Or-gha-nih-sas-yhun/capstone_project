@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Certificate of Residency — Barangay Pili</title>
+  <title>Certificate of Residency — {{ barangay_label() }}</title>
   <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
@@ -69,27 +69,12 @@
   </div>
 
   <div class="page">
-    <div class="watermark">
-      <img src="{{ asset('assets/images/pili_logo.png') }}" style="width: 100%; height: 100%; object-fit: contain;" alt="Watermark">
-    </div>
+    @include('print.partials.watermark')
 
     <!-- HEADER -->
-    <div class="top-header">
-      <div class="logo">
-        <img src="{{ asset('assets/images/pili_logo.png') }}" alt="Pili Barangay Logo">
-      </div>
-      <div class="header-text">
-        <div class="republic">Republic of the Philippines</div>
-        <div class="province">Province of Cebu</div>
-        <div class="municipality">Municipality of Madridejos</div>
-        <div class="barangay">BARANGAY PILI</div>
-      </div>
-      <div class="logo">
-        <img src="{{ asset('assets/images/municipality_logo.png') }}" alt="Municipality Logo">
-      </div>
-    </div>
+    @include('print.partials.letterhead', ['republic' => true])
 
-    <div class="office-title">Office of the Barangay Captain</div>
+    <div class="office-title">{{ barangay_office_title() }}</div>
     <div class="header-line"></div>
 
     <!-- MAIN CONTENT -->
@@ -185,7 +170,7 @@
           <p class="indent-para">
             This is to certify that <span class="underline-value" style="min-width: 150px;">{{ strtoupper($certReq->resident->full_name) }}</span>, 
             <span class="underline-value" style="min-width: 30px; text-align: center;">{{ $certReq->resident->age }}</span> years old is a resident of Purok
-            {{ $certReq->resident->purok ?? '—' }} Barangay Pili, Madridejos, Cebu. 
+            {{ $certReq->resident->purok ?? '—' }} {{ barangay_location(true) }}. 
             {{ $certReq->resident->gender === 'Female' ? 'She' : 'He' }} is personally known to me and was born on 
             <span class="underline-value" style="min-width: 100px;">{{ \Carbon\Carbon::parse($certReq->resident->birthdate)->format('F j, Y') }}</span>.
           </p>
@@ -197,7 +182,7 @@
 
           <p class="indent-para">
             Issued this <u>{{ date('j') }}<sup>{{ date('S') }}</sup></u> day of
-            {{ date('F Y') }}, at Madridejos, Cebu.
+            {{ date('F Y') }}, at {{ barangay_municipality_province() }}.
           </p>
 
           <!-- SIGNATURES -->
@@ -232,7 +217,7 @@
 
             <div style="margin-top: 8px;">
               <div>Issued on {{ date('m/d/Y') }}</div>
-              <div>Issued at Pili, Madridejos, Cebu</div>
+              <div>Issued at {{ barangay_location() }}</div>
               <div>CTC No.<span style="display:inline-block; border-bottom: 1px solid #333; width: 120px;"></span></div>
             </div>
           </div>

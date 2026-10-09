@@ -42,18 +42,18 @@
 <div id="printReport" class="official-report" style="background:#fff; padding:30px; border:1px solid #e5e7eb; border-radius:8px;">
   <div class="report-letterhead" style="display:flex; justify-content:space-between; align-items:center; border-bottom:3px solid #333; padding-bottom:12px; margin-bottom:20px;">
     <div class="logo">
-      <img src="{{ asset('assets/images/pili_logo.png') }}" alt="Barangay Logo" style="width: 72px; height: 72px; object-fit: contain;">
+      <img src="{{ setting_image('brand.logo') }}" alt="Barangay Logo" style="width: 72px; height: 72px; object-fit: contain;">
     </div>
     <div style="text-align:center;">
       <div class="rep" style="font-size:14px; text-transform:uppercase; letter-spacing:0.5px;">Republic of the Philippines</div>
-      <div style="font-size:14px;">Province of Cebu</div>
-      <div style="font-size:14px;">Municipality of Madridejos</div>
-      <strong style="font-size:18px; display:block; margin-top:2px;">BARANGAY PILI</strong>
+      <div style="font-size:14px;">{{ barangay_province_line() }}</div>
+      <div style="font-size:14px;">{{ barangay_municipality_line() }}</div>
+      <strong style="font-size:18px; display:block; margin-top:2px;">{{ strtoupper(barangay_label()) }}</strong>
       <h2 style="font-size:18px; margin-top:8px; font-weight:800; color:#111;">MONTHLY TRANSACTIONS REPORT</h2>
       <p style="font-size:12.5px; color:#4b5563; margin-top:2px;">{{ \Carbon\Carbon::parse($start)->format('F 1, Y') }} to {{ \Carbon\Carbon::parse($start)->format('F t, Y') }}</p>
     </div>
     <div class="logo">
-      <img src="{{ asset('assets/images/municipality_logo.png') }}" alt="Municipality Logo" style="width: 72px; height: 72px; object-fit: contain;">
+      <img src="{{ setting_image('brand.municipality_logo', 'assets/images/municipality_logo.png') }}" alt="Municipality Logo" style="width: 72px; height: 72px; object-fit: contain;">
     </div>
   </div>
 

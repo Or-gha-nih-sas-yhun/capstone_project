@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>@yield('title', 'Dashboard') — {{ config('app.name', 'Barangay Pili') }} System</title>
-  <meta name="description" content="Barangay Pili Clearance and Certificate Processing System">
-  <link rel="icon" type="image/png" href="{{ asset('assets/images/pili_logo.png') }}">
-  <link rel="shortcut icon" href="{{ asset('assets/images/pili_logo.png') }}">
+  <title>@yield('title', 'Dashboard') — {{ setting('brand.app_title', barangay_label()) }} System</title>
+  <meta name="description" content="{{ setting('brand.app_title', barangay_label() . ' Clearance & Certificate System') }}">
+  <link rel="icon" type="image/png" href="{{ setting_image('brand.logo') }}">
+  <link rel="shortcut icon" href="{{ setting_image('brand.logo') }}">
   <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   @yield('styles')
 
-  @if(str_contains(request()->header('User-Agent', ''), 'BrgyPiliApp'))
+  @if(is_mobile_app())
   <style>
     /* Native Mobile APK Specific Styles */
     body.native-mobile-app {
@@ -50,7 +50,7 @@
   </style>
   @endif
 </head>
-<body class="{{ str_contains(request()->header('User-Agent', ''), 'BrgyPiliApp') ? 'native-mobile-app' : '' }}">
+<body class="{{ is_mobile_app() ? 'native-mobile-app' : '' }}">
   <!-- Mobile sidebar overlay -->
   <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
@@ -59,10 +59,10 @@
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-brand">
         <div class="brand-logo" style="background: transparent;">
-          <img src="{{ asset('assets/images/pili_logo.png') }}" alt="Pili Logo" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));">
+          <img src="{{ setting_image('brand.logo') }}" alt="{{ barangay_label() }} Logo" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));">
         </div>
         <div class="brand-text">
-          <strong>Brgy. Pili</strong>
+          <strong>{{ setting('brand.short_name', barangay_label()) }}</strong>
           <small>Clearance System</small>
         </div>
       </div>
@@ -111,6 +111,12 @@
             </a>
             <a href="{{ route('admin.activity_logs') }}" class="nav-link {{ Route::is('admin.activity_logs') ? 'active' : '' }}">
               <i class="fas fa-history"></i> Activity Logs
+            </a>
+            <a href="{{ route('admin.puroks') }}" class="nav-link {{ Route::is('admin.puroks') ? 'active' : '' }}">
+              <i class="fas fa-map-location-dot"></i> Puroks
+            </a>
+            <a href="{{ route('admin.settings') }}" class="nav-link {{ Route::is('admin.settings') ? 'active' : '' }}">
+              <i class="fas fa-gear"></i> Barangay Settings
             </a>
           @endif
         @else
@@ -175,13 +181,13 @@
       <header class="topbar no-print">
         <div class="topbar-left">
           <!-- Hamburger menu removed -->
-          @if(str_contains(request()->header('User-Agent', ''), 'BrgyPiliApp') && Auth::user()->role === 'resident')
-            <img src="{{ asset('assets/images/pili_logo.png') }}" alt="Barangay Pili logo" style="width:34px;height:34px;object-fit:contain;margin-right:8px;">
+          @if(is_mobile_app() && Auth::user()->role === 'resident')
+            <img src="{{ setting_image('brand.logo') }}" alt="{{ barangay_label() }} logo" style="width:34px;height:34px;object-fit:contain;margin-right:8px;">
           @endif
           <span class="topbar-title">@yield('title', 'Dashboard')</span>
         </div>
         <div class="topbar-right">
-          @if(str_contains(request()->header('User-Agent', ''), 'BrgyPiliApp') && Auth::user()->role === 'resident')
+          @if(is_mobile_app() && Auth::user()->role === 'resident')
             <button type="button" class="btn btn-outline-secondary btn-sm" title="Log out"
               onclick="document.getElementById('logoutModal').style.display='flex'">
               <i class="fas fa-sign-out-alt"></i> Logout
@@ -244,7 +250,7 @@
 
   <!-- Mobile Bottom Navigation -->
   <nav class="mobile-bottom-nav" id="mobile-bottom-nav">
-    @if(str_contains(request()->header('User-Agent', ''), 'BrgyPiliApp') && Auth::user()->role === 'resident')
+    @if(is_mobile_app() && Auth::user()->role === 'resident')
       <a href="{{ route('resident.dashboard') }}" class="mobile-nav-item {{ Route::is('resident.dashboard') ? 'active' : '' }}">
         <i class="fas fa-house"></i>
         <span>Home</span>

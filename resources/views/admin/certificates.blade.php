@@ -107,6 +107,54 @@
           <label class="form-label">Description</label>
           <textarea name="description" class="form-control" rows="2" placeholder="Brief description of the document">{{ old('description', $editCertificate ? $editCertificate->description : '') }}</textarea>
         </div>
+
+        <hr style="margin:18px 0;border:none;border-top:1px solid #e5e7eb;">
+
+        <div style="font-weight:700;font-size:14px;margin-bottom:4px;">
+          <i class="fas fa-file-pen" style="color:var(--primary);margin-right:6px;"></i>Custom Document Wording
+        </div>
+        <p style="color:#6b7280;font-size:12.5px;margin:0 0 12px;">
+          Leave blank to use the system's built-in wording for this document. Fill it in to write your own text —
+          useful for a certificate type unique to {{ barangay_label() }}.
+        </p>
+
+        <div class="form-group">
+          <label class="form-label">Document Heading</label>
+          <input type="text" name="header_title" class="form-control"
+            value="{{ old('header_title', $editCertificate ? $editCertificate->header_title : '') }}"
+            placeholder="e.g. BARANGAY CERTIFICATION">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Body Text</label>
+          <textarea name="body_template" class="form-control" rows="6"
+            placeholder="This is to certify that {{ '{{full_name}}' }}, {{ '{{age}}' }} years of age, a resident of {{ '{{address}}' }}, {{ '{{barangay_label}}' }}, …">{{ old('body_template', $editCertificate ? $editCertificate->body_template : '') }}</textarea>
+          <small class="form-text">
+            Wrap each paragraph in &lt;p&gt;…&lt;/p&gt;. You may use &lt;strong&gt;, &lt;em&gt;, &lt;u&gt; and &lt;br&gt;.
+          </small>
+        </div>
+
+        <details style="margin-bottom:14px;">
+          <summary style="cursor:pointer;font-size:13px;font-weight:600;color:var(--primary);">
+            Available placeholders ({{ count($tokens) }})
+          </summary>
+          <div
+            style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:4px 14px;margin-top:10px;font-size:12px;">
+            @foreach ($tokens as $token => $description)
+              <div>
+                <code style="background:#f3f4f6;padding:1px 4px;border-radius:3px;">{{ '{{' . $token . '}}' }}</code>
+                <span style="color:#6b7280;"> — {{ $description }}</span>
+              </div>
+            @endforeach
+          </div>
+        </details>
+
+        <div class="form-group">
+          <label class="form-label">Signatory Position</label>
+          <input type="text" name="signatory_position" class="form-control"
+            value="{{ old('signatory_position', $editCertificate ? $editCertificate->signatory_position : '') }}"
+            placeholder="e.g. Punong Barangay">
+        </div>
       </div>
       <div class="modal-footer">
         <a class="btn btn-secondary" style="text-decoration:none;" href="{{ route('admin.certificates', ['search' => $search]) }}">Cancel</a>

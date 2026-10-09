@@ -95,7 +95,7 @@
         <i class="fas fa-university" style="margin-right:8px;"></i>
         <div>
           <strong>Payment & Claiming Information</strong><br>
-          <span>Processing fee will be settled at <strong>Barangay Pili Hall</strong> upon document pickup.</span>
+          <span>Processing fee will be settled at <strong>{{ setting('barangay.hall_name', barangay_label() . ' Hall') }}</strong> upon document pickup.</span>
         </div>
       </div>
 
@@ -144,7 +144,7 @@
         <div id="fee-display" style="display:none; margin-bottom:16px;">
           <div class="alert alert-warning" style="margin:0; border-radius:8px; font-size:13px;">
             <i class="fas fa-peso-sign"></i>
-            <div>Processing fee: <strong id="fee-amount"></strong>. <em>Payable at the Barangay Pili Office.</em></div>
+            <div>Processing fee: <strong id="fee-amount"></strong>. <em>Payable at the {{ barangay_label() }} Office.</em></div>
           </div>
         </div>
 
