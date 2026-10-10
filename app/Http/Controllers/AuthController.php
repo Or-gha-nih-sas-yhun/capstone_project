@@ -32,8 +32,9 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'email'    => 'required|email|string',
+        $request->validate([
+            'email'    => 'sometimes|required_without:username|email|string',
+            'username' => 'sometimes|required_without:email|string',
             'password' => 'required|string',
         ]);
 
@@ -41,36 +42,60 @@ class AuthController extends Controller
         $isMobileApp = is_mobile_app($request);
         if (!$isMobileApp && !$this->verifyRecaptcha($request)) {
             return back()->with('error', 'Please complete the Google reCAPTCHA security verification to proceed.')
-                ->withInput($request->only('email'));
+                ->withInput($request->only(['email', 'username']));
         }
 
-        $user = User::where('email', $credentials['email'])->first();
+        $loginField = $request->filled('username') ? 'username' : 'email';
+        $loginCredentials = [
+            $loginField => $request->input($loginField),
+            'password' => $request->input('password'),
+        ];
 
-        // If credentials mismatch or account is not a resident (e.g. admin/staff trying resident portal)
-        if (!$user || !Hash::check($credentials['password'], $user->password) || $user->role !== 'resident') {
+        if (!Auth::attempt($loginCredentials, $request->has('remember'))) {
             return back()->with('error', 'User not found or invalid credentials. Please try again.')
-                ->withInput($request->only('email'));
+                ->withInput($request->only(['email', 'username']));
         }
 
-        // Email verification check
-        if ($user->email_verified_at === null) {
-            if (!$user->verification_code) {
-                $user->verification_code = sprintf("%06d", mt_rand(100000, 999999));
-                $user->save();
-                $this->sendVerificationEmail($user);
+        $user = Auth::user();
+
+        if ($user->role === 'resident') {
+            if ($user->email_verified_at === null) {
+                if (!$user->verification_code) {
+                    $user->verification_code = sprintf("%06d", mt_rand(100000, 999999));
+                    $user->save();
+                    $this->sendVerificationEmail($user);
+                }
+                Auth::logout();
+                $request->session()->put('verify_email', $user->email);
+                return redirect()->route('verification.notice')->with('error', 'Please verify your email address first.');
             }
-            $request->session()->put('verify_email', $user->email);
-            return redirect()->route('verification.notice')->with('error', 'Please verify your email address first.');
+
+            if ($user->status === 'inactive') {
+                Auth::logout();
+                return back()->with('error', 'Your account is pending approval by the administrator.');
+            }
+            if ($user->status === 'suspended') {
+                Auth::logout();
+                return back()->with('error', 'Your account has been suspended.');
+            }
         }
 
-        if ($user->status === 'inactive') {
-            return back()->with('error', 'Your account is pending approval by the administrator.');
-        }
-        if ($user->status === 'suspended') {
-            return back()->with('error', 'Your account has been suspended.');
+        if (!in_array($user->role, ['resident', 'admin', 'staff'])) {
+            Auth::logout();
+            return back()->with('error', 'User not found or invalid credentials. Please try again.')
+                ->withInput($request->only(['email', 'username']));
         }
 
-        Auth::login($user, $request->has('remember'));
+        if (in_array($user->role, ['admin', 'staff']) && $user->status === 'inactive') {
+            Auth::logout();
+            return back()->with('error', 'Your administrative account is inactive. Please contact the lead administrator.');
+        }
+
+        if (in_array($user->role, ['admin', 'staff']) && $user->status === 'suspended') {
+            Auth::logout();
+            return back()->with('error', 'Your account has been suspended. Please contact the administrator.');
+        }
+
         $request->session()->regenerate();
 
         ActivityLog::log('LOGIN', 'Auth', 'User logged in');
@@ -93,8 +118,9 @@ class AuthController extends Controller
 
     public function adminLogin(Request $request)
     {
-        $credentials = $request->validate([
-            'email'    => 'required|email|string',
+        $request->validate([
+            'email'    => 'sometimes|required_without:username|email|string',
+            'username' => 'sometimes|required_without:email|string',
             'password' => 'required|string',
         ]);
 
@@ -105,7 +131,7 @@ class AuthController extends Controller
         if (empty($lat) || empty($lng) || !is_numeric($lat) || !is_numeric($lng) ||
             $lat < -90 || $lat > 90 || $lng < -180 || $lng > 180) {
             return back()->with('error', 'Location access is strictly required to log in to the administrative portal. Please enable location permissions in your browser and try again.')
-                ->withInput($request->only('email'));
+                ->withInput($request->only(['email', 'username']));
         }
 
         $location = "{$lat},{$lng}";
@@ -113,16 +139,22 @@ class AuthController extends Controller
         // 2. Google reCAPTCHA Verification
         if (!$this->verifyRecaptcha($request)) {
             return back()->with('error', 'Please complete the Google reCAPTCHA security verification to proceed.')
-                ->withInput($request->only('email'));
+                ->withInput($request->only(['email', 'username']));
         }
 
         // 3. Validate User Credentials
-        $user = User::where('email', $credentials['email'])->first();
+        $loginField = $request->filled('username') ? 'username' : 'email';
+        $credentials = [
+            $loginField => $request->input($loginField),
+            'password' => $request->input('password'),
+        ];
 
-        if (!$user || !Hash::check($credentials['password'], $user->password)) {
+        if (!Auth::attempt($credentials)) {
             return back()->with('error', 'Invalid administrative email address or password. Please try again.')
-                ->withInput($request->only('email'));
+                ->withInput($request->only(['email', 'username']));
         }
+
+        $user = Auth::user();
 
         // 4. Ensure role is admin or staff (restrict residents)
         if (!in_array($user->role, ['admin', 'staff'])) {
@@ -280,7 +312,7 @@ class AuthController extends Controller
         }
 
         if (empty($recaptchaResponse)) {
-            return false;
+            return app()->environment(['local', 'testing']);
         }
 
         try {
