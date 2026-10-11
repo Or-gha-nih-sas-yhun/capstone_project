@@ -649,13 +649,15 @@
         <table class="report-table">
           <thead>
             <tr>
-              <th style="width:14%;">Tracking No.</th>
-              <th style="width:20%;">Resident Name & Purok</th>
-              <th style="width:20%;">Certificate / Clearance</th>
-              <th style="width:12%;">Date Filed</th>
-              <th style="width:12%;">Date Issued</th>
-              <th style="width:11%; text-align:center;">Status</th>
-              <th style="width:11%; text-align:right;">Amount (PHP)</th>
+              <th style="width:11%;">Tracking No.</th>
+              <th style="width:17%;">Resident Name & Purok</th>
+              <th style="width:8%;">Gender</th>
+              <th style="width:10%;">Civil Status</th>
+              <th style="width:17%;">Certificate / Clearance</th>
+              <th style="width:11%;">Date Filed</th>
+              <th style="width:11%;">Date Issued</th>
+              <th style="width:8%; text-align:center;">Status</th>
+              <th style="width:7%; text-align:right;">Amount (PHP)</th>
             </tr>
           </thead>
           <tbody>
@@ -672,6 +674,8 @@
                     <div style="font-size:10.5px; color:#6b7280;"><i class="fas fa-location-dot" style="font-size:10px;"></i> {{ $row->resident->purok }}</div>
                   @endif
                 </td>
+                <td>{{ $row->resident->gender ?? 'N/A' }}</td>
+                <td>{{ $row->resident->civil_status ?? 'N/A' }}</td>
                 <td>
                   <div style="font-weight:600;">{{ $row->certificate ? $row->certificate->name : 'N/A' }}</div>
                   @if($row->purpose)
@@ -723,7 +727,7 @@
               </tr>
             @empty
               <tr>
-                <td colspan="7" style="text-align:center; padding:24px; color:#6b7280;">
+                <td colspan="9" style="text-align:center; padding:24px; color:#6b7280;">
                   No matching transaction or issuance records found for the selected filter parameters.
                 </td>
               </tr>
@@ -732,7 +736,7 @@
           @if($transactions->isNotEmpty())
             <tfoot>
               <tr>
-                <td colspan="6" style="text-transform:uppercase;">
+                <td colspan="8" style="text-transform:uppercase;">
                   TOTAL FILTERED TRANSACTIONS COLLECTION (PAID)
                 </td>
                 <td style="text-align:right; color:#7c3aed; font-size:13px; font-weight:800;">
