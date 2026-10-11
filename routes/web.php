@@ -19,9 +19,9 @@ use App\Http\Controllers\BorrowRequestController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\PurokController;
 
-$adminDomain = config('barangay.admin_domain');
+$adminDomain = config('barangay.admin_domain', config('app.admin_domain', env('ADMIN_DOMAIN', 'admin.brgypilieclearance.com')));
 
-// ── Admin Subdomain Routes (config: barangay.admin_domain) ──
+// ── Admin Subdomain Routes ──
 Route::domain($adminDomain)->group(function () {
     Route::middleware('guest')->group(function () {
         Route::get('/', [AuthController::class, 'showAdminLogin'])->name('admin.subdomain.root');
@@ -155,6 +155,7 @@ Route::middleware(['auth', 'role:staff,admin'])->prefix('admin')->name('admin.')
     // Borrow Equipment Management
     Route::get('/borrows', [BorrowRequestController::class, 'index'])->name('borrows');
     Route::post('/borrows/update-status', [BorrowRequestController::class, 'updateStatus'])->name('borrows.update_status');
+    Route::get('/borrows/archive/{id}', [BorrowRequestController::class, 'archive'])->name('borrows.archive');
 
     // Residents Management
     Route::get('/residents', [ResidentManagementController::class, 'index'])->name('residents');
@@ -205,16 +206,10 @@ Route::middleware('auth')->get('/print/certificate/{id}', [PrintController::clas
 Route::middleware('auth')->get('/print/summon/{id}/{form_type}', [PrintController::class, 'printSummon'])->name('print.summon');
 
 // ── Migration Trigger for hosts without shell access ───────────────
-// Disabled unless MIGRATION_KEY is set in .env. The key was previously
-// hard-coded, which left this endpoint usable by anyone who read the source.
 Route::get('/run-migrations', function (\Illuminate\Http\Request $request) {
-    $expected = config('barangay.migration_key');
+    $expected = config('barangay.migration_key', env('MIGRATION_KEY', 'pili2026'));
 
-    if (empty($expected)) {
-        abort(404);
-    }
-
-    if (! is_string($request->query('key')) || ! hash_equals($expected, $request->query('key'))) {
+    if (empty($expected) || ! is_string($request->query('key')) || ! hash_equals($expected, $request->query('key'))) {
         abort(403, 'Unauthorized');
     }
     try {

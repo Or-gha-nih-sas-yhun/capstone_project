@@ -20,7 +20,11 @@
 <body>
   <div class="email-container">
     <div class="header">
+<<<<<<< HEAD
+      <h2>Barangay Pili Case Filing System</h2>
+=======
       <h2>{{ barangay_label() }} Case Filing System</h2>
+>>>>>>> origin/master
     </div>
     <div class="content">
       <p>Dear Admin,</p>

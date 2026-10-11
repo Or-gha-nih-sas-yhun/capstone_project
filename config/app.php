@@ -54,6 +54,13 @@ return [
     |
     */
 
+<<<<<<< HEAD
+    'url' => env('APP_URL', 'http://brgypilieclearance.com'),
+
+    'asset_url' => env('ASSET_URL', null),
+
+    'admin_domain' => env('ADMIN_DOMAIN', 'admin.brgypilieclearance.com'),
+=======
     'url' => env('APP_URL', 'http://localhost'),
 
     'asset_url' => env('ASSET_URL', null),
@@ -61,6 +68,7 @@ return [
     // Kept for backwards compatibility; config('barangay.admin_domain')
     // is the canonical source and derives a default from APP_URL.
     'admin_domain' => env('ADMIN_DOMAIN'),
+>>>>>>> origin/master
 
     'jwt_secret' => env('JWT_SECRET', null),
 
@@ -182,7 +190,10 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+<<<<<<< HEAD
+=======
         App\Providers\SettingsServiceProvider::class,
+>>>>>>> origin/master
 
     ],
 

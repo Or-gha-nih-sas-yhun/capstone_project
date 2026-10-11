@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>@yield('title', 'Dashboard') — {{ setting('brand.app_title', barangay_label()) }} System</title>
   <meta name="description" content="{{ setting('brand.app_title', barangay_label() . ' Clearance & Certificate System') }}">
   <link rel="icon" type="image/png" href="{{ setting_image('brand.logo') }}">
@@ -69,11 +69,10 @@
 
       <nav class="sidebar-nav">
         @if(in_array(Auth::user()->role, ['admin', 'staff']))
-          <span class="nav-section-label">Main</span>
+          <span class="nav-section-label">General</span>
           <a href="{{ route('admin.dashboard') }}" class="nav-link {{ Route::is('admin.dashboard') ? 'active' : '' }}">
             <i class="fas fa-chart-pie"></i> Dashboard
           </a>
-          <span class="nav-section-label">Management</span>
           <a href="{{ route('admin.requests') }}" class="nav-link {{ Route::is('admin.requests') ? 'active' : '' }}">
             <i class="fas fa-file-alt"></i> Requests
           </a>
@@ -134,14 +133,14 @@
             <i class="fas fa-gavel"></i> My Summons
           </a>
           <a href="{{ route('resident.bulletins') }}" class="nav-link {{ Route::is('resident.bulletins') ? 'active' : '' }}">
-            <i class="fas fa-bullhorn"></i> Announcements
+            <i class="fas fa-bullhorn"></i> Bulletins
           </a>
           <a href="{{ route('resident.profile') }}" class="nav-link {{ Route::is('resident.profile') ? 'active' : '' }}">
             <i class="fas fa-user"></i> My Profile
           </a>
         @endif
 
-        <span class="nav-section-label">General</span>
+        <span class="nav-section-label">Account</span>
         <form method="POST" action="{{ route('logout') }}" id="logout-form" style="margin:0;">
           @csrf
         </form>
@@ -180,13 +179,19 @@
       <!-- Topbar -->
       <header class="topbar no-print">
         <div class="topbar-left">
-          <!-- Hamburger menu removed -->
           @if(is_mobile_app() && Auth::user()->role === 'resident')
             <img src="{{ setting_image('brand.logo') }}" alt="{{ barangay_label() }} logo" style="width:34px;height:34px;object-fit:contain;margin-right:8px;">
           @endif
           <span class="topbar-title">@yield('title', 'Dashboard')</span>
         </div>
         <div class="topbar-right">
+          <!-- System Zoom Controls -->
+          <div class="zoom-controls" style="display:flex; align-items:center; gap: 4px; margin-right: 12px; background: #f3f4f6; padding: 2px 4px; border-radius: 6px; border: 1px solid #e5e7eb;">
+            <button type="button" class="btn btn-sm" onclick="adjustZoom(-0.1)" title="Zoom Out" style="padding: 4px 8px; background:transparent; border:none; color: #374151; cursor:pointer;"><i class="fas fa-search-minus"></i></button>
+            <button type="button" class="btn btn-sm" onclick="resetZoom()" title="Reset Zoom (100%)" style="padding: 4px 8px; background:transparent; border:none; color: #374151; cursor:pointer; font-weight:600; font-size:11px;"><i class="fas fa-undo"></i> 100%</button>
+            <button type="button" class="btn btn-sm" onclick="adjustZoom(0.1)" title="Zoom In" style="padding: 4px 8px; background:transparent; border:none; color: #374151; cursor:pointer;"><i class="fas fa-search-plus"></i></button>
+          </div>
+
           @if(is_mobile_app() && Auth::user()->role === 'resident')
             <button type="button" class="btn btn-outline-secondary btn-sm" title="Log out"
               onclick="document.getElementById('logoutModal').style.display='flex'">
@@ -284,7 +289,10 @@
         <i class="fas fa-money-bill-wave"></i>
         <span>Payments</span>
       </a>
-
+      <button class="mobile-nav-item" onclick="document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebar-overlay').classList.toggle('show');">
+        <i class="fas fa-bars"></i>
+        <span>More</span>
+      </button>
       <button class="mobile-nav-item" style="color:#dc2626;" onclick="document.getElementById('logoutModal').style.display='flex'">
         <i class="fas fa-sign-out-alt"></i>
         <span>Logout</span>
@@ -306,7 +314,10 @@
         <i class="fas fa-bullhorn"></i>
         <span>Notices</span>
       </a>
-
+      <button class="mobile-nav-item" onclick="document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebar-overlay').classList.toggle('show');">
+        <i class="fas fa-bars"></i>
+        <span>More</span>
+      </button>
       <button class="mobile-nav-item" style="color:#dc2626;" onclick="document.getElementById('logoutModal').style.display='flex'">
         <i class="fas fa-sign-out-alt"></i>
         <span>Logout</span>
@@ -316,6 +327,28 @@
 
   <script src="{{ asset('assets/js/main.js') }}"></script>
   @yield('scripts')
+
+  <!-- Zoom Logic -->
+  <script>
+    let currentZoom = parseFloat(localStorage.getItem('appZoom')) || 1;
+    function applyZoom() {
+      document.body.style.zoom = currentZoom;
+    }
+    function adjustZoom(step) {
+      currentZoom = Math.round((currentZoom + step) * 10) / 10;
+      if (currentZoom < 0.6) currentZoom = 0.6;
+      if (currentZoom > 1.8) currentZoom = 1.8;
+      localStorage.setItem('appZoom', currentZoom);
+      applyZoom();
+    }
+    function resetZoom() {
+      currentZoom = 1;
+      localStorage.setItem('appZoom', currentZoom);
+      applyZoom();
+    }
+    // Apply immediately
+    applyZoom();
+  </script>
 
   {{-- Logout Confirmation Modal (works in all WebViews / APK) --}}
   <div id="logoutModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:9999; align-items:center; justify-content:center; padding:20px;">

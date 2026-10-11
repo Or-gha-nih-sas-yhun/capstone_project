@@ -12,7 +12,7 @@
   --dark: #161616;
   --dark-2: #2a1a1a;
   --dark-3: #3f2a2a;
-  --gray: #6b7280;
+  --gray: #4b5563; /* Darkened for better contrast */
   --gray-light: #e5e7eb;
   --gray-lighter: #f3f4f6;
   --white: #ffffff;
@@ -40,7 +40,7 @@ html {
 
 body {
   font-family: 'Inter', sans-serif;
-  font-size: 14px;
+  font-size: 15px;
   color: var(--dark);
   background: #f8fafc;
   line-height: 1.6;
@@ -59,6 +59,54 @@ img {
   max-width: 100%;
 }
 
+/* ── UX Enhancements ───────────────────────────────────── */
+/* Custom Scrollbar for Webkit */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--gray-lighter);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Focus States for Accessibility */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Smooth Transitions & Hover States */
+.card, .stat-card, .btn, .nav-link, tr {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+tbody tr:hover {
+  background-color: var(--gray-lighter) !important;
+}
+
+/* Skeleton Loading (Utility class) */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
 /* ── Layout ────────────────────────────────────────────── */
 .wrapper {
   display: flex;
@@ -141,7 +189,7 @@ img {
   gap: 12px;
   padding: 12px 20px;
   color: rgba(255, 255, 255, .9);
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   border-radius: 10px;
   transition: all var(--transition);
@@ -215,19 +263,22 @@ img {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 /* Topbar */
 .topbar {
-  height: var(--topbar-h);
+  min-height: var(--topbar-h);
   background: var(--white);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
+  padding: 8px 24px;
   position: sticky;
   top: 0;
   z-index: 100;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .topbar-left {
@@ -503,11 +554,11 @@ img {
 .table th,
 .datatable th {
   background: #f8fafc;
-  font-size: 11.5px;
+  font-size: 13px;
   font-weight: 700;
-  color: #475569;
+  color: #334155;
   text-transform: uppercase;
-  letter-spacing: .06em;
+  letter-spacing: .05em;
   padding: 13px 18px;
   border-top: 1px solid #e2e8f0;
   border-bottom: 2px solid #e2e8f0;
@@ -520,7 +571,7 @@ img {
 .datatable td {
   padding: 14px 18px;
   border-bottom: 1px solid #f1f5f9;
-  font-size: 13.5px;
+  font-size: 14px;
   color: #1e293b;
   vertical-align: middle;
   line-height: 1.5;
@@ -749,7 +800,7 @@ img {
 
 .form-label {
   display: block;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--dark-3);
   margin-bottom: 6px;
@@ -758,10 +809,10 @@ img {
 .form-control,
 .form-select {
   width: 100%;
-  padding: 9px 13px;
+  padding: 10px 14px;
   border: 1.5px solid var(--gray-light);
   border-radius: 8px;
-  font-size: 13.5px;
+  font-size: 14.5px;
   font-family: 'Inter', sans-serif;
   color: var(--dark);
   background: var(--white);
@@ -794,16 +845,18 @@ textarea.form-control {
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   padding: 9px 18px;
   border-radius: 8px;
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 600;
   font-family: 'Inter', sans-serif;
   cursor: pointer;
   border: none;
   transition: all var(--transition);
-  white-space: nowrap;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.4;
 }
 
 .btn-sm {
@@ -885,13 +938,13 @@ textarea.form-control {
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 3px 9px;
+  gap: 6px;
+  padding: 4px 10px;
   border-radius: 6px;
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.02em;
-  line-height: 1.35;
+  line-height: 1.4;
   white-space: nowrap;
   background: #f1f5f9;
   color: #475569;
@@ -1012,11 +1065,11 @@ textarea.form-control {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 36px;
-  height: 36px;
+  min-width: 38px;
+  height: 38px;
   padding: 0 13px;
   border-radius: 8px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: #334155;
   background: #ffffff;
@@ -1922,17 +1975,17 @@ textarea.form-control {
 }
 
 .grid-2 {
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 16px;
 }
 
 .grid-3 {
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 16px;
 }
 
 .grid-4 {
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 16px;
 }
 

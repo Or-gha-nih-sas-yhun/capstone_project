@@ -23,12 +23,21 @@ class BorrowRequest extends Model
         'remarks',
         'approved_by',
         'approved_at',
+<<<<<<< HEAD
+        'archived_at',
+        'archived_by',
+=======
+>>>>>>> origin/master
     ];
 
     protected $casts = [
         'borrow_date' => 'date',
         'return_date' => 'date',
         'approved_at' => 'datetime',
+<<<<<<< HEAD
+        'archived_at' => 'datetime',
+=======
+>>>>>>> origin/master
     ];
 
     public function resident()

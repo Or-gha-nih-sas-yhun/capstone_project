@@ -44,7 +44,11 @@
         </div>
         <div class="details-row">
           <div class="details-label">Venue:</div>
+<<<<<<< HEAD
+          <div class="details-value">Barangay Pili Hall, Session Room</div>
+=======
           <div class="details-value">{{ setting('barangay.session_room', barangay_label() . ' Hall') }}</div>
+>>>>>>> origin/master
         </div>
         <div class="details-row">
           <div class="details-label">Purpose:</div>
@@ -57,7 +61,11 @@
       </p>
       
       <p>Sincerely,</p>
+<<<<<<< HEAD
+      <p><strong>Office of the Punong Barangay / Lupon Chairman</strong><br>Barangay Pili, Minalabac</p>
+=======
       <p><strong>{{ barangay_office_title() }} / Lupon Chairman</strong><br>{{ barangay_location(true) }}</p>
+>>>>>>> origin/master
     </div>
     <div class="footer">
       This is an official administrative notice of legal consequence. Please do not reply directly to this email.

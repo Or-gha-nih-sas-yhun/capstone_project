@@ -29,9 +29,13 @@ class CertificateController extends Controller
             $editCertificate = Certificate::findOrFail($editId);
         }
 
+<<<<<<< HEAD
+        return view('admin.certificates', compact('certificates', 'editCertificate', 'search'));
+=======
         $tokens = \App\Services\CertificateRenderer::tokens();
 
         return view('admin.certificates', compact('certificates', 'editCertificate', 'search', 'tokens'));
+>>>>>>> origin/master
     }
 
     public function store(Request $request)
@@ -44,9 +48,12 @@ class CertificateController extends Controller
             'processing_days' => 'required|integer|min:1',
             'requirements' => 'nullable|string',
             'description' => 'nullable|string',
+<<<<<<< HEAD
+=======
             'body_template' => 'nullable|string|max:5000',
             'header_title' => 'nullable|string|max:150',
             'signatory_position' => 'nullable|string|max:150',
+>>>>>>> origin/master
         ]);
 
         $id = $request->certificate_id;
@@ -64,6 +71,11 @@ class CertificateController extends Controller
             $templateFile = 'certificate_clearance.php';
         }
 
+<<<<<<< HEAD
+        $data = $request->only(['name', 'category', 'fee', 'processing_days', 'requirements', 'description']);
+        $data['template_file'] = $templateFile;
+
+=======
         $data = $request->only([
             'name', 'category', 'fee', 'processing_days', 'requirements', 'description',
             'body_template', 'header_title', 'signatory_position',
@@ -78,6 +90,7 @@ class CertificateController extends Controller
             }
         }
 
+>>>>>>> origin/master
         if ($id > 0) {
             $cert = Certificate::findOrFail($id);
             $cert->update($data);

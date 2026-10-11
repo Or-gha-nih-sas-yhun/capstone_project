@@ -16,6 +16,10 @@ class ResidentManagementController extends Controller
         $search = $request->input('search');
         $status = $request->input('status', 'active');
         $editId = $request->input('edit');
+<<<<<<< HEAD
+        $classification = $request->input('classification');
+=======
+>>>>>>> origin/master
 
         $query = Resident::whereNull('archived_at');
 
@@ -24,7 +28,10 @@ class ResidentManagementController extends Controller
                 $q->where('status', 'inactive');
             });
         } else {
+<<<<<<< HEAD
+=======
             // Active residents whose user is active or don't have user account
+>>>>>>> origin/master
             $query->where(function ($q) {
                 $q->whereHas('user', function ($qu) {
                     $qu->where('status', 'active');
@@ -41,7 +48,23 @@ class ResidentManagementController extends Controller
             });
         }
 
+<<<<<<< HEAD
+        // Classification filter
+        $sixtyYearsAgo = now()->subYears(60)->format('Y-m-d');
+        if ($classification === 'pwd') {
+            $query->where('is_pwd', true);
+        } elseif ($classification === 'senior') {
+            $query->where('birthdate', '<=', $sixtyYearsAgo);
+        } elseif ($classification === 'single_parent') {
+            $query->where('is_single_parent', true);
+        } elseif ($classification === 'widowed') {
+            $query->where('civil_status', 'Widowed');
+        }
+
+        $residents = $query->orderBy('last_name')->orderBy('first_name')->paginate(15);
+=======
         $residents = $query->orderBy('last_name')->orderBy('first_name')->paginate(8);
+>>>>>>> origin/master
 
         $editResident = null;
         if ($editId) {
@@ -53,7 +76,22 @@ class ResidentManagementController extends Controller
                 $q->where('status', 'inactive');
             })->count();
 
+<<<<<<< HEAD
+        // Classification summary counts
+        $classificationCounts = [
+            'total'         => Resident::whereNull('archived_at')->count(),
+            'pwd'           => Resident::whereNull('archived_at')->where('is_pwd', true)->count(),
+            'senior'        => Resident::whereNull('archived_at')->where('birthdate', '<=', $sixtyYearsAgo)->count(),
+            'single_parent' => Resident::whereNull('archived_at')->where('is_single_parent', true)->count(),
+            'widowed'       => Resident::whereNull('archived_at')->where('civil_status', 'Widowed')->count(),
+            'married'       => Resident::whereNull('archived_at')->where('civil_status', 'Married')->count(),
+            'single'        => Resident::whereNull('archived_at')->where('civil_status', 'Single')->count(),
+        ];
+
+        return view('admin.residents', compact('residents', 'editResident', 'status', 'search', 'pendingCount', 'classificationCounts', 'classification'));
+=======
         return view('admin.residents', compact('residents', 'editResident', 'status', 'search', 'pendingCount'));
+>>>>>>> origin/master
     }
 
     public function store(Request $request)
@@ -70,7 +108,11 @@ class ResidentManagementController extends Controller
             'contact_number' => 'nullable|string|max:20',
             'email' => 'nullable|email',
             'address' => 'required|string|max:255',
+<<<<<<< HEAD
+            'purok' => 'nullable|string|max:100',
+=======
             'purok' => purok_rule(),
+>>>>>>> origin/master
             'occupation' => 'nullable|string|max:150',
             'voter_status' => 'required|in:Registered,Not Registered',
             'years_of_residency' => 'required|integer|min:0',
@@ -86,6 +128,13 @@ class ResidentManagementController extends Controller
             'occupation', 'voter_status', 'years_of_residency'
         ]);
 
+<<<<<<< HEAD
+        // Checkbox fields (unchecked = 0 via hidden input)
+        $data['is_pwd']          = $request->input('is_pwd', 0) ? 1 : 0;
+        $data['is_single_parent'] = $request->input('is_single_parent', 0) ? 1 : 0;
+
+=======
+>>>>>>> origin/master
         $id = $request->resident_id;
 
         if ($id > 0) {
@@ -113,7 +162,11 @@ class ResidentManagementController extends Controller
             if ($previousStatus !== 'active') {
                 SmsService::notifyResident(
                     $resident,
+<<<<<<< HEAD
+                    "Hi {$resident->first_name}, your Barangay Pili resident account has been APPROVED. You may now log in to the resident portal.",
+=======
                     "Hi {$resident->first_name}, your " . sms_signature() . " resident account has been APPROVED. You may now log in to the resident portal.",
+>>>>>>> origin/master
                     "resident account approval {$resident->id}"
                 );
             }
@@ -147,7 +200,11 @@ class ResidentManagementController extends Controller
         if (!$wasAlreadyRejected) {
             SmsService::notifyResident(
                 $resident,
+<<<<<<< HEAD
+                "Hi {$resident->first_name}, your Barangay Pili resident registration was not approved. Please visit the Barangay Hall for verification or assistance.",
+=======
                 "Hi {$resident->first_name}, your " . sms_signature() . " resident registration was not approved. Please visit the Barangay Hall for verification or assistance.",
+>>>>>>> origin/master
                 "resident registration rejection {$resident->id}"
             );
         }

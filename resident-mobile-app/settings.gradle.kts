@@ -14,9 +14,13 @@ dependencyResolutionManagement {
     }
 }
 
+<<<<<<< HEAD
+rootProject.name = "BarangayPiliResidentPortal"
+=======
 // Set brgyProjectName in gradle.properties to rebrand the generated APK name.
 rootProject.name =
     (extra.properties["brgyProjectName"] as String?)?.trim()?.takeIf { it.isNotEmpty() }
         ?: "BarangayResidentPortal"
 
+>>>>>>> origin/master
 include(":app")

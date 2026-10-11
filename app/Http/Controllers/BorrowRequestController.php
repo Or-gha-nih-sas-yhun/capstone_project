@@ -16,7 +16,12 @@ class BorrowRequestController extends Controller
         $status = $request->input('status', 'all');
         $search = $request->input('search');
 
+<<<<<<< HEAD
+        $query = BorrowRequest::with(['resident', 'approver'])
+            ->whereNull('archived_at'); // Exclude archived records from active list
+=======
         $query = BorrowRequest::with(['resident', 'approver']);
+>>>>>>> origin/master
 
         if ($status !== 'all') {
             $query->where('status', $status);
@@ -149,7 +154,11 @@ class BorrowRequestController extends Controller
                 $reasonText = $borrow->remarks ? ' Reason: ' . Str::limit($borrow->remarks, 100) : '';
                 $smsText = "Hi {$firstName}, your equipment borrow request #{$borrow->id} has been REJECTED.{$reasonText} Please contact the Barangay Hall for assistance.";
             } else {
+<<<<<<< HEAD
+                $smsText = "Hi {$firstName}, your equipment borrow request #{$borrow->id} has been marked RETURNED and completed. Thank you! - Barangay Pili";
+=======
                 $smsText = "Hi {$firstName}, your equipment borrow request #{$borrow->id} has been marked RETURNED and completed. Thank you! - " . sms_signature();
+>>>>>>> origin/master
             }
 
             SmsService::notifyResident(
@@ -168,6 +177,26 @@ class BorrowRequestController extends Controller
         return back()->with('success', "Borrow request status updated to {$request->status} successfully.");
     }
 
+<<<<<<< HEAD
+    public function archive($id)
+    {
+        $borrow = BorrowRequest::with('resident')->findOrFail($id);
+
+        // Only allow archiving of completed (returned or rejected) records
+        if (!in_array($borrow->status, ['returned', 'rejected'])) {
+            return back()->with('error', 'Only returned or rejected borrow requests can be archived.');
+        }
+
+        $borrow->update([
+            'archived_at' => now(),
+            'archived_by' => Auth::id(),
+        ]);
+
+        $residentName = $borrow->resident ? $borrow->resident->full_name : 'Unknown';
+        ActivityLog::log('ARCHIVE_BORROW', 'Borrow', "Archived borrow request ID {$borrow->id} ({$residentName})");
+
+        return back()->with('success', 'Borrow record archived successfully and preserved for administrative history.');
+=======
     public function checkAvailability(Request $request)
     {
         $borrowDate = $request->input('borrow_date');
@@ -201,5 +230,6 @@ class BorrowRequestController extends Controller
             'chair' => max(0, 50 - $usedChairs),
             'table' => max(0, 25 - $usedTables)
         ]);
+>>>>>>> origin/master
     }
 }

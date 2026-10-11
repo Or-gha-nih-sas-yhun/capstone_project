@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+<<<<<<< HEAD
+  <title>Certificate of Indigency — Barangay Pili</title>
+=======
   <title>Certificate of Indigency — {{ barangay_label() }}</title>
+>>>>>>> origin/master
   <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
@@ -69,12 +73,36 @@
   </div>
 
   <div class="page">
+<<<<<<< HEAD
+    <div class="watermark">
+      <img src="{{ asset('assets/images/pili_logo.png') }}" style="width: 100%; height: 100%; object-fit: contain;" alt="Watermark">
+    </div>
+
+    <!-- HEADER -->
+    <div class="top-header">
+      <div class="logo">
+        <img src="{{ asset('assets/images/pili_logo.png') }}" alt="Pili Barangay Logo">
+      </div>
+      <div class="header-text">
+        <div class="republic">Republic of the Philippines</div>
+        <div class="province">Province of Cebu</div>
+        <div class="municipality">Municipality of Madridejos</div>
+        <div class="barangay">BARANGAY PILI</div>
+      </div>
+      <div class="logo">
+        <img src="{{ asset('assets/images/municipality_logo.png') }}" alt="Municipality Logo">
+      </div>
+    </div>
+
+    <div class="office-title">Office of the Barangay Captain</div>
+=======
     @include('print.partials.watermark')
 
     <!-- HEADER -->
     @include('print.partials.letterhead', ['republic' => true])
 
     <div class="office-title">{{ barangay_office_title() }}</div>
+>>>>>>> origin/master
     <div class="header-line"></div>
 
     <!-- MAIN CONTENT -->
@@ -170,7 +198,11 @@
           <p class="indent-para">
             This is to certify that <span class="underline-value" style="min-width: 180px;">{{ strtoupper($certReq->resident->full_name) }}</span>, 
             Male ({{ $certReq->resident->gender === 'Male' ? '√' : ' ' }}) / Female ({{ $certReq->resident->gender === 'Female' ? '√' : ' ' }}) 
+<<<<<<< HEAD
+            a resident of Barangay Pili, Madridejos, Cebu, is personally known to me to be a person of good moral character and a law-abiding citizen in our community.
+=======
             a resident of {{ barangay_location(true) }}, is personally known to me to be a person of good moral character and a law-abiding citizen in our community.
+>>>>>>> origin/master
           </p>
 
           <p class="indent-para">
@@ -183,7 +215,11 @@
 
           <p class="indent-para">
             Issued this <u>{{ date('j') }}<sup>{{ date('S') }}</sup></u> day of
+<<<<<<< HEAD
+            {{ date('F Y') }}, at Pili, Madridejos, Cebu.
+=======
             {{ date('F Y') }}, at {{ barangay_location() }}.
+>>>>>>> origin/master
           </p>
 
           <!-- SIGNATURES -->
@@ -204,7 +240,11 @@
           <!-- FOOTER -->
           <div class="footer-info">
             <div>Issued on {{ date('m/d/Y') }}</div>
+<<<<<<< HEAD
+            <div>Issued at Pili, Madridejos, Cebu</div>
+=======
             <div>Issued at {{ barangay_location() }}</div>
+>>>>>>> origin/master
           </div>
 
           <div class="doc-stamp">

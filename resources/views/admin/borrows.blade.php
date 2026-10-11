@@ -100,9 +100,18 @@
                     <i class="fas fa-edit"></i>
                   </button>
                 @else
+<<<<<<< HEAD
+                  <a href="{{ route('admin.borrows.archive', $b->id) }}"
+                     class="btn btn-outline-secondary btn-sm"
+                     title="Archive this record"
+                     onclick="return confirm('Archive this borrow record? It will be preserved in the archive for administrative history and reports.')">
+                    <i class="fas fa-archive"></i> Archive
+                  </a>
+=======
                   <button type="button" class="btn btn-outline-secondary btn-sm" disabled style="opacity:0.5;">
                     <i class="fas fa-check"></i> Done
                   </button>
+>>>>>>> origin/master
                 @endif
               </td>
             </tr>

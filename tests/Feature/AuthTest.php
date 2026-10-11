@@ -4,13 +4,21 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use App\Models\Resident;
+<<<<<<< HEAD
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+=======
 use Illuminate\Foundation\Testing\RefreshDatabase;
+>>>>>>> origin/master
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class AuthTest extends TestCase
 {
+<<<<<<< HEAD
+    use DatabaseTransactions;
+=======
     use RefreshDatabase;
+>>>>>>> origin/master
 
     public function test_login_page_renders_successfully()
     {
