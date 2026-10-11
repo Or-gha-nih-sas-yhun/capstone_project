@@ -3,26 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<<<<<<< HEAD
-  <title>@yield('title', 'Dashboard') — {{ config('app.name', 'Barangay Pili') }} System</title>
-  <meta name="description" content="Barangay Pili Clearance and Certificate Processing System">
-  <link rel="icon" type="image/png" href="{{ asset('assets/images/pili_logo.png') }}">
-  <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
-=======
   <title>@yield('title', 'Dashboard') — {{ setting('brand.app_title', barangay_label()) }} System</title>
   <meta name="description" content="{{ setting('brand.app_title', barangay_label() . ' Clearance & Certificate System') }}">
   <link rel="icon" type="image/png" href="{{ setting_image('brand.logo') }}">
   <link rel="shortcut icon" href="{{ setting_image('brand.logo') }}">
->>>>>>> origin/master
   <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   @yield('styles')
 
-<<<<<<< HEAD
-  @if(str_contains(request()->header('User-Agent', ''), 'BrgyPiliApp'))
-=======
   @if(is_mobile_app())
->>>>>>> origin/master
   <style>
     /* Native Mobile APK Specific Styles */
     body.native-mobile-app {
@@ -61,11 +50,7 @@
   </style>
   @endif
 </head>
-<<<<<<< HEAD
-<body class="{{ str_contains(request()->header('User-Agent', ''), 'BrgyPiliApp') ? 'native-mobile-app' : '' }}">
-=======
 <body class="{{ is_mobile_app() ? 'native-mobile-app' : '' }}">
->>>>>>> origin/master
   <!-- Mobile sidebar overlay -->
   <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
@@ -74,28 +59,20 @@
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-brand">
         <div class="brand-logo" style="background: transparent;">
-<<<<<<< HEAD
-          <img src="{{ asset('assets/images/pili_logo.png') }}" alt="Pili Logo" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));">
-        </div>
-        <div class="brand-text">
-          <strong>Brgy. Pili</strong>
-=======
           <img src="{{ setting_image('brand.logo') }}" alt="{{ barangay_label() }} Logo" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));">
         </div>
         <div class="brand-text">
           <strong>{{ setting('brand.short_name', barangay_label()) }}</strong>
->>>>>>> origin/master
           <small>Clearance System</small>
         </div>
       </div>
 
       <nav class="sidebar-nav">
         @if(in_array(Auth::user()->role, ['admin', 'staff']))
-          <span class="nav-section-label">Main</span>
+          <span class="nav-section-label">General</span>
           <a href="{{ route('admin.dashboard') }}" class="nav-link {{ Route::is('admin.dashboard') ? 'active' : '' }}">
             <i class="fas fa-chart-pie"></i> Dashboard
           </a>
-          <span class="nav-section-label">Management</span>
           <a href="{{ route('admin.requests') }}" class="nav-link {{ Route::is('admin.requests') ? 'active' : '' }}">
             <i class="fas fa-file-alt"></i> Requests
           </a>
@@ -134,15 +111,12 @@
             <a href="{{ route('admin.activity_logs') }}" class="nav-link {{ Route::is('admin.activity_logs') ? 'active' : '' }}">
               <i class="fas fa-history"></i> Activity Logs
             </a>
-<<<<<<< HEAD
-=======
             <a href="{{ route('admin.puroks') }}" class="nav-link {{ Route::is('admin.puroks') ? 'active' : '' }}">
               <i class="fas fa-map-location-dot"></i> Puroks
             </a>
             <a href="{{ route('admin.settings') }}" class="nav-link {{ Route::is('admin.settings') ? 'active' : '' }}">
               <i class="fas fa-gear"></i> Barangay Settings
             </a>
->>>>>>> origin/master
           @endif
         @else
           <span class="nav-section-label">My Account</span>
@@ -159,14 +133,14 @@
             <i class="fas fa-gavel"></i> My Summons
           </a>
           <a href="{{ route('resident.bulletins') }}" class="nav-link {{ Route::is('resident.bulletins') ? 'active' : '' }}">
-            <i class="fas fa-bullhorn"></i> Announcements
+            <i class="fas fa-bullhorn"></i> Bulletins
           </a>
           <a href="{{ route('resident.profile') }}" class="nav-link {{ Route::is('resident.profile') ? 'active' : '' }}">
             <i class="fas fa-user"></i> My Profile
           </a>
         @endif
 
-        <span class="nav-section-label">General</span>
+        <span class="nav-section-label">Account</span>
         <form method="POST" action="{{ route('logout') }}" id="logout-form" style="margin:0;">
           @csrf
         </form>
@@ -205,29 +179,20 @@
       <!-- Topbar -->
       <header class="topbar no-print">
         <div class="topbar-left">
-<<<<<<< HEAD
-
-          @if(str_contains(request()->header('User-Agent', ''), 'BrgyPiliApp') && Auth::user()->role === 'resident')
-            <img src="{{ asset('assets/images/pili_logo.png') }}" alt="Barangay Pili logo" style="width:34px;height:34px;object-fit:contain;margin-right:8px;">
-=======
-          <!-- Hamburger menu removed -->
           @if(is_mobile_app() && Auth::user()->role === 'resident')
             <img src="{{ setting_image('brand.logo') }}" alt="{{ barangay_label() }} logo" style="width:34px;height:34px;object-fit:contain;margin-right:8px;">
->>>>>>> origin/master
           @endif
           <span class="topbar-title">@yield('title', 'Dashboard')</span>
         </div>
         <div class="topbar-right">
-<<<<<<< HEAD
-          <div class="zoom-controls" style="display:flex; align-items:center; gap: 4px; margin-right: 12px; background: #f3f4f6; padding: 2px; border-radius: 6px;">
-            <button type="button" class="btn btn-sm" onclick="adjustZoom(-0.1)" title="Zoom Out" style="padding: 4px 8px; background:transparent; border:none; color: #374151;"><i class="fas fa-search-minus"></i></button>
-            <button type="button" class="btn btn-sm" onclick="resetZoom()" title="Reset Zoom" style="padding: 4px 8px; background:transparent; border:none; color: #374151;"><i class="fas fa-search"></i></button>
-            <button type="button" class="btn btn-sm" onclick="adjustZoom(0.1)" title="Zoom In" style="padding: 4px 8px; background:transparent; border:none; color: #374151;"><i class="fas fa-search-plus"></i></button>
+          <!-- System Zoom Controls -->
+          <div class="zoom-controls" style="display:flex; align-items:center; gap: 4px; margin-right: 12px; background: #f3f4f6; padding: 2px 4px; border-radius: 6px; border: 1px solid #e5e7eb;">
+            <button type="button" class="btn btn-sm" onclick="adjustZoom(-0.1)" title="Zoom Out" style="padding: 4px 8px; background:transparent; border:none; color: #374151; cursor:pointer;"><i class="fas fa-search-minus"></i></button>
+            <button type="button" class="btn btn-sm" onclick="resetZoom()" title="Reset Zoom (100%)" style="padding: 4px 8px; background:transparent; border:none; color: #374151; cursor:pointer; font-weight:600; font-size:11px;"><i class="fas fa-undo"></i> 100%</button>
+            <button type="button" class="btn btn-sm" onclick="adjustZoom(0.1)" title="Zoom In" style="padding: 4px 8px; background:transparent; border:none; color: #374151; cursor:pointer;"><i class="fas fa-search-plus"></i></button>
           </div>
-          @if(str_contains(request()->header('User-Agent', ''), 'BrgyPiliApp') && Auth::user()->role === 'resident')
-=======
+
           @if(is_mobile_app() && Auth::user()->role === 'resident')
->>>>>>> origin/master
             <button type="button" class="btn btn-outline-secondary btn-sm" title="Log out"
               onclick="document.getElementById('logoutModal').style.display='flex'">
               <i class="fas fa-sign-out-alt"></i> Logout
@@ -290,11 +255,7 @@
 
   <!-- Mobile Bottom Navigation -->
   <nav class="mobile-bottom-nav" id="mobile-bottom-nav">
-<<<<<<< HEAD
-    @if(str_contains(request()->header('User-Agent', ''), 'BrgyPiliApp') && Auth::user()->role === 'resident')
-=======
     @if(is_mobile_app() && Auth::user()->role === 'resident')
->>>>>>> origin/master
       <a href="{{ route('resident.dashboard') }}" class="mobile-nav-item {{ Route::is('resident.dashboard') ? 'active' : '' }}">
         <i class="fas fa-house"></i>
         <span>Home</span>
@@ -328,14 +289,10 @@
         <i class="fas fa-money-bill-wave"></i>
         <span>Payments</span>
       </a>
-<<<<<<< HEAD
       <button class="mobile-nav-item" onclick="document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebar-overlay').classList.toggle('show');">
         <i class="fas fa-bars"></i>
         <span>More</span>
       </button>
-=======
-
->>>>>>> origin/master
       <button class="mobile-nav-item" style="color:#dc2626;" onclick="document.getElementById('logoutModal').style.display='flex'">
         <i class="fas fa-sign-out-alt"></i>
         <span>Logout</span>
@@ -357,14 +314,10 @@
         <i class="fas fa-bullhorn"></i>
         <span>Notices</span>
       </a>
-<<<<<<< HEAD
       <button class="mobile-nav-item" onclick="document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebar-overlay').classList.toggle('show');">
         <i class="fas fa-bars"></i>
         <span>More</span>
       </button>
-=======
-
->>>>>>> origin/master
       <button class="mobile-nav-item" style="color:#dc2626;" onclick="document.getElementById('logoutModal').style.display='flex'">
         <i class="fas fa-sign-out-alt"></i>
         <span>Logout</span>
@@ -375,17 +328,16 @@
   <script src="{{ asset('assets/js/main.js') }}"></script>
   @yield('scripts')
 
-<<<<<<< HEAD
+  <!-- Zoom Logic -->
   <script>
     let currentZoom = parseFloat(localStorage.getItem('appZoom')) || 1;
     function applyZoom() {
-      // Use CSS zoom
       document.body.style.zoom = currentZoom;
     }
     function adjustZoom(step) {
-      currentZoom += step;
+      currentZoom = Math.round((currentZoom + step) * 10) / 10;
       if (currentZoom < 0.6) currentZoom = 0.6;
-      if (currentZoom > 2.0) currentZoom = 2.0;
+      if (currentZoom > 1.8) currentZoom = 1.8;
       localStorage.setItem('appZoom', currentZoom);
       applyZoom();
     }
@@ -398,8 +350,6 @@
     applyZoom();
   </script>
 
-=======
->>>>>>> origin/master
   {{-- Logout Confirmation Modal (works in all WebViews / APK) --}}
   <div id="logoutModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:9999; align-items:center; justify-content:center; padding:20px;">
     <div style="background:#fff; border-radius:16px; max-width:320px; width:100%; padding:28px 24px; box-shadow:0 20px 50px rgba(0,0,0,0.25); text-align:center;">

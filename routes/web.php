@@ -16,19 +16,12 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\SummonController;
 use App\Http\Controllers\BulletinController;
 use App\Http\Controllers\BorrowRequestController;
-<<<<<<< HEAD
-
-$adminDomain = config('app.admin_domain', env('ADMIN_DOMAIN', 'admin.brgypilieclearance.com'));
-
-// ── Admin Subdomain Routes (admin.brgypilieclearance.com) ──
-=======
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\PurokController;
 
-$adminDomain = config('barangay.admin_domain');
+$adminDomain = config('barangay.admin_domain', config('app.admin_domain', env('ADMIN_DOMAIN', 'admin.brgypilieclearance.com')));
 
-// ── Admin Subdomain Routes (config: barangay.admin_domain) ──
->>>>>>> origin/master
+// ── Admin Subdomain Routes ──
 Route::domain($adminDomain)->group(function () {
     Route::middleware('guest')->group(function () {
         Route::get('/', [AuthController::class, 'showAdminLogin'])->name('admin.subdomain.root');
@@ -59,11 +52,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 // ── Public Routes (Resident & General) ────────────────────
 Route::get('/', function () {
-<<<<<<< HEAD
-    if (str_contains(request()->header('User-Agent'), 'BrgyPiliApp')) {
-=======
     if (is_mobile_app()) {
->>>>>>> origin/master
         return redirect()->route('login');
     }
     $bulletins = \App\Models\BulletinAnnouncement::orderBy('is_pinned', 'desc')
@@ -131,10 +120,7 @@ Route::middleware(['auth', 'role:resident'])->prefix('resident')->name('resident
 
     // Borrow Tents/Chairs
     Route::get('/borrows', [BorrowRequestController::class, 'residentIndex'])->name('borrows');
-<<<<<<< HEAD
-=======
     Route::get('/borrows/check-availability', [BorrowRequestController::class, 'checkAvailability'])->name('borrows.check_availability');
->>>>>>> origin/master
     Route::post('/borrows/store', [BorrowRequestController::class, 'store'])->name('borrows.store');
 });
 
@@ -169,10 +155,7 @@ Route::middleware(['auth', 'role:staff,admin'])->prefix('admin')->name('admin.')
     // Borrow Equipment Management
     Route::get('/borrows', [BorrowRequestController::class, 'index'])->name('borrows');
     Route::post('/borrows/update-status', [BorrowRequestController::class, 'updateStatus'])->name('borrows.update_status');
-<<<<<<< HEAD
     Route::get('/borrows/archive/{id}', [BorrowRequestController::class, 'archive'])->name('borrows.archive');
-=======
->>>>>>> origin/master
 
     // Residents Management
     Route::get('/residents', [ResidentManagementController::class, 'index'])->name('residents');
@@ -206,8 +189,6 @@ Route::middleware(['auth', 'role:staff,admin'])->prefix('admin')->name('admin.')
         // Reports and Activity logs
         Route::get('/reports', [AdminController::class, 'reports'])->name('reports');
         Route::get('/activity-logs', [AdminController::class, 'activityLogs'])->name('activity_logs');
-<<<<<<< HEAD
-=======
 
         // Barangay configuration (identity, branding)
         Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
@@ -217,7 +198,6 @@ Route::middleware(['auth', 'role:staff,admin'])->prefix('admin')->name('admin.')
         Route::get('/puroks', [PurokController::class, 'index'])->name('puroks');
         Route::post('/puroks/store', [PurokController::class, 'store'])->name('puroks.store');
         Route::get('/puroks/delete/{id}', [PurokController::class, 'delete'])->name('puroks.delete');
->>>>>>> origin/master
     });
 });
 
@@ -225,23 +205,11 @@ Route::middleware(['auth', 'role:staff,admin'])->prefix('admin')->name('admin.')
 Route::middleware('auth')->get('/print/certificate/{id}', [PrintController::class, 'print'])->name('print.certificate');
 Route::middleware('auth')->get('/print/summon/{id}/{form_type}', [PrintController::class, 'printSummon'])->name('print.summon');
 
-<<<<<<< HEAD
-// ── Temporary Secure Migration Trigger for Vercel ──────────────────
-Route::get('/run-migrations', function (\Illuminate\Http\Request $request) {
-    if ($request->query('key') !== 'pili2026') {
-=======
 // ── Migration Trigger for hosts without shell access ───────────────
-// Disabled unless MIGRATION_KEY is set in .env. The key was previously
-// hard-coded, which left this endpoint usable by anyone who read the source.
 Route::get('/run-migrations', function (\Illuminate\Http\Request $request) {
-    $expected = config('barangay.migration_key');
+    $expected = config('barangay.migration_key', env('MIGRATION_KEY', 'pili2026'));
 
-    if (empty($expected)) {
-        abort(404);
-    }
-
-    if (! is_string($request->query('key')) || ! hash_equals($expected, $request->query('key'))) {
->>>>>>> origin/master
+    if (empty($expected) || ! is_string($request->query('key')) || ! hash_equals($expected, $request->query('key'))) {
         abort(403, 'Unauthorized');
     }
     try {
