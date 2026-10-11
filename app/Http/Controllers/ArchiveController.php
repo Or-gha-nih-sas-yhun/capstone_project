@@ -8,7 +8,10 @@ use App\Models\Certificate;
 use App\Models\Request as CertificateRequest;
 use App\Models\Summon;
 use App\Models\Official;
+<<<<<<< HEAD
 use App\Models\BorrowRequest;
+=======
+>>>>>>> origin/master
 use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 
@@ -22,9 +25,14 @@ class ArchiveController extends Controller
         $users = User::whereIn('role', ['admin', 'staff'])->whereNotNull('archived_at')->orderBy('archived_at', 'desc')->get();
         $summons = Summon::whereNotNull('archived_at')->orderBy('archived_at', 'desc')->get();
         $officials = Official::whereNotNull('archived_at')->orderBy('archived_at', 'desc')->get();
+<<<<<<< HEAD
         $borrows = BorrowRequest::with('resident')->whereNotNull('archived_at')->orderBy('archived_at', 'desc')->get();
 
         return view('admin.archive', compact('residents', 'certificates', 'requests', 'users', 'summons', 'officials', 'borrows'));
+=======
+
+        return view('admin.archive', compact('residents', 'certificates', 'requests', 'users', 'summons', 'officials'));
+>>>>>>> origin/master
     }
 
     public function restore($type, $id)
@@ -92,6 +100,7 @@ class ArchiveController extends Controller
             ]);
             $name = $official->name;
             $restored = true;
+<<<<<<< HEAD
         } elseif ($type === 'borrow') {
             $borrow = BorrowRequest::with('resident')->findOrFail($id);
             $borrow->update([
@@ -100,6 +109,8 @@ class ArchiveController extends Controller
             ]);
             $name = $borrow->resident ? $borrow->resident->full_name . ' (Borrow #' . $borrow->id . ')' : 'Borrow #' . $borrow->id;
             $restored = true;
+=======
+>>>>>>> origin/master
         }
 
         if ($restored) {

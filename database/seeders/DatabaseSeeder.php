@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+<<<<<<< HEAD
 use App\Models\User;
 use App\Models\Certificate;
 use App\Models\Official;
@@ -9,10 +10,27 @@ use App\Models\Resident;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
+=======
+use App\Models\Certificate;
+use App\Models\User;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
+
+/**
+ * Baseline data every barangay deployment needs: staff accounts and the
+ * standard certificate types issued under the Local Government Code.
+ *
+ * Nothing here is specific to one barangay. Sample officials and residents
+ * for demos live in DemoDataSeeder, which is not run by default:
+ *
+ *     php artisan db:seed --class=DemoDataSeeder
+ */
+>>>>>>> origin/master
 class DatabaseSeeder extends Seeder
 {
     public function run()
     {
+<<<<<<< HEAD
         // 1. Seed Users (without resident link first)
         User::create([
             'username' => 'admin',
@@ -31,6 +49,44 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // 2. Seed Certificates
+=======
+        $this->seedUsers();
+        $this->seedCertificates();
+
+        $this->command->info('Baseline data seeded.');
+        $this->command->line('Next: php artisan barangay:setup');
+    }
+
+    private function seedUsers(): void
+    {
+        // Derived from the deployment's own domain rather than a fixed
+        // barangay address, so a new deployment does not inherit another
+        // barangay's email domain.
+        $domain = config('barangay.domain', 'localhost');
+
+        $accounts = [
+            ['username' => 'admin', 'role' => 'admin'],
+            ['username' => 'staff1', 'role' => 'staff'],
+        ];
+
+        foreach ($accounts as $account) {
+            User::firstOrCreate(
+                ['username' => $account['username']],
+                [
+                    'email'    => $account['username'] . '@' . $domain,
+                    'password' => Hash::make('password'),
+                    'role'     => $account['role'],
+                    'status'   => 'active',
+                ]
+            );
+        }
+
+        $this->command->warn('Default accounts use the password "password" — change them before going live.');
+    }
+
+    private function seedCertificates(): void
+    {
+>>>>>>> origin/master
         $certs = [
             [
                 'name' => 'Barangay Clearance',
@@ -40,17 +96,29 @@ class DatabaseSeeder extends Seeder
                 'processing_days' => 1,
                 'template_file' => 'certificate_clearance.php',
                 'requirements' => 'Valid ID, Proof of residency',
+<<<<<<< HEAD
                 'status' => 'active'
             ],
             [
                 'name' => 'Certificate of Residency',
                 'description' => 'Certifies that the person is a legitimate resident of Barangay Pili',
+=======
+                'status' => 'active',
+            ],
+            [
+                'name' => 'Certificate of Residency',
+                'description' => 'Certifies that the person is a legitimate resident of this barangay',
+>>>>>>> origin/master
                 'category' => 'Certification',
                 'fee' => 50.00,
                 'processing_days' => 1,
                 'template_file' => 'certificate_residency.php',
                 'requirements' => 'Valid ID',
+<<<<<<< HEAD
                 'status' => 'active'
+=======
+                'status' => 'active',
+>>>>>>> origin/master
             ],
             [
                 'name' => 'Certificate of Indigency',
@@ -60,7 +128,11 @@ class DatabaseSeeder extends Seeder
                 'processing_days' => 1,
                 'template_file' => 'certificate_indigency.php',
                 'requirements' => 'Valid ID, Proof of indigency',
+<<<<<<< HEAD
                 'status' => 'active'
+=======
+                'status' => 'active',
+>>>>>>> origin/master
             ],
             [
                 'name' => 'Business Clearance',
@@ -70,7 +142,11 @@ class DatabaseSeeder extends Seeder
                 'processing_days' => 3,
                 'template_file' => 'certificate_clearance.php',
                 'requirements' => 'Valid ID, Business documents',
+<<<<<<< HEAD
                 'status' => 'active'
+=======
+                'status' => 'active',
+>>>>>>> origin/master
             ],
             [
                 'name' => 'Certificate of Good Moral Character',
@@ -80,7 +156,11 @@ class DatabaseSeeder extends Seeder
                 'processing_days' => 1,
                 'template_file' => 'certificate_moral.php',
                 'requirements' => 'Valid ID',
+<<<<<<< HEAD
                 'status' => 'active'
+=======
+                'status' => 'active',
+>>>>>>> origin/master
             ],
             [
                 'name' => 'First Time Jobseeker Certificate',
@@ -90,6 +170,7 @@ class DatabaseSeeder extends Seeder
                 'processing_days' => 1,
                 'template_file' => 'certificate.php',
                 'requirements' => 'Valid ID, Barangay Certificate',
+<<<<<<< HEAD
                 'status' => 'active'
             ]
         ];
@@ -168,6 +249,16 @@ class DatabaseSeeder extends Seeder
 
         foreach ($residents as $r) {
             Resident::create($r);
+=======
+                'status' => 'active',
+            ],
+        ];
+
+        foreach ($certs as $c) {
+            // Keeps the seeder safe to re-run on an existing deployment and
+            // avoids duplicating a type the barangay has already edited.
+            Certificate::firstOrCreate(['name' => $c['name']], $c);
+>>>>>>> origin/master
         }
     }
 }

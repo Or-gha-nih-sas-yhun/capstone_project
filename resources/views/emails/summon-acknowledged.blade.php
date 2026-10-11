@@ -20,7 +20,11 @@
 <body>
   <div class="email-container">
     <div class="header">
+<<<<<<< HEAD
       <h2>Barangay Pili Mediation Services</h2>
+=======
+      <h2>{{ barangay_label() }} Mediation Services</h2>
+>>>>>>> origin/master
     </div>
     <div class="content">
       <p>Dear {{ $summon->complainant_name }},</p>
@@ -54,10 +58,17 @@
         </div>
       </div>
 
+<<<<<<< HEAD
       <p>You can track the ongoing status of your case and view any updated remarks by logging into your account on the Barangay Pili Resident Portal.</p>
       
       <p>Sincerely,</p>
       <p><strong>Office of the Punong Barangay</strong><br>Barangay Pili, Minalabac</p>
+=======
+      <p>You can track the ongoing status of your case and view any updated remarks by logging into your account on the {{ barangay_label() }} Resident Portal.</p>
+      
+      <p>Sincerely,</p>
+      <p><strong>{{ barangay_office_title() }}</strong><br>{{ barangay_location(true) }}</p>
+>>>>>>> origin/master
     </div>
     <div class="footer">
       This is an official automated notification. Please do not reply directly to this email.

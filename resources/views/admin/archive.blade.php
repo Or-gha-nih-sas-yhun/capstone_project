@@ -247,6 +247,7 @@
     </div>
   </div>
 
+<<<<<<< HEAD
   <!-- Archived Borrow Records -->
   <div class="card">
     <div class="card-header">
@@ -315,3 +316,7 @@
 </div>
 @endsection
 
+=======
+</div>
+@endsection
+>>>>>>> origin/master

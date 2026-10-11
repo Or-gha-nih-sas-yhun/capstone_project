@@ -32,6 +32,7 @@
         <label class="form-label">Reporting Month</label>
         <input type="month" name="month" class="form-control" value="{{ $month }}">
       </div>
+<<<<<<< HEAD
       <div>
         <label class="form-label">Filter Demographics by Purok</label>
         <select name="purok" class="form-select">
@@ -41,6 +42,8 @@
           @endforeach
         </select>
       </div>
+=======
+>>>>>>> origin/master
       <button type="submit" class="btn btn-primary"><i class="fas fa-filter"></i> Generate</button>
       <button type="button" class="btn btn-success" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
       <button type="submit" name="export" value="csv" class="btn btn-secondary"><i class="fas fa-file-csv"></i> Export CSV</button>
@@ -51,6 +54,7 @@
 <div id="printReport" class="official-report" style="background:#fff; padding:30px; border:1px solid #e5e7eb; border-radius:8px;">
   <div class="report-letterhead" style="display:flex; justify-content:space-between; align-items:center; border-bottom:3px solid #333; padding-bottom:12px; margin-bottom:20px;">
     <div class="logo">
+<<<<<<< HEAD
       <img src="{{ asset('assets/images/pili_logo.png') }}" alt="Barangay Logo" style="width: 72px; height: 72px; object-fit: contain;">
     </div>
     <div style="text-align:center;">
@@ -58,11 +62,24 @@
       <div style="font-size:14px;">Province of Cebu</div>
       <div style="font-size:14px;">Municipality of Madridejos</div>
       <strong style="font-size:18px; display:block; margin-top:2px;">BARANGAY PILI</strong>
+=======
+      <img src="{{ setting_image('brand.logo') }}" alt="Barangay Logo" style="width: 72px; height: 72px; object-fit: contain;">
+    </div>
+    <div style="text-align:center;">
+      <div class="rep" style="font-size:14px; text-transform:uppercase; letter-spacing:0.5px;">Republic of the Philippines</div>
+      <div style="font-size:14px;">{{ barangay_province_line() }}</div>
+      <div style="font-size:14px;">{{ barangay_municipality_line() }}</div>
+      <strong style="font-size:18px; display:block; margin-top:2px;">{{ strtoupper(barangay_label()) }}</strong>
+>>>>>>> origin/master
       <h2 style="font-size:18px; margin-top:8px; font-weight:800; color:#111;">MONTHLY TRANSACTIONS REPORT</h2>
       <p style="font-size:12.5px; color:#4b5563; margin-top:2px;">{{ \Carbon\Carbon::parse($start)->format('F 1, Y') }} to {{ \Carbon\Carbon::parse($start)->format('F t, Y') }}</p>
     </div>
     <div class="logo">
+<<<<<<< HEAD
       <img src="{{ asset('assets/images/municipality_logo.png') }}" alt="Municipality Logo" style="width: 72px; height: 72px; object-fit: contain;">
+=======
+      <img src="{{ setting_image('brand.municipality_logo', 'assets/images/municipality_logo.png') }}" alt="Municipality Logo" style="width: 72px; height: 72px; object-fit: contain;">
+>>>>>>> origin/master
     </div>
   </div>
 
@@ -81,9 +98,15 @@
     </div>
   </div>
 
+<<<<<<< HEAD
   <section class="report-section" style="margin-bottom:24px; overflow-x: auto;">
     <h3 style="font-size:14px; font-weight:800; border-bottom:1px solid #e5e7eb; padding-bottom:6px; margin-bottom:10px; color:#374151;">Transactions Report</h3>
     <table class="report-table" style="width:100%; border-collapse:collapse; font-size:12.5px; min-width: 600px;">
+=======
+  <section class="report-section" style="margin-bottom:24px;">
+    <h3 style="font-size:14px; font-weight:800; border-bottom:1px solid #e5e7eb; padding-bottom:6px; margin-bottom:10px; color:#374151;">Transactions Report</h3>
+    <table class="report-table" style="width:100%; border-collapse:collapse; font-size:12.5px;">
+>>>>>>> origin/master
       <thead>
         <tr style="border-bottom:2px solid #e5e7eb; text-align:left; background:#f9fafb;">
           <th style="padding:8px;">Tracking No.</th>
@@ -115,9 +138,15 @@
     </table>
   </section>
 
+<<<<<<< HEAD
   <section class="report-section" style="margin-bottom:24px; overflow-x: auto;">
     <h3 style="font-size:14px; font-weight:800; border-bottom:1px solid #e5e7eb; padding-bottom:6px; margin-bottom:10px; color:#374151;">Breakdown by Certificate Types</h3>
     <table class="report-table" style="width:100%; border-collapse:collapse; font-size:12.5px; min-width: 600px;">
+=======
+  <section class="report-section" style="margin-bottom:24px;">
+    <h3 style="font-size:14px; font-weight:800; border-bottom:1px solid #e5e7eb; padding-bottom:6px; margin-bottom:10px; color:#374151;">Breakdown by Certificate Types</h3>
+    <table class="report-table" style="width:100%; border-collapse:collapse; font-size:12.5px;">
+>>>>>>> origin/master
       <thead>
         <tr style="border-bottom:2px solid #e5e7eb; text-align:left; background:#f9fafb;">
           <th style="padding:8px;">Certificate Type</th>
@@ -147,6 +176,7 @@
     </table>
   </section>
 
+<<<<<<< HEAD
   <section class="report-section" style="margin-bottom:24px;">
     <h3 style="font-size:14px; font-weight:800; border-bottom:1px solid #e5e7eb; padding-bottom:6px; margin-bottom:10px; color:#374151;">Resident Demographics</h3>
     <div style="display:flex; flex-wrap:wrap; gap:24px;">
@@ -220,6 +250,8 @@
     </div>
   </section>
 
+=======
+>>>>>>> origin/master
   <section class="report-section" style="margin-top:40px;">
     <div class="report-signatures" style="display:flex; justify-content:space-between; align-items:flex-start;">
       <div style="text-align:left;">

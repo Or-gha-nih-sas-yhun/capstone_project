@@ -15,7 +15,11 @@ class Authenticate extends Middleware
     protected function redirectTo($request)
     {
         if (! $request->expectsJson()) {
+<<<<<<< HEAD
             $adminDomain = config('app.admin_domain', env('ADMIN_DOMAIN', 'admin.brgypilieclearance.com'));
+=======
+            $adminDomain = config('barangay.admin_domain');
+>>>>>>> origin/master
             if ($request->is('admin*') || $request->getHost() === $adminDomain) {
                 return route('admin.login');
             }

@@ -95,11 +95,19 @@
   <div class="email-wrapper">
     <div class="email-content">
       <div class="email-header">
+<<<<<<< HEAD
         <h1>Barangay Pili Portal</h1>
       </div>
       <div class="email-body">
         <h2>Hello,</h2>
         <p>You are receiving this email because we received a password reset request for your account on the Barangay Pili Clearance & Certificate System.</p>
+=======
+        <h1>{{ setting('brand.portal_name', barangay_label() . ' Portal') }}</h1>
+      </div>
+      <div class="email-body">
+        <h2>Hello,</h2>
+        <p>You are receiving this email because we received a password reset request for your account on the {{ setting('brand.app_title', barangay_label() . ' Clearance & Certificate System') }}.</p>
+>>>>>>> origin/master
         <div class="btn-container">
           <a href="{{ $resetUrl }}" class="btn-primary" target="_blank">Reset Password</a>
         </div>
@@ -110,7 +118,11 @@
         <a href="{{ $resetUrl }}" style="color: #b91c1c;">{{ $resetUrl }}</a></p>
       </div>
       <div class="email-footer">
+<<<<<<< HEAD
         <p>Barangay Pili, Madridejos, Cebu &bull; Official Clearance & Certificate System</p>
+=======
+        <p>{{ barangay_location(true) }} &bull; Official Clearance & Certificate System</p>
+>>>>>>> origin/master
       </div>
     </div>
   </div>

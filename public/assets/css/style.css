@@ -12,7 +12,11 @@
   --dark: #161616;
   --dark-2: #2a1a1a;
   --dark-3: #3f2a2a;
+<<<<<<< HEAD
   --gray: #4b5563; /* Darkened for better contrast */
+=======
+  --gray: #6b7280;
+>>>>>>> origin/master
   --gray-light: #e5e7eb;
   --gray-lighter: #f3f4f6;
   --white: #ffffff;
@@ -40,10 +44,17 @@ html {
 
 body {
   font-family: 'Inter', sans-serif;
+<<<<<<< HEAD
   font-size: 16px;
   color: var(--dark);
   background: #f8fafc;
   line-height: 1.7;
+=======
+  font-size: 14px;
+  color: var(--dark);
+  background: #f8fafc;
+  line-height: 1.6;
+>>>>>>> origin/master
 }
 
 a {
@@ -59,6 +70,7 @@ img {
   max-width: 100%;
 }
 
+<<<<<<< HEAD
 /* ── UX Enhancements ───────────────────────────────────── */
 /* Custom Scrollbar for Webkit */
 ::-webkit-scrollbar {
@@ -108,6 +120,8 @@ tbody tr:hover {
   100% { background-position: -200% 0; }
 }
 
+=======
+>>>>>>> origin/master
 /* ── Layout ────────────────────────────────────────────── */
 .wrapper {
   display: flex;
@@ -190,7 +204,11 @@ tbody tr:hover {
   gap: 12px;
   padding: 12px 20px;
   color: rgba(255, 255, 255, .9);
+<<<<<<< HEAD
   font-size: 16px;
+=======
+  font-size: 14px;
+>>>>>>> origin/master
   font-weight: 600;
   border-radius: 10px;
   transition: all var(--transition);
@@ -263,24 +281,39 @@ tbody tr:hover {
   flex: 1;
   display: flex;
   flex-direction: column;
+<<<<<<< HEAD
   height: 100vh;
   overflow: hidden;
+=======
+  min-height: 100vh;
+>>>>>>> origin/master
 }
 
 /* Topbar */
 .topbar {
+<<<<<<< HEAD
   min-height: var(--topbar-h);
   height: auto;
+=======
+  height: var(--topbar-h);
+>>>>>>> origin/master
   background: var(--white);
   display: flex;
   align-items: center;
   justify-content: space-between;
+<<<<<<< HEAD
   padding: 10px 24px;
   position: sticky;
   top: 0;
   z-index: 100;
   flex-wrap: wrap;
   gap: 10px;
+=======
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+>>>>>>> origin/master
 }
 
 .topbar-left {
@@ -556,12 +589,21 @@ tbody tr:hover {
 .table th,
 .datatable th {
   background: #f8fafc;
+<<<<<<< HEAD
   font-size: 14px;
   font-weight: 700;
   color: #334155;
   text-transform: uppercase;
   letter-spacing: .05em;
   padding: 14px 18px;
+=======
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  padding: 13px 18px;
+>>>>>>> origin/master
   border-top: 1px solid #e2e8f0;
   border-bottom: 2px solid #e2e8f0;
   white-space: nowrap;
@@ -571,12 +613,21 @@ tbody tr:hover {
 
 .table td,
 .datatable td {
+<<<<<<< HEAD
   padding: 16px 18px;
   border-bottom: 1px solid #f1f5f9;
   font-size: 15px;
   color: #1e293b;
   vertical-align: middle;
   line-height: 1.6;
+=======
+  padding: 14px 18px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 13.5px;
+  color: #1e293b;
+  vertical-align: middle;
+  line-height: 1.5;
+>>>>>>> origin/master
 }
 
 .table tbody tr,
@@ -802,19 +853,33 @@ tbody tr:hover {
 
 .form-label {
   display: block;
+<<<<<<< HEAD
   font-size: 15px;
   font-weight: 600;
   color: var(--dark-3);
   margin-bottom: 8px;
+=======
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--dark-3);
+  margin-bottom: 6px;
+>>>>>>> origin/master
 }
 
 .form-control,
 .form-select {
   width: 100%;
+<<<<<<< HEAD
   padding: 10px 14px;
   border: 1.5px solid var(--gray-light);
   border-radius: 8px;
   font-size: 16px;
+=======
+  padding: 9px 13px;
+  border: 1.5px solid var(--gray-light);
+  border-radius: 8px;
+  font-size: 13.5px;
+>>>>>>> origin/master
   font-family: 'Inter', sans-serif;
   color: var(--dark);
   background: var(--white);
@@ -847,18 +912,29 @@ textarea.form-control {
 .btn {
   display: inline-flex;
   align-items: center;
+<<<<<<< HEAD
   gap: 8px;
   padding: 10px 20px;
   border-radius: 8px;
   font-size: 15px;
+=======
+  gap: 6px;
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-size: 13.5px;
+>>>>>>> origin/master
   font-weight: 600;
   font-family: 'Inter', sans-serif;
   cursor: pointer;
   border: none;
   transition: all var(--transition);
+<<<<<<< HEAD
   white-space: normal;
   text-align: center;
   line-height: 1.5;
+=======
+  white-space: nowrap;
+>>>>>>> origin/master
 }
 
 .btn-sm {
@@ -940,6 +1016,7 @@ textarea.form-control {
 .badge {
   display: inline-flex;
   align-items: center;
+<<<<<<< HEAD
   gap: 6px;
   padding: 4px 10px;
   border-radius: 6px;
@@ -948,6 +1025,16 @@ textarea.form-control {
   letter-spacing: 0.02em;
   line-height: 1.4;
   white-space: normal;
+=======
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.35;
+  white-space: nowrap;
+>>>>>>> origin/master
   background: #f1f5f9;
   color: #475569;
   border: 1px solid #e2e8f0;
@@ -1067,11 +1154,19 @@ textarea.form-control {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+<<<<<<< HEAD
   min-width: 40px;
   height: 40px;
   padding: 0 14px;
   border-radius: 8px;
   font-size: 15px;
+=======
+  min-width: 36px;
+  height: 36px;
+  padding: 0 13px;
+  border-radius: 8px;
+  font-size: 13px;
+>>>>>>> origin/master
   font-weight: 600;
   color: #334155;
   background: #ffffff;
@@ -1977,17 +2072,29 @@ textarea.form-control {
 }
 
 .grid-2 {
+<<<<<<< HEAD
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+=======
+  grid-template-columns: repeat(2, 1fr);
+>>>>>>> origin/master
   gap: 16px;
 }
 
 .grid-3 {
+<<<<<<< HEAD
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+=======
+  grid-template-columns: repeat(3, 1fr);
+>>>>>>> origin/master
   gap: 16px;
 }
 
 .grid-4 {
+<<<<<<< HEAD
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+=======
+  grid-template-columns: repeat(4, 1fr);
+>>>>>>> origin/master
   gap: 16px;
 }
 

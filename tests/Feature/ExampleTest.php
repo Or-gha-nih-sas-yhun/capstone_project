@@ -7,6 +7,10 @@ use Tests\TestCase;
 
 class ExampleTest extends TestCase
 {
+<<<<<<< HEAD
+=======
+    use RefreshDatabase;
+>>>>>>> origin/master
     /**
      * A basic test example.
      *

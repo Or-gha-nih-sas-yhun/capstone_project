@@ -89,6 +89,7 @@
                       <i class="fas fa-print"></i>
                     </a>
                   @endif
+<<<<<<< HEAD
                   @if (in_array($r->status, ['rejected', 'released']))
                     <form method="POST" action="{{ route('admin.requests.update_status') }}" style="display:inline;">
                       @csrf
@@ -100,6 +101,8 @@
                       </button>
                     </form>
                   @endif
+=======
+>>>>>>> origin/master
                 </div>
               </td>
             </tr>
@@ -248,6 +251,7 @@
             </div>
           </form>
         @else
+<<<<<<< HEAD
           <hr style="margin-bottom:16px;">
           <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
             @if (in_array($viewedRequest->status, ['approved', 'released']))
@@ -271,6 +275,18 @@
               </button>
             </form>
           </div>
+=======
+          @if (in_array($viewedRequest->status, ['approved', 'released']))
+            <a href="{{ route('print.certificate', ['id' => $viewedRequest->id]) }}" target="_blank"
+              class="btn btn-outline-primary">
+              <i class="fas fa-up-right-from-square"></i> Preview Certificate
+            </a>
+            <a href="{{ route('print.certificate', ['id' => $viewedRequest->id, 'print' => 1]) }}" target="_blank"
+              class="btn btn-primary">
+              <i class="fas fa-print"></i> Print Document
+            </a>
+          @endif
+>>>>>>> origin/master
         @endif
 
         <!-- Manual Payment Collection Form (if fee > 0 and unpaid/waived status can be changed) -->

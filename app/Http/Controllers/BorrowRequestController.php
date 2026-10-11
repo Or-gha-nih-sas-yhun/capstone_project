@@ -16,8 +16,12 @@ class BorrowRequestController extends Controller
         $status = $request->input('status', 'all');
         $search = $request->input('search');
 
+<<<<<<< HEAD
         $query = BorrowRequest::with(['resident', 'approver'])
             ->whereNull('archived_at'); // Exclude archived records from active list
+=======
+        $query = BorrowRequest::with(['resident', 'approver']);
+>>>>>>> origin/master
 
         if ($status !== 'all') {
             $query->where('status', $status);
@@ -150,7 +154,11 @@ class BorrowRequestController extends Controller
                 $reasonText = $borrow->remarks ? ' Reason: ' . Str::limit($borrow->remarks, 100) : '';
                 $smsText = "Hi {$firstName}, your equipment borrow request #{$borrow->id} has been REJECTED.{$reasonText} Please contact the Barangay Hall for assistance.";
             } else {
+<<<<<<< HEAD
                 $smsText = "Hi {$firstName}, your equipment borrow request #{$borrow->id} has been marked RETURNED and completed. Thank you! - Barangay Pili";
+=======
+                $smsText = "Hi {$firstName}, your equipment borrow request #{$borrow->id} has been marked RETURNED and completed. Thank you! - " . sms_signature();
+>>>>>>> origin/master
             }
 
             SmsService::notifyResident(
@@ -169,6 +177,7 @@ class BorrowRequestController extends Controller
         return back()->with('success', "Borrow request status updated to {$request->status} successfully.");
     }
 
+<<<<<<< HEAD
     public function archive($id)
     {
         $borrow = BorrowRequest::with('resident')->findOrFail($id);
@@ -187,5 +196,40 @@ class BorrowRequestController extends Controller
         ActivityLog::log('ARCHIVE_BORROW', 'Borrow', "Archived borrow request ID {$borrow->id} ({$residentName})");
 
         return back()->with('success', 'Borrow record archived successfully and preserved for administrative history.');
+=======
+    public function checkAvailability(Request $request)
+    {
+        $borrowDate = $request->input('borrow_date');
+        $returnDate = $request->input('return_date');
+
+        if (!$borrowDate || !$returnDate) {
+            return response()->json([
+                'tent' => 5,
+                'chair' => 50,
+                'table' => 25
+            ]);
+        }
+
+        $overlappingRequests = BorrowRequest::whereIn('status', ['pending', 'approved'])
+            ->where(function ($query) use ($borrowDate, $returnDate) {
+                $query->whereBetween('borrow_date', [$borrowDate, $returnDate])
+                      ->orWhereBetween('return_date', [$borrowDate, $returnDate])
+                      ->orWhere(function ($q) use ($borrowDate, $returnDate) {
+                          $q->where('borrow_date', '<=', $borrowDate)
+                            ->where('return_date', '>=', $returnDate);
+                      });
+            })
+            ->get();
+
+        $usedTents = $overlappingRequests->sum('tent_quantity');
+        $usedChairs = $overlappingRequests->sum('chair_quantity');
+        $usedTables = $overlappingRequests->sum('table_quantity');
+
+        return response()->json([
+            'tent' => max(0, 5 - $usedTents),
+            'chair' => max(0, 50 - $usedChairs),
+            'table' => max(0, 25 - $usedTables)
+        ]);
+>>>>>>> origin/master
     }
 }

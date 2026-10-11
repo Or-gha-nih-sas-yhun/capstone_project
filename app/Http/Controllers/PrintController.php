@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Request as CertificateRequest;
 use App\Models\Official;
 use App\Models\Summon;
+<<<<<<< HEAD
+=======
+use App\Services\CertificateRenderer;
+>>>>>>> origin/master
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -42,11 +46,28 @@ class PrintController extends Controller
         // Auto print check
         $autoPrint = $request->has('print');
 
+<<<<<<< HEAD
+=======
+        // A barangay-authored body overrides the built-in wording and always
+        // prints through the general letterhead layout, so a barangay can
+        // reword a document or add a new certificate type without code.
+        $customBody = (new CertificateRenderer())->render(
+            $certReq->certificate->body_template ?? null,
+            $certReq
+        );
+
+>>>>>>> origin/master
         // Determine view from template_file column
         $tpl = $certReq->certificate->template_file ?? 'certificate.php';
         $viewName = 'print.general';
 
+<<<<<<< HEAD
         if (str_contains($tpl, 'indigency')) {
+=======
+        if ($customBody !== null) {
+            $viewName = 'print.general';
+        } elseif (str_contains($tpl, 'indigency')) {
+>>>>>>> origin/master
             $viewName = 'print.indigency';
         } elseif (str_contains($tpl, 'residency')) {
             $viewName = 'print.residency';
@@ -68,7 +89,12 @@ class PrintController extends Controller
             'skChairman',
             'skName',
             'kagawads',
+<<<<<<< HEAD
             'autoPrint'
+=======
+            'autoPrint',
+            'customBody'
+>>>>>>> origin/master
         ));
     }
 

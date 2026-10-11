@@ -18,6 +18,7 @@
   </button>
 </div>
 
+<<<<<<< HEAD
 {{-- Classification Summary Cards --}}
 <div class="grid-4" style="margin-bottom:20px;">
   <a href="{{ route('admin.residents', ['status' => 'active']) }}" class="stat-card" style="text-decoration:none; border-left: 4px solid #1d4ed8;">
@@ -69,6 +70,18 @@
     <div style="display:flex;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--gray-light);padding-bottom:8px;">
       <a href="{{ route('admin.residents', ['status' => 'active', 'search' => $search]) }}" class="btn btn-sm {{ $status === 'active' && !$classification ? 'btn-primary' : 'btn-outline-secondary' }}" style="border-radius:20px; padding:6px 16px;">
         <i class="fas fa-user-check"></i> All Active
+=======
+<div class="card">
+  <div class="card-header" style="flex-direction:column;align-items:stretch;gap:16px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <h5><i class="fas fa-users" style="color:var(--primary);margin-right:8px;"></i>
+          Residents <span style="font-size:13px;font-weight:400;color:#6b7280;">({{ $residents->total() }})</span></h5>
+    </div>
+    <!-- Tabs/Filters -->
+    <div style="display:flex;gap:8px;border-bottom:1px solid var(--gray-light);padding-bottom:8px;">
+      <a href="{{ route('admin.residents', ['status' => 'active', 'search' => $search]) }}" class="btn btn-sm {{ $status === 'active' ? 'btn-primary' : 'btn-outline-secondary' }}" style="border-radius:20px; padding:6px 16px;">
+        <i class="fas fa-user-check"></i> Active Residents
+>>>>>>> origin/master
       </a>
       <a href="{{ route('admin.residents', ['status' => 'pending', 'search' => $search]) }}" class="btn btn-sm {{ $status === 'pending' ? 'btn-primary' : 'btn-outline-secondary' }}" style="border-radius:20px; padding:6px 16px; position:relative;">
         <i class="fas fa-user-clock"></i> Pending Approval
@@ -76,6 +89,7 @@
           <span class="badge bg-danger" style="font-size:9px; padding:2px 6px; margin-left:4px;">{{ $pendingCount }}</span>
         @endif
       </a>
+<<<<<<< HEAD
       <a href="{{ route('admin.residents', ['status' => 'active', 'classification' => 'pwd']) }}" class="btn btn-sm {{ $classification === 'pwd' ? 'btn-primary' : 'btn-outline-secondary' }}" style="border-radius:20px; padding:6px 16px;">
         <i class="fas fa-wheelchair"></i> PWD
       </a>
@@ -88,6 +102,8 @@
       <a href="{{ route('admin.residents', ['status' => 'active', 'classification' => 'widowed']) }}" class="btn btn-sm {{ $classification === 'widowed' ? 'btn-primary' : 'btn-outline-secondary' }}" style="border-radius:20px; padding:6px 16px;">
         <i class="fas fa-ribbon"></i> Widowed
       </a>
+=======
+>>>>>>> origin/master
     </div>
   </div>
   <div class="table-wrapper">
@@ -99,7 +115,10 @@
           <th>Gender</th>
           <th>Age</th>
           <th>Civil Status</th>
+<<<<<<< HEAD
           <th>Classifications</th>
+=======
+>>>>>>> origin/master
           <th>Contact</th>
           <th>Purok</th>
           <th>Voter</th>
@@ -109,7 +128,11 @@
       </thead>
       <tbody>
         @if ($residents->isEmpty())
+<<<<<<< HEAD
           <tr><td colspan="11" class="text-center text-muted" style="padding:40px;">No residents found.</td></tr>
+=======
+          <tr><td colspan="10" class="text-center text-muted" style="padding:40px;">No residents found.</td></tr>
+>>>>>>> origin/master
         @else
           @foreach ($residents as $i => $r)
             <tr>
@@ -121,6 +144,7 @@
               <td>{{ $r->gender }}</td>
               <td>{{ $r->age }}</td>
               <td>{{ $r->civil_status }}</td>
+<<<<<<< HEAD
               <td>
                 <div style="display:flex; flex-wrap:wrap; gap:4px;">
                   @if($r->is_pwd)
@@ -137,6 +161,8 @@
                   @endif
                 </div>
               </td>
+=======
+>>>>>>> origin/master
               <td>{{ $r->contact_number ?? '—' }}</td>
               <td>{{ $r->purok ?? '—' }}</td>
               <td>
@@ -231,6 +257,7 @@
               @endforeach
             </select>
           </div>
+<<<<<<< HEAD
           <div class="form-group" style="grid-column:span 2;">
             <label class="form-label">Special Classifications</label>
             <div style="display:flex; gap: 20px; align-items:center;">
@@ -246,6 +273,8 @@
               </label>
             </div>
           </div>
+=======
+>>>>>>> origin/master
           <div class="form-group">
             <label class="form-label">Contact Number</label>
             <input type="text" name="contact_number" class="form-control" value="{{ old('contact_number', $editResident ? $editResident->contact_number : '') }}">
@@ -256,11 +285,19 @@
           </div>
           <div class="form-group" style="grid-column:span 2;">
             <label class="form-label">Complete Address *</label>
+<<<<<<< HEAD
             <input type="text" name="address" class="form-control" required value="{{ old('address', $editResident ? $editResident->address : 'Barangay Pili, Madridejos, Cebu') }}">
           </div>
           <div class="form-group">
             <label class="form-label">Purok</label>
             <input type="text" name="purok" class="form-control" value="{{ old('purok', $editResident ? $editResident->purok : '') }}">
+=======
+            <input type="text" name="address" class="form-control" required value="{{ old('address', $editResident ? $editResident->address : barangay_location(true)) }}">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Purok</label>
+            @include('components.purok-select', ['value' => old('purok', $editResident ? $editResident->purok : '')])
+>>>>>>> origin/master
           </div>
           <div class="form-group">
             <label class="form-label">Occupation</label>

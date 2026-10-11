@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+<<<<<<< HEAD
   <title>Certificate of Good Moral — Barangay Pili</title>
+=======
+  <title>Certificate of Good Moral — {{ barangay_label() }}</title>
+>>>>>>> origin/master
   <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
@@ -69,6 +73,7 @@
   </div>
 
   <div class="page">
+<<<<<<< HEAD
     <div class="watermark">
       <img src="{{ asset('assets/images/pili_logo.png') }}" style="width: 100%; height: 100%; object-fit: contain;" alt="Watermark">
     </div>
@@ -90,6 +95,14 @@
     </div>
 
     <div class="office-title">Office of the Barangay Captain</div>
+=======
+    @include('print.partials.watermark')
+
+    <!-- HEADER -->
+    @include('print.partials.letterhead', ['republic' => true])
+
+    <div class="office-title">{{ barangay_office_title() }}</div>
+>>>>>>> origin/master
     <div class="header-line"></div>
 
     <!-- MAIN CONTENT -->
@@ -184,7 +197,11 @@
 
           <p class="indent-para">
             This is to certify that <span class="underline-value" style="min-width: 180px;">{{ strtoupper($certReq->resident->full_name) }}</span>, 
+<<<<<<< HEAD
             a resident of {{ $certReq->resident->address }}, Barangay Pili, Madridejos, Cebu, is personally known to this office as a person of good moral character, law-abiding, peace-loving, and a socially responsible citizen of our community.
+=======
+            a resident of {{ $certReq->resident->address }}, {{ barangay_location(true) }}, is personally known to this office as a person of good moral character, law-abiding, peace-loving, and a socially responsible citizen of our community.
+>>>>>>> origin/master
           </p>
 
           <p class="indent-para">
@@ -197,7 +214,11 @@
           </p>
 
           <p class="indent-para" style="font-weight: bold;">
+<<<<<<< HEAD
             Issued this {{ date('jS') }} day of {{ date('F Y') }}, at Pili, Madridejos, Cebu.
+=======
+            Issued this {{ date('jS') }} day of {{ date('F Y') }}, at {{ barangay_location() }}.
+>>>>>>> origin/master
           </p>
 
           <!-- SIGNATURES -->
@@ -232,7 +253,11 @@
 
             <div style="margin-top: 10px;">
               <div>Issued on {{ date('m/d/Y') }}</div>
+<<<<<<< HEAD
               <div>Issued at Pili, Madridejos, Cebu</div>
+=======
+              <div>Issued at {{ barangay_location() }}</div>
+>>>>>>> origin/master
             </div>
           </div>
 

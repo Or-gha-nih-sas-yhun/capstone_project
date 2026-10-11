@@ -18,6 +18,7 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
+<<<<<<< HEAD
         $sixtyYearsAgo = now()->subYears(60)->format('Y-m-d');
         $thisMonthStart = now()->startOfMonth();
         $lastMonthStart = now()->subMonth()->startOfMonth();
@@ -67,6 +68,27 @@ class AdminController extends Controller
             DB::raw("DATE_FORMAT(requested_at, '%b') as month"),
             DB::raw("COUNT(*) as total"),
             DB::raw("SUM(CASE WHEN status='released' THEN 1 ELSE 0 END) as released"),
+=======
+        // 1. Fetch Stats
+        $stats = [
+            'residents' => Resident::where('status', 'active')->whereNull('archived_at')->count(),
+            'total_req' => CertificateRequest::count(),
+            'pending' => CertificateRequest::where('status', 'pending')->count(),
+            'approved' => CertificateRequest::where('status', 'approved')->count(),
+            'released' => CertificateRequest::where('status', 'released')->count(),
+            'revenue' => Payment::where('payment_status', 'paid')->sum('amount'),
+            'pending_residents' => Resident::where('status', 'active')
+                ->whereNull('archived_at')
+                ->whereHas('user', function ($query) {
+                    $query->where('status', 'inactive');
+                })->count()
+        ];
+
+        // 2. Monthly Requests (last 6 months)
+        $monthlyDataQuery = CertificateRequest::select(
+            DB::raw("DATE_FORMAT(requested_at, '%b') as month"),
+            DB::raw("COUNT(*) as total"),
+>>>>>>> origin/master
             DB::raw("DATE_FORMAT(requested_at, '%Y-%m') as sort_key")
         )
         ->where('requested_at', '>=', now()->subMonths(6))
@@ -75,12 +97,20 @@ class AdminController extends Controller
         ->get();
 
         $monthly = [
+<<<<<<< HEAD
             'labels'   => $monthlyDataQuery->pluck('month')->toArray(),
             'data'     => $monthlyDataQuery->pluck('total')->toArray(),
             'released' => $monthlyDataQuery->pluck('released')->toArray(),
         ];
 
         // ── Requests by Certificate Type ─────────────────────────
+=======
+            'labels' => $monthlyDataQuery->pluck('month')->toArray(),
+            'data' => $monthlyDataQuery->pluck('total')->toArray()
+        ];
+
+        // 3. Requests by Certificate Type
+>>>>>>> origin/master
         $byTypeDataQuery = Certificate::withCount(['requests'])
             ->where('status', 'active')
             ->orderBy('requests_count', 'desc')
@@ -88,6 +118,7 @@ class AdminController extends Controller
 
         $byType = [
             'labels' => $byTypeDataQuery->pluck('name')->toArray(),
+<<<<<<< HEAD
             'data'   => $byTypeDataQuery->pluck('requests_count')->toArray(),
         ];
 
@@ -129,6 +160,18 @@ class AdminController extends Controller
             'stats', 'monthly', 'byType', 'recentRequests',
             'revenueChart', 'topCert', 'recentActivity'
         ));
+=======
+            'data' => $byTypeDataQuery->pluck('requests_count')->toArray()
+        ];
+
+        // 4. Recent Requests (limit 5)
+        $recentRequests = CertificateRequest::with(['resident', 'certificate'])
+            ->orderBy('requested_at', 'desc')
+            ->limit(5)
+            ->get();
+
+        return view('admin.dashboard', compact('stats', 'monthly', 'byType', 'recentRequests'));
+>>>>>>> origin/master
     }
 
     public function profileForm()
@@ -176,8 +219,11 @@ class AdminController extends Controller
     public function reports(Request $request)
     {
         $month = $request->input('month', date('Y-m'));
+<<<<<<< HEAD
         $purokFilter = $request->input('purok');
         
+=======
+>>>>>>> origin/master
         $start = $month . '-01';
         $end = date('Y-m-t', strtotime($start));
         $from = $start . ' 00:00:00';
@@ -245,6 +291,7 @@ class AdminController extends Controller
         $captain = Official::getCaptain();
         $captainName = $captain ? $captain->name : 'PUNONG BARANGAY';
 
+<<<<<<< HEAD
         $activeResidents = Resident::whereNull('archived_at');
         if ($purokFilter) {
             $activeResidents->where('purok', $purokFilter);
@@ -273,6 +320,9 @@ class AdminController extends Controller
         $puroks = Resident::select('purok')->whereNotNull('purok')->whereNull('archived_at')->distinct()->orderBy('purok')->pluck('purok');
 
         return view('admin.reports', compact('transactions', 'byCert', 'totalAmount', 'month', 'start', 'captainName', 'demographics', 'puroks', 'purokFilter'));
+=======
+        return view('admin.reports', compact('transactions', 'byCert', 'totalAmount', 'month', 'start', 'captainName'));
+>>>>>>> origin/master
     }
 
     public function activityLogs()

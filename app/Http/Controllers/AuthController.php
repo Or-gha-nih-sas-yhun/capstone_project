@@ -19,7 +19,11 @@ class AuthController extends Controller
     // ── Standard (Resident) Login ─────────────────────────────
     public function showLogin()
     {
+<<<<<<< HEAD
         $adminDomain = config('app.admin_domain', env('ADMIN_DOMAIN', 'admin.brgypilieclearance.com'));
+=======
+        $adminDomain = config('barangay.admin_domain');
+>>>>>>> origin/master
         if (request()->getHost() === $adminDomain) {
             return $this->showAdminLogin();
         }
@@ -32,12 +36,19 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+<<<<<<< HEAD
         $credentials = $request->validate([
             'email'    => 'required|email|string',
+=======
+        $request->validate([
+            'email'    => 'sometimes|required_without:username|email|string',
+            'username' => 'sometimes|required_without:email|string',
+>>>>>>> origin/master
             'password' => 'required|string',
         ]);
 
         // Google reCAPTCHA verification (for web logins, exempts Android APK)
+<<<<<<< HEAD
         $isMobileApp = str_contains((string) $request->userAgent(), 'BrgyPiliApp');
         if (!$isMobileApp && !$this->verifyRecaptcha($request)) {
             return back()->with('error', 'Please complete the Google reCAPTCHA security verification to proceed.')
@@ -71,6 +82,65 @@ class AuthController extends Controller
         }
 
         Auth::login($user, $request->has('remember'));
+=======
+        $isMobileApp = is_mobile_app($request);
+        if (!$isMobileApp && !$this->verifyRecaptcha($request)) {
+            return back()->with('error', 'Please complete the Google reCAPTCHA security verification to proceed.')
+                ->withInput($request->only(['email', 'username']));
+        }
+
+        $loginField = $request->filled('username') ? 'username' : 'email';
+        $loginCredentials = [
+            $loginField => $request->input($loginField),
+            'password' => $request->input('password'),
+        ];
+
+        if (!Auth::attempt($loginCredentials, $request->has('remember'))) {
+            return back()->with('error', 'User not found or invalid credentials. Please try again.')
+                ->withInput($request->only(['email', 'username']));
+        }
+
+        $user = Auth::user();
+
+        if ($user->role === 'resident') {
+            if ($user->email_verified_at === null) {
+                if (!$user->verification_code) {
+                    $user->verification_code = sprintf("%06d", mt_rand(100000, 999999));
+                    $user->save();
+                    $this->sendVerificationEmail($user);
+                }
+                Auth::logout();
+                $request->session()->put('verify_email', $user->email);
+                return redirect()->route('verification.notice')->with('error', 'Please verify your email address first.');
+            }
+
+            if ($user->status === 'inactive') {
+                Auth::logout();
+                return back()->with('error', 'Your account is pending approval by the administrator.');
+            }
+            if ($user->status === 'suspended') {
+                Auth::logout();
+                return back()->with('error', 'Your account has been suspended.');
+            }
+        }
+
+        if (!in_array($user->role, ['resident', 'admin', 'staff'])) {
+            Auth::logout();
+            return back()->with('error', 'User not found or invalid credentials. Please try again.')
+                ->withInput($request->only(['email', 'username']));
+        }
+
+        if (in_array($user->role, ['admin', 'staff']) && $user->status === 'inactive') {
+            Auth::logout();
+            return back()->with('error', 'Your administrative account is inactive. Please contact the lead administrator.');
+        }
+
+        if (in_array($user->role, ['admin', 'staff']) && $user->status === 'suspended') {
+            Auth::logout();
+            return back()->with('error', 'Your account has been suspended. Please contact the administrator.');
+        }
+
+>>>>>>> origin/master
         $request->session()->regenerate();
 
         ActivityLog::log('LOGIN', 'Auth', 'User logged in');
@@ -78,7 +148,11 @@ class AuthController extends Controller
         return $this->redirectUser();
     }
 
+<<<<<<< HEAD
     // ── Dedicated Admin Auth (admin.brgypilieclearance.com or /admin/login) ────
+=======
+    // ── Dedicated Admin Auth (admin subdomain or /admin/login) ─────────────────
+>>>>>>> origin/master
     public function showAdminLogin()
     {
         if (Auth::check()) {
@@ -93,8 +167,14 @@ class AuthController extends Controller
 
     public function adminLogin(Request $request)
     {
+<<<<<<< HEAD
         $credentials = $request->validate([
             'email'    => 'required|email|string',
+=======
+        $request->validate([
+            'email'    => 'sometimes|required_without:username|email|string',
+            'username' => 'sometimes|required_without:email|string',
+>>>>>>> origin/master
             'password' => 'required|string',
         ]);
 
@@ -105,7 +185,11 @@ class AuthController extends Controller
         if (empty($lat) || empty($lng) || !is_numeric($lat) || !is_numeric($lng) ||
             $lat < -90 || $lat > 90 || $lng < -180 || $lng > 180) {
             return back()->with('error', 'Location access is strictly required to log in to the administrative portal. Please enable location permissions in your browser and try again.')
+<<<<<<< HEAD
                 ->withInput($request->only('email'));
+=======
+                ->withInput($request->only(['email', 'username']));
+>>>>>>> origin/master
         }
 
         $location = "{$lat},{$lng}";
@@ -113,6 +197,7 @@ class AuthController extends Controller
         // 2. Google reCAPTCHA Verification
         if (!$this->verifyRecaptcha($request)) {
             return back()->with('error', 'Please complete the Google reCAPTCHA security verification to proceed.')
+<<<<<<< HEAD
                 ->withInput($request->only('email'));
         }
 
@@ -124,6 +209,25 @@ class AuthController extends Controller
                 ->withInput($request->only('email'));
         }
 
+=======
+                ->withInput($request->only(['email', 'username']));
+        }
+
+        // 3. Validate User Credentials
+        $loginField = $request->filled('username') ? 'username' : 'email';
+        $credentials = [
+            $loginField => $request->input($loginField),
+            'password' => $request->input('password'),
+        ];
+
+        if (!Auth::attempt($credentials)) {
+            return back()->with('error', 'Invalid administrative email address or password. Please try again.')
+                ->withInput($request->only(['email', 'username']));
+        }
+
+        $user = Auth::user();
+
+>>>>>>> origin/master
         // 4. Ensure role is admin or staff (restrict residents)
         if (!in_array($user->role, ['admin', 'staff'])) {
             return back()->with('error', 'Access restricted: This portal is reserved for Barangay Officials and Staff only. Residents please sign in via the resident portal.')
@@ -280,7 +384,11 @@ class AuthController extends Controller
         }
 
         if (empty($recaptchaResponse)) {
+<<<<<<< HEAD
             return false;
+=======
+            return app()->environment(['local', 'testing']);
+>>>>>>> origin/master
         }
 
         try {
@@ -369,11 +477,19 @@ class AuthController extends Controller
         $email = $user->email;
         try {
             Mail::send('emails.admin-login-otp', ['code' => $otp, 'user' => $user], function ($message) use ($email) {
+<<<<<<< HEAD
                 $fromAddress = config('mail.from.address') ?: 'no-reply@brgypilieclearance.com';
                 $fromName = config('mail.from.name') ?: 'Barangay Pili Clearance';
                 $message->from($fromAddress, $fromName);
                 $message->to($email);
                 $message->subject('Admin Portal Verification Code - Barangay Pili');
+=======
+                $fromAddress = config('mail.from.address') ?: 'no-reply@' . config('barangay.domain');
+                $fromName = config('mail.from.name') ?: setting('brand.app_title', barangay_label());
+                $message->from($fromAddress, $fromName);
+                $message->to($email);
+                $message->subject('Admin Portal Verification Code - ' . barangay_label());
+>>>>>>> origin/master
             });
             Log::info("Admin 2FA OTP sent to {$email}: {$otp}");
         } catch (\Exception $e) {
@@ -394,7 +510,11 @@ class AuthController extends Controller
             'birthdate' => 'required|date|before_or_equal:today',
             'civil_status' => 'required|in:Single,Married,Widowed,Separated',
             'contact_number' => 'nullable|string',
+<<<<<<< HEAD
             'purok' => 'nullable|string',
+=======
+            'purok' => purok_rule(),
+>>>>>>> origin/master
             'years_of_residency' => 'nullable|integer|min:0',
             'email' => 'required|email|unique:users,email',
             'username' => 'required|string|unique:users,username',
@@ -418,7 +538,11 @@ class AuthController extends Controller
                 'civil_status' => $request->civil_status,
                 'contact_number' => $request->contact_number,
                 'email' => $request->email,
+<<<<<<< HEAD
                 'address' => 'Barangay Pili, Madridejos, Cebu', // Default fallback address
+=======
+                'address' => barangay_location(true), // Default fallback address
+>>>>>>> origin/master
                 'purok' => $request->purok,
                 'voter_status' => 'Not Registered',
                 'years_of_residency' => $request->years_of_residency ?? 0,
@@ -461,7 +585,11 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $wasAdmin = Auth::check() && in_array(Auth::user()->role, ['admin', 'staff']);
+<<<<<<< HEAD
         $adminDomain = config('app.admin_domain', env('ADMIN_DOMAIN', 'admin.brgypilieclearance.com'));
+=======
+        $adminDomain = config('barangay.admin_domain');
+>>>>>>> origin/master
         $isOnAdminDomain = request()->getHost() === $adminDomain;
 
         if (Auth::check()) {
@@ -520,11 +648,19 @@ class AuthController extends Controller
         $email = $request->email;
         try {
             Mail::send('emails.forgot-password', ['resetUrl' => $resetUrl], function ($message) use ($email) {
+<<<<<<< HEAD
                 $fromAddress = config('mail.from.address') ?: 'no-reply@brgypilieclearance.com';
                 $fromName = config('mail.from.name') ?: 'Barangay Pili Clearance';
                 $message->from($fromAddress, $fromName);
                 $message->to($email);
                 $message->subject('Reset Password - Barangay Pili Clearance & Certificate System');
+=======
+                $fromAddress = config('mail.from.address') ?: 'no-reply@' . config('barangay.domain');
+                $fromName = config('mail.from.name') ?: setting('brand.app_title', barangay_label());
+                $message->from($fromAddress, $fromName);
+                $message->to($email);
+                $message->subject('Reset Password - ' . setting('brand.app_title', barangay_label()));
+>>>>>>> origin/master
             });
 
             Log::info("Password reset link requested for {$email}: {$resetUrl}");
@@ -646,11 +782,19 @@ class AuthController extends Controller
         $email = $user->email;
         try {
             Mail::send('emails.verify-email', ['code' => $code], function ($message) use ($email) {
+<<<<<<< HEAD
                 $fromAddress = config('mail.from.address') ?: 'no-reply@brgypilieclearance.com';
                 $fromName = config('mail.from.name') ?: 'Barangay Pili Clearance';
                 $message->from($fromAddress, $fromName);
                 $message->to($email);
                 $message->subject('Verify Your Email Address - Barangay Pili Clearance & Certificate System');
+=======
+                $fromAddress = config('mail.from.address') ?: 'no-reply@' . config('barangay.domain');
+                $fromName = config('mail.from.name') ?: setting('brand.app_title', barangay_label());
+                $message->from($fromAddress, $fromName);
+                $message->to($email);
+                $message->subject('Verify Your Email Address - ' . setting('brand.app_title', barangay_label()));
+>>>>>>> origin/master
             });
             Log::info("Verification code sent to {$email}: {$code}");
         } catch (\Exception $e) {

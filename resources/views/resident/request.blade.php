@@ -95,7 +95,11 @@
         <i class="fas fa-university" style="margin-right:8px;"></i>
         <div>
           <strong>Payment & Claiming Information</strong><br>
+<<<<<<< HEAD
           <span>Processing fee will be settled at <strong>Barangay Pili Hall</strong> upon document pickup.</span>
+=======
+          <span>Processing fee will be settled at <strong>{{ setting('barangay.hall_name', barangay_label() . ' Hall') }}</strong> upon document pickup.</span>
+>>>>>>> origin/master
         </div>
       </div>
 
@@ -113,7 +117,11 @@
                      onchange="updateFee({{ $c->fee }}, '{{ htmlspecialchars($c->requirements ?? '', ENT_QUOTES) }}')">
               <div class="cert-card {{ old('certificate_id') == $c->id ? 'selected' : '' }}" id="cert-{{ $c->id }}">
                 <span class="cert-check-indicator"><i class="fas fa-check"></i></span>
+<<<<<<< HEAD
                 <div style="font-size:26px; margin-bottom:6px;">📄</div>
+=======
+                <div style="font-size:22px; margin-bottom:6px; color:var(--primary);"><i class="fas fa-file-alt"></i></div>
+>>>>>>> origin/master
                 <div style="font-size:13px; font-weight:700; color:#1e293b; margin-bottom:4px; line-height:1.3;">
                   {{ $c->name }}
                 </div>
@@ -144,7 +152,11 @@
         <div id="fee-display" style="display:none; margin-bottom:16px;">
           <div class="alert alert-warning" style="margin:0; border-radius:8px; font-size:13px;">
             <i class="fas fa-peso-sign"></i>
+<<<<<<< HEAD
             <div>Processing fee: <strong id="fee-amount"></strong>. <em>Payable at the Barangay Pili Office.</em></div>
+=======
+            <div>Processing fee: <strong id="fee-amount"></strong>. <em>Payable at the {{ barangay_label() }} Office.</em></div>
+>>>>>>> origin/master
           </div>
         </div>
 

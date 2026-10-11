@@ -16,6 +16,12 @@ class Certificate extends Model
         'fee',
         'processing_days',
         'template_file',
+<<<<<<< HEAD
+=======
+        'body_template',
+        'header_title',
+        'signatory_position',
+>>>>>>> origin/master
         'requirements',
         'status',
         'archived_at',

@@ -1,0 +1,209 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="2100" viewBox="0 0 1600 2100" role="img" aria-labelledby="title desc">
+  <title id="title">Level 1 Data Flow Diagram — Barangay Pili Clearance and Records Management System</title>
+  <desc id="desc">A Level 1 data flow diagram showing Resident, Barangay Staff, System Administrator and Mail Server entities; nine system processes; and twelve database stores.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#dce6eb"/>
+    </marker>
+    <style>
+      .entity { fill:#fff; stroke:#e4edf1; stroke-width:2; }
+      .process { fill:#fff; stroke:#e4edf1; stroke-width:2; rx:14; }
+      .store { fill:#fff; stroke:#e4edf1; stroke-width:2; }
+      .store-divider { stroke:#263740; stroke-width:1.5; }
+      .flow { fill:none; stroke:#dce6eb; stroke-width:2; marker-end:url(#arrow); }
+      .flow-dashed { fill:none; stroke:#a9bdc6; stroke-width:2; stroke-dasharray:8 7; marker-end:url(#arrow); }
+      .heading { fill:#f5fbfd; font-family:Arial,Helvetica,sans-serif; font-size:31px; font-weight:700; text-anchor:middle; }
+      .subheading { fill:#87a6b3; font-family:Arial,Helvetica,sans-serif; font-size:15px; letter-spacing:2px; text-anchor:middle; }
+      .column { fill:#4dc3df; font-family:Arial,Helvetica,sans-serif; font-size:14px; font-weight:700; letter-spacing:2px; text-anchor:middle; }
+      .box-title { fill:#101820; font-family:Arial,Helvetica,sans-serif; font-size:18px; font-weight:700; text-anchor:middle; }
+      .box-sub { fill:#536671; font-family:Arial,Helvetica,sans-serif; font-size:13px; text-anchor:middle; }
+      .process-no { fill:#0f6f8f; font-family:Arial,Helvetica,sans-serif; font-size:17px; font-weight:700; text-anchor:middle; }
+      .store-id { fill:#101820; font-family:Arial,Helvetica,sans-serif; font-size:14px; font-weight:700; text-anchor:middle; }
+      .store-name { fill:#101820; font-family:Arial,Helvetica,sans-serif; font-size:16px; font-weight:700; }
+      .store-fields { fill:#667984; font-family:Arial,Helvetica,sans-serif; font-size:10px; }
+      .label-bg { fill:#fff; stroke:#cfdae0; stroke-width:1; rx:3; }
+      .label { fill:#101820; font-family:Arial,Helvetica,sans-serif; font-size:11px; text-anchor:middle; }
+      .legend { fill:#8ca5b0; font-family:Arial,Helvetica,sans-serif; font-size:12px; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="2100" fill="#03080b"/>
+  <rect x="5" y="5" width="1590" height="2090" fill="none" stroke="#0a7594" stroke-width="3"/>
+
+  <text id="diagram-title" class="heading" x="800" y="55">LEVEL 1 DATA FLOW DIAGRAM</text>
+  <text class="subheading" x="800" y="82">BARANGAY PILI CLEARANCE &amp; RECORDS MANAGEMENT SYSTEM</text>
+  <text class="column" x="190" y="120">EXTERNAL ENTITIES</text>
+  <text class="column" x="755" y="120">SYSTEM PROCESSES</text>
+  <text class="column" x="1365" y="120">DATA STORES</text>
+
+  <!-- Data-flow connectors are deliberately behind all nodes. -->
+  <!-- Resident and system flows -->
+  <path class="flow" d="M320 360 H470 V200 H600"/>
+  <path class="flow" d="M320 385 H500 V430 H600"/>
+  <path class="flow" d="M320 410 H470 V650 H600"/>
+  <path class="flow" d="M320 435 H445 V860 H600"/>
+  <path class="flow" d="M600 695 H475 V455 H320"/>
+  <path class="flow" d="M600 905 H500 V480 H320"/>
+
+  <!-- Staff flows -->
+  <path class="flow" d="M320 1040 H500 V1080 H600"/>
+  <path class="flow" d="M320 1065 H470 V1290 H600"/>
+  <path class="flow" d="M320 1090 H445 V1500 H600"/>
+  <path class="flow" d="M320 1115 H420 V1710 H600"/>
+  <path class="flow" d="M600 1920 H390 V1140 H320"/>
+
+  <!-- Administrator flows -->
+  <path class="flow" d="M320 1640 H385 V245 H600"/>
+  <path class="flow" d="M320 1665 H555 V1755 H600"/>
+  <path class="flow" d="M320 1690 H530 V1965 H600"/>
+
+  <!-- Outbound notification flows -->
+  <path class="flow" d="M755 290 V2015 H320"/>
+  <path class="flow" d="M600 1545 H565 V2040 H320"/>
+
+  <!-- Process-to-store flows -->
+  <path class="flow" d="M910 190 H1040 V180 H1200"/>
+  <path class="flow" d="M910 215 H1070 V275 H1200"/>
+  <path class="flow" d="M910 240 H1100 V370 H1200"/>
+  <path class="flow" d="M910 430 H1040 V480 H1200"/>
+  <path class="flow" d="M910 455 H1080 V575 H1200"/>
+  <path class="flow" d="M1200 480 H1140 V650 H910"/>
+  <path class="flow" d="M910 860 H1080 V780 H1200"/>
+  <path class="flow" d="M1200 480 H1115 V1080 H910"/>
+  <path class="flow" d="M910 1105 H1150 V480 H1200"/>
+  <path class="flow" d="M910 1130 H1090 V575 H1200"/>
+  <path class="flow" d="M910 1290 H1080 V900 H1200"/>
+  <path class="flow" d="M910 1500 H1045 V1015 H1200"/>
+  <path class="flow" d="M910 1525 H1070 V1110 H1200"/>
+  <path class="flow" d="M910 1710 H1020 V370 H1200"/>
+  <path class="flow" d="M910 1735 H1050 V575 H1200"/>
+  <path class="flow" d="M910 1760 H1080 V1225 H1200"/>
+  <path class="flow" d="M910 1785 H1110 V1320 H1200"/>
+  <path class="flow" d="M1200 480 H1165 V1895 H910"/>
+  <path class="flow" d="M1200 575 H1138 V1920 H910"/>
+  <path class="flow" d="M1200 900 H1112 V1945 H910"/>
+  <path class="flow" d="M1200 1015 H1085 V1970 H910"/>
+  <path class="flow" d="M1200 1480 H1058 V1995 H910"/>
+
+  <!-- Audit flows -->
+  <path class="flow-dashed" d="M910 265 H980 V1480 H1200"/>
+  <path class="flow-dashed" d="M910 480 H995 V1480 H1200"/>
+  <path class="flow-dashed" d="M910 905 H1010 V1480 H1200"/>
+  <path class="flow-dashed" d="M910 1135 H1025 V1480 H1200"/>
+  <path class="flow-dashed" d="M910 1315 H1040 V1480 H1200"/>
+  <path class="flow-dashed" d="M910 1550 H1055 V1480 H1200"/>
+  <path class="flow-dashed" d="M910 1810 H1070 V1480 H1200"/>
+
+  <!-- External entities -->
+  <g id="entity-resident">
+    <rect class="entity" x="60" y="330" width="260" height="120"/>
+    <text class="box-title" x="190" y="383">RESIDENT</text>
+    <text class="box-sub" x="190" y="410">Web Portal / Mobile App</text>
+  </g>
+  <g id="entity-staff">
+    <rect class="entity" x="60" y="1010" width="260" height="140"/>
+    <text class="box-title" x="190" y="1068">BARANGAY STAFF</text>
+    <text class="box-sub" x="190" y="1095">Secretary / Clerk</text>
+  </g>
+  <g id="entity-admin">
+    <rect class="entity" x="60" y="1610" width="260" height="120"/>
+    <text class="box-title" x="190" y="1663">SYSTEM ADMINISTRATOR</text>
+    <text class="box-sub" x="190" y="1690">Barangay IT / Administrator</text>
+  </g>
+  <g id="entity-mail">
+    <rect class="entity" x="60" y="1975" width="260" height="90"/>
+    <text class="box-title" x="190" y="2015">MAIL SERVER</text>
+    <text class="box-sub" x="190" y="2040">Email / OTP Notifications</text>
+  </g>
+
+  <!-- Processes -->
+  <g id="process-1">
+    <rect class="process" x="600" y="155" width="310" height="135"/>
+    <text class="process-no" x="755" y="190">1.0</text>
+    <text class="box-title" x="755" y="222">Authenticate &amp; Register</text>
+    <text class="box-sub" x="755" y="250">Verify users and manage access</text>
+  </g>
+  <g id="process-2">
+    <rect class="process" x="600" y="385" width="310" height="120"/>
+    <text class="process-no" x="755" y="420">2.0</text>
+    <text class="box-title" x="755" y="452">File Certificate Request</text>
+    <text class="box-sub" x="755" y="480">Validate and create application</text>
+  </g>
+  <g id="process-3">
+    <rect class="process" x="600" y="605" width="310" height="110"/>
+    <text class="process-no" x="755" y="642">3.0</text>
+    <text class="box-title" x="755" y="675">Track Request Status</text>
+    <text class="box-sub" x="755" y="699">Return status and document</text>
+  </g>
+  <g id="process-4">
+    <rect class="process" x="600" y="815" width="310" height="110"/>
+    <text class="process-no" x="755" y="852">4.0</text>
+    <text class="box-title" x="755" y="885">Manage Equipment Borrowing</text>
+    <text class="box-sub" x="755" y="909">Tents, chairs and tables</text>
+  </g>
+  <g id="process-5">
+    <rect class="process" x="600" y="1035" width="310" height="120"/>
+    <text class="process-no" x="755" y="1072">5.0</text>
+    <text class="box-title" x="755" y="1105">Review &amp; Approve Requests</text>
+    <text class="box-sub" x="755" y="1132">Update status and release date</text>
+  </g>
+  <g id="process-6">
+    <rect class="process" x="600" y="1245" width="310" height="110"/>
+    <text class="process-no" x="755" y="1282">6.0</text>
+    <text class="box-title" x="755" y="1315">Record &amp; Settle Payment</text>
+    <text class="box-sub" x="755" y="1339">Maintain payment ledger</text>
+  </g>
+  <g id="process-7">
+    <rect class="process" x="600" y="1455" width="310" height="120"/>
+    <text class="process-no" x="755" y="1492">7.0</text>
+    <text class="box-title" x="755" y="1525">Manage Summons</text>
+    <text class="box-sub" x="755" y="1552">KP case and hearing records</text>
+  </g>
+  <g id="process-8">
+    <rect class="process" x="600" y="1665" width="310" height="155"/>
+    <text class="process-no" x="755" y="1702">8.0</text>
+    <text class="box-title" x="755" y="1735">Maintain Registry,</text>
+    <text class="box-title" x="755" y="1760">Reference Data &amp; Bulletins</text>
+    <text class="box-sub" x="755" y="1792">Residents, officials and notices</text>
+  </g>
+  <g id="process-9">
+    <rect class="process" x="600" y="1870" width="310" height="145"/>
+    <text class="process-no" x="755" y="1907">9.0</text>
+    <text class="box-title" x="755" y="1940">Generate Reports &amp;</text>
+    <text class="box-title" x="755" y="1965">Printable Documents</text>
+    <text class="box-sub" x="755" y="1993">Certificates, KP forms and reports</text>
+  </g>
+
+  <!-- Data stores -->
+  <g id="store-d1"><rect class="store" x="1200" y="145" width="330" height="70"/><line class="store-divider" x1="1260" y1="145" x2="1260" y2="215"/><text class="store-id" x="1230" y="185">D1</text><text class="store-name" x="1280" y="175">users</text><text class="store-fields" x="1280" y="197">id, resident_id, email, role, password</text></g>
+  <g id="store-d2"><rect class="store" x="1200" y="240" width="330" height="70"/><line class="store-divider" x1="1260" y1="240" x2="1260" y2="310"/><text class="store-id" x="1230" y="280">D2</text><text class="store-name" x="1280" y="270">password_resets</text><text class="store-fields" x="1280" y="292">email, token, created_at</text></g>
+  <g id="store-d3"><rect class="store" x="1200" y="335" width="330" height="70"/><line class="store-divider" x1="1260" y1="335" x2="1260" y2="405"/><text class="store-id" x="1230" y="375">D3</text><text class="store-name" x="1280" y="365">residents</text><text class="store-fields" x="1280" y="387">first_name, last_name, address, status</text></g>
+  <g id="store-d4"><rect class="store" x="1200" y="445" width="330" height="70"/><line class="store-divider" x1="1260" y1="445" x2="1260" y2="515"/><text class="store-id" x="1230" y="485">D4</text><text class="store-name" x="1280" y="475">requests</text><text class="store-fields" x="1280" y="497">tracking_number, resident_id, status, purpose</text></g>
+  <g id="store-d5"><rect class="store" x="1200" y="540" width="330" height="70"/><line class="store-divider" x1="1260" y1="540" x2="1260" y2="610"/><text class="store-id" x="1230" y="580">D5</text><text class="store-name" x="1280" y="570">certificates</text><text class="store-fields" x="1280" y="592">id, name, fee, requirements</text></g>
+  <g id="store-d10"><rect class="store" x="1200" y="745" width="330" height="70"/><line class="store-divider" x1="1260" y1="745" x2="1260" y2="815"/><text class="store-id" x="1230" y="785">D10</text><text class="store-name" x="1280" y="775">borrow_requests</text><text class="store-fields" x="1280" y="797">resident_id, item_type, borrow_date, status</text></g>
+  <g id="store-d6"><rect class="store" x="1200" y="865" width="330" height="70"/><line class="store-divider" x1="1260" y1="865" x2="1260" y2="935"/><text class="store-id" x="1230" y="905">D6</text><text class="store-name" x="1280" y="895">payments</text><text class="store-fields" x="1280" y="917">request_id, amount, payment_method, payment_status</text></g>
+  <g id="store-d7"><rect class="store" x="1200" y="980" width="330" height="70"/><line class="store-divider" x1="1260" y1="980" x2="1260" y2="1050"/><text class="store-id" x="1230" y="1020">D7</text><text class="store-name" x="1280" y="1010">summons</text><text class="store-fields" x="1280" y="1032">case_number, complainant, respondent, status</text></g>
+  <g id="store-d8"><rect class="store" x="1200" y="1075" width="330" height="70"/><line class="store-divider" x1="1260" y1="1075" x2="1260" y2="1145"/><text class="store-id" x="1230" y="1115">D8</text><text class="store-name" x="1280" y="1105">summon_hearings</text><text class="store-fields" x="1280" y="1127">summon_id, hearing_number, schedule_date</text></g>
+  <g id="store-d9"><rect class="store" x="1200" y="1190" width="330" height="70"/><line class="store-divider" x1="1260" y1="1190" x2="1260" y2="1260"/><text class="store-id" x="1230" y="1230">D9</text><text class="store-name" x="1280" y="1220">officials</text><text class="store-fields" x="1280" y="1242">name, position, term_start, term_end</text></g>
+  <g id="store-d11"><rect class="store" x="1200" y="1285" width="330" height="70"/><line class="store-divider" x1="1260" y1="1285" x2="1260" y2="1355"/><text class="store-id" x="1230" y="1325">D11</text><text class="store-name" x="1280" y="1315">bulletin_announcements</text><text class="store-fields" x="1280" y="1337">title, content, image, published_at</text></g>
+  <g id="store-d12"><rect class="store" x="1200" y="1445" width="330" height="70"/><line class="store-divider" x1="1260" y1="1445" x2="1260" y2="1515"/><text class="store-id" x="1230" y="1485">D12</text><text class="store-name" x="1280" y="1475">activity_logs</text><text class="store-fields" x="1280" y="1497">user_id, action, module, ip_address</text></g>
+
+  <!-- Flow labels -->
+  <g><rect class="label-bg" x="340" y="166" width="220" height="29"/><text class="label" x="450" y="185">credentials / registration details</text></g>
+  <g><rect class="label-bg" x="352" y="418" width="205" height="29"/><text class="label" x="455" y="437">certificate request details</text></g>
+  <g><rect class="label-bg" x="347" y="638" width="210" height="29"/><text class="label" x="452" y="657">tracking number / inquiry</text></g>
+  <g><rect class="label-bg" x="342" y="847" width="215" height="29"/><text class="label" x="450" y="866">borrow request / documents</text></g>
+  <g><rect class="label-bg" x="335" y="1025" width="230" height="29"/><text class="label" x="450" y="1044">status decision / release schedule</text></g>
+  <g><rect class="label-bg" x="350" y="1278" width="205" height="29"/><text class="label" x="452" y="1297">payment transaction details</text></g>
+  <g><rect class="label-bg" x="345" y="1488" width="215" height="29"/><text class="label" x="452" y="1507">case and hearing information</text></g>
+  <g><rect class="label-bg" x="350" y="1698" width="205" height="29"/><text class="label" x="452" y="1717">master-data maintenance</text></g>
+  <g><rect class="label-bg" x="333" y="1910" width="230" height="29"/><text class="label" x="448" y="1929">report criteria / print command</text></g>
+  <g><rect class="label-bg" x="1000" y="164" width="175" height="29"/><text class="label" x="1088" y="183">user account record</text></g>
+  <g><rect class="label-bg" x="993" y="416" width="182" height="29"/><text class="label" x="1084" y="435">new request record</text></g>
+  <g><rect class="label-bg" x="1002" y="764" width="173" height="29"/><text class="label" x="1089" y="783">borrow application</text></g>
+  <g><rect class="label-bg" x="1004" y="884" width="171" height="29"/><text class="label" x="1090" y="903">payment record</text></g>
+  <g><rect class="label-bg" x="1006" y="995" width="169" height="29"/><text class="label" x="1090" y="1014">summons record</text></g>
+  <g><rect class="label-bg" x="1010" y="1466" width="165" height="29"/><text class="label" x="1093" y="1485">audit entry</text></g>
+
+  <text class="legend" x="70" y="2080">Notation: square = external entity  •  rounded rectangle = process  •  split rectangle = data store  •  dashed flow = audit trail</text>
+</svg>
