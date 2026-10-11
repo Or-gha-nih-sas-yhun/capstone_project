@@ -66,6 +66,7 @@ class ResidentManagementController extends Controller
             'gender' => 'required|in:Male,Female,Other',
             'birthdate' => 'required|date',
             'civil_status' => 'required|in:Single,Married,Widowed,Separated',
+            'is_pwd' => 'required|boolean',
             'contact_number' => 'nullable|string|max:20',
             'email' => 'nullable|email',
             'address' => 'required|string|max:255',
@@ -81,7 +82,7 @@ class ResidentManagementController extends Controller
 
         $data = $request->only([
             'first_name', 'middle_name', 'last_name', 'gender', 'birthdate',
-            'civil_status', 'contact_number', 'email', 'address', 'purok',
+            'civil_status', 'is_pwd', 'contact_number', 'email', 'address', 'purok',
             'occupation', 'voter_status', 'years_of_residency'
         ]);
 

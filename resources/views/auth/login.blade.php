@@ -208,6 +208,13 @@
                   </select>
                 </div>
                 <div class="form-group">
+                  <label class="form-label">Person with Disability (PWD) *</label>
+                  <select name="is_pwd" class="form-select" required>
+                    <option value="0" {{ old('is_pwd', '0') === '0' ? 'selected' : '' }}>No</option>
+                    <option value="1" {{ old('is_pwd') === '1' ? 'selected' : '' }}>Yes</option>
+                  </select>
+                </div>
+                <div class="form-group">
                   <label class="form-label">Contact Number</label>
                   <input type="text" name="contact_number" class="form-control" placeholder="09XXXXXXXXX"
                     value="{{ old('contact_number') }}">

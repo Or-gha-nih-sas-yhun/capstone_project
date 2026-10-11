@@ -425,6 +425,7 @@ class AuthController extends Controller
             'gender' => 'required|in:Male,Female,Other',
             'birthdate' => 'required|date|before_or_equal:today',
             'civil_status' => 'required|in:Single,Married,Widowed,Separated',
+            'is_pwd' => 'nullable|boolean',
             'contact_number' => 'nullable|string',
             'purok' => purok_rule(),
             'years_of_residency' => 'nullable|integer|min:0',
@@ -448,6 +449,7 @@ class AuthController extends Controller
                 'gender' => $request->gender,
                 'birthdate' => $request->birthdate,
                 'civil_status' => $request->civil_status,
+                'is_pwd' => $request->boolean('is_pwd'),
                 'contact_number' => $request->contact_number,
                 'email' => $request->email,
                 'address' => barangay_location(true), // Default fallback address

@@ -33,6 +33,22 @@ class AdminController extends Controller
                 })->count()
         ];
 
+        $genderCounts = Resident::where('status', 'active')
+            ->whereNull('archived_at')
+            ->whereIn('gender', ['Male', 'Female', 'Other'])
+            ->select('gender', DB::raw('COUNT(*) as total'))
+            ->groupBy('gender')
+            ->pluck('total', 'gender');
+
+        $byGender = [
+            'labels' => ['Male', 'Female', 'Other'],
+            'data' => [
+                (int) ($genderCounts['Male'] ?? 0),
+                (int) ($genderCounts['Female'] ?? 0),
+                (int) ($genderCounts['Other'] ?? 0),
+            ],
+        ];
+
         // 2. Monthly Requests (last 6 months)
         $monthlyDataQuery = CertificateRequest::select(
             DB::raw("DATE_FORMAT(requested_at, '%b') as month"),
@@ -66,7 +82,7 @@ class AdminController extends Controller
             ->limit(5)
             ->get();
 
-        return view('admin.dashboard', compact('stats', 'monthly', 'byType', 'recentRequests'));
+        return view('admin.dashboard', compact('stats', 'monthly', 'byType', 'byGender', 'recentRequests'));
     }
 
     public function profileForm()
@@ -160,11 +176,14 @@ class AdminController extends Controller
             
             $callback = function () use ($transactions) {
                 $file = fopen('php://output', 'w');
-                fputcsv($file, ['Tracking No.', 'Resident', 'Certificate', 'Date Filed', 'Status', 'Payment', 'Amount']);
+                fputcsv($file, ['Tracking No.', 'Resident', 'Gender', 'Civil Status', 'PWD', 'Certificate', 'Date Filed', 'Status', 'Payment', 'Amount']);
                 foreach ($transactions as $row) {
                     fputcsv($file, [
                         $row->tracking_number,
                         $row->resident->full_name,
+                        $row->resident->gender,
+                        $row->resident->civil_status,
+                        $row->resident->is_pwd ? 'Yes' : 'No',
                         $row->certificate->name,
                         $row->requested_at,
                         $row->status,

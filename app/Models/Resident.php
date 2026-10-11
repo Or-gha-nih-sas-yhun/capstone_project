@@ -17,6 +17,7 @@ class Resident extends Model
         'gender',
         'birthdate',
         'civil_status',
+        'is_pwd',
         'nationality',
         'religion',
         'occupation',

@@ -21,7 +21,7 @@
   <div>
     <div class="eyebrow">Official Reporting</div>
     <h1>Reports</h1>
-    <p>Transactions report, certificate type breakdown, and printable monthly reports.</p>
+    <p>Monthly transactions with resident gender, civil status, and PWD details, plus certificate type breakdown.</p>
   </div>
 </div>
 
@@ -74,11 +74,14 @@
 
   <section class="report-section" style="margin-bottom:24px;">
     <h3 style="font-size:14px; font-weight:800; border-bottom:1px solid #e5e7eb; padding-bottom:6px; margin-bottom:10px; color:#374151;">Transactions Report</h3>
-    <table class="report-table" style="width:100%; border-collapse:collapse; font-size:12.5px;">
+    <table class="report-table" style="width:100%; border-collapse:collapse; font-size:11px;">
       <thead>
         <tr style="border-bottom:2px solid #e5e7eb; text-align:left; background:#f9fafb;">
           <th style="padding:8px;">Tracking No.</th>
           <th style="padding:8px;">Resident</th>
+          <th style="padding:8px;">Gender</th>
+          <th style="padding:8px;">Civil Status</th>
+          <th style="padding:8px;">PWD</th>
           <th style="padding:8px;">Certificate</th>
           <th style="padding:8px;">Date Filed</th>
           <th style="padding:8px;">Status</th>
@@ -88,12 +91,15 @@
       </thead>
       <tbody>
         @if ($transactions->isEmpty())
-          <tr><td colspan="7" class="text-center" style="padding:20px; color:#6b7280;">No transactions for this period.</td></tr>
+          <tr><td colspan="10" class="text-center" style="padding:20px; color:#6b7280;">No transactions for this period.</td></tr>
         @else
           @foreach ($transactions as $row)
             <tr style="border-bottom:1px solid #e5e7eb;">
               <td style="padding:8px; font-family:monospace;">{{ $row->tracking_number }}</td>
               <td style="padding:8px;">{{ $row->resident->full_name }}</td>
+              <td style="padding:8px;">{{ $row->resident->gender }}</td>
+              <td style="padding:8px;">{{ $row->resident->civil_status }}</td>
+              <td style="padding:8px;">{{ $row->resident->is_pwd ? 'Yes' : 'No' }}</td>
               <td style="padding:8px;">{{ $row->certificate->name }}</td>
               <td style="padding:8px;">{{ \Carbon\Carbon::parse($row->requested_at)->format('M d, Y') }}</td>
               <td style="padding:8px;">{{ ucfirst($row->status) }}</td>

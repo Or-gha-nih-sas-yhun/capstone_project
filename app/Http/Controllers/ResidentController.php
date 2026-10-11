@@ -118,6 +118,7 @@ class ResidentController extends Controller
                 'purok' => purok_rule(),
                 'occupation' => 'nullable|string|max:150',
                 'civil_status' => 'required|in:Single,Married,Widowed,Separated',
+                'is_pwd' => 'required|boolean',
                 'voter_status' => 'required|in:Registered,Not Registered',
             ], [
                 'first_name.regex' => 'First name must contain only letters, spaces, hyphens, and periods.',
@@ -127,7 +128,7 @@ class ResidentController extends Controller
 
             $resident->update($request->only([
                 'first_name', 'middle_name', 'last_name', 'contact_number',
-                'address', 'purok', 'occupation', 'civil_status', 'voter_status'
+                'address', 'purok', 'occupation', 'civil_status', 'is_pwd', 'voter_status'
             ]));
 
             ActivityLog::log('UPDATE_PROFILE', 'Profile', 'Resident updated profile info');

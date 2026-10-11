@@ -92,7 +92,7 @@
 
   .chart-panel {
     display: grid;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: repeat(3, minmax(0, 1fr));
     gap: 12px;
     min-height: 0;
   }
@@ -119,7 +119,7 @@
     position: relative;
     width: 100%;
     height: 100%;
-    min-height: 115px;
+    min-height: 90px;
   }
 
   .dashboard-table th,
@@ -260,6 +260,17 @@
         @endif
       </div>
     </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h5><i class="fas fa-venus-mars" style="color:var(--primary);margin-right:8px;"></i>Residents by Gender</h5>
+      </div>
+      <div class="card-body">
+        <div class="chart-box">
+          <canvas id="genderChart"></canvas>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Right Side: Recent Requests Table -->
@@ -314,6 +325,8 @@
 
   const typeLabels = @json($byType['labels']);
   const typeData = @json($byType['data']);
+  const genderLabels = @json($byGender['labels']);
+  const genderData = @json($byGender['data']);
 
   // Bar Chart for Monthly Requests
   if (document.getElementById('monthlyChart')) {
@@ -349,6 +362,29 @@
         datasets: [{
           data: typeData,
           backgroundColor: ['#b91c1c', '#dc2626', '#f97316', '#10b981', '#6b7280', '#f59e0b'],
+          borderWidth: 1.5,
+          borderColor: '#fff'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '70%',
+        plugins: {
+          legend: { position: 'right', labels: { boxWidth: 10, padding: 8, font: { family: 'Inter', size: 9.5 } } }
+        }
+      }
+    });
+  }
+
+  if (document.getElementById('genderChart')) {
+    new Chart(document.getElementById('genderChart'), {
+      type: 'doughnut',
+      data: {
+        labels: genderLabels,
+        datasets: [{
+          data: genderData,
+          backgroundColor: ['#2563eb', '#db2777', '#6b7280'],
           borderWidth: 1.5,
           borderColor: '#fff'
         }]

@@ -46,6 +46,7 @@
           <th>Gender</th>
           <th>Age</th>
           <th>Civil Status</th>
+          <th>PWD</th>
           <th>Contact</th>
           <th>Purok</th>
           <th>Voter</th>
@@ -55,7 +56,7 @@
       </thead>
       <tbody>
         @if ($residents->isEmpty())
-          <tr><td colspan="10" class="text-center text-muted" style="padding:40px;">No residents found.</td></tr>
+          <tr><td colspan="11" class="text-center text-muted" style="padding:40px;">No residents found.</td></tr>
         @else
           @foreach ($residents as $i => $r)
             <tr>
@@ -67,6 +68,7 @@
               <td>{{ $r->gender }}</td>
               <td>{{ $r->age }}</td>
               <td>{{ $r->civil_status }}</td>
+              <td>{{ $r->is_pwd ? 'Yes' : 'No' }}</td>
               <td>{{ $r->contact_number ?? '—' }}</td>
               <td>{{ $r->purok ?? '—' }}</td>
               <td>
@@ -159,6 +161,13 @@
               @foreach (['Single','Married','Widowed','Separated'] as $cs)
                 <option value="{{ $cs }}" {{ (old('civil_status') ?? ($editResident ? $editResident->civil_status : '')) === $cs ? 'selected' : '' }}>{{ $cs }}</option>
               @endforeach
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Person with Disability (PWD) *</label>
+            <select name="is_pwd" class="form-select" required>
+              <option value="0" {{ (string) old('is_pwd', $editResident ? (int) $editResident->is_pwd : 0) === '0' ? 'selected' : '' }}>No</option>
+              <option value="1" {{ (string) old('is_pwd', $editResident ? (int) $editResident->is_pwd : 0) === '1' ? 'selected' : '' }}>Yes</option>
             </select>
           </div>
           <div class="form-group">

@@ -68,6 +68,7 @@ class AuthTest extends TestCase
             'gender' => 'Female',
             'birthdate' => '2000-01-01',
             'civil_status' => 'Single',
+            'is_pwd' => '1',
             'contact_number' => '09123456789',
             'purok' => 'Purok 1',
             'years_of_residency' => 5,
@@ -84,6 +85,7 @@ class AuthTest extends TestCase
         $resident = Resident::where('email', 'clara@santos.com')->first();
         $this->assertNotNull($resident);
         $this->assertEquals('Maria Clara', $resident->first_name);
+        $this->assertTrue((bool) $resident->is_pwd);
 
         // Check user account exists, has a verification code, is unverified, and inactive (pending approval)
         $user = User::where('username', 'mariaclara')->first();
