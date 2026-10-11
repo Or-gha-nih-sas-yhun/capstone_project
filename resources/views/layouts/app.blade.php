@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>@yield('title', 'Dashboard') — {{ setting('brand.app_title', barangay_label()) }} System</title>
   <meta name="description" content="{{ setting('brand.app_title', barangay_label() . ' Clearance & Certificate System') }}">
   <link rel="icon" type="image/png" href="{{ setting_image('brand.logo') }}">
