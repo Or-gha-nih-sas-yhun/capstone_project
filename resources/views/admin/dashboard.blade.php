@@ -257,65 +257,6 @@
     <div class="kpi-value">{{ number_format($stats['residents'] ?? 0) }}</div>
     <div class="kpi-label">Active Residents</div>
   </div>
-  <a href="{{ route('admin.requests') }}" class="btn btn-primary"><i class="fas fa-file-alt"></i> Manage Requests</a>
-</div>
-
-@if ($stats['pending_residents'] > 0)
-  <div class="alert alert-warning"
-    style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
-    <div style="display:flex; align-items:center; gap:12px;">
-      <i class="fas fa-user-clock" style="font-size:20px; color:var(--warning);"></i>
-      <div>
-        <h5 style="margin:0 0 2px 0; color:#92400e; font-size:13px; font-weight:700;">Resident Accounts Pending Approval</h5>
-        <p style="margin:0; font-size:12px; color:#b45309;">There are {{ $stats['pending_residents'] }} new resident registration(s) awaiting verification.</p>
-      </div>
-    </div>
-    <a href="{{ route('admin.residents', ['status' => 'pending']) }}" class="btn btn-warning btn-sm"
-      style="background:var(--warning); color:#fff; font-weight:600; padding:4px 10px;">
-      <i class="fas fa-shield-halved"></i> Review
-    </a>
-  </div>
-@endif
-
-<div class="dashboard-stats">
-  <div class="stat-card">
-    <div class="stat-icon blue"><i class="fas fa-users"></i></div>
-    <div>
-      <div class="stat-value">{{ number_format($stats['residents']) }}</div>
-      <div class="stat-label">Total Residents</div>
-    </div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-icon teal"><i class="fas fa-file-alt"></i></div>
-    <div>
-      <div class="stat-value">{{ number_format($stats['total_req']) }}</div>
-      <div class="stat-label">Total Requests</div>
-    </div>
-    <div class="kpi-value" style="font-size:16px;">₱{{ number_format($stats['month_revenue'] ?? $stats['revenue'] ?? 0, 0) }}</div>
-    <div class="kpi-label">Revenue (Month)</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-icon orange"><i class="fas fa-clock"></i></div>
-    <div>
-      <div class="stat-value">{{ number_format($stats['pending']) }}</div>
-      <div class="stat-label">Pending Requests</div>
-    </div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
-    <div>
-      <div class="stat-value">{{ number_format($stats['approved']) }}</div>
-      <div class="stat-label">Approved</div>
-    </div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-icon purple"><i class="fas fa-box-open"></i></div>
-    <div>
-      <div class="stat-value">{{ number_format($stats['released']) }}</div>
-      <div class="stat-label">Released</div>
-    </div>
-  </div>
-</div>
 
 {{-- ── Row 2: Demographics Strip ── --}}
 @php
@@ -485,48 +426,7 @@
     </div>
   </div>
 
-  <!-- Right Side: Recent Requests Table -->
-  <div class="card">
-    <div class="card-header">
-      <h5><i class="fas fa-list" style="color:var(--primary);margin-right:8px;"></i>Recent Requests</h5>
-      <a href="{{ route('admin.requests') }}" class="btn btn-outline-primary btn-sm">View All</a>
-    </div>
-    <div class="table-wrapper">
-      <table class="table dashboard-table">
-        <thead>
-          <tr>
-            <th>Tracking #</th>
-            <th>Resident</th>
-            <th>Document</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          @if ($recentRequests->isEmpty())
-            <tr>
-              <td colspan="4" class="text-center text-muted" style="padding:20px; font-size:12px;">No requests yet.</td>
-            </tr>
-          @else
-            @foreach ($recentRequests as $req)
-              <tr style="cursor:pointer;" onclick="window.location='{{ route('admin.requests', ['view' => $req->tracking_number]) }}'" title="Click to view details">
-                <td><code style="font-size:10.5px;">{{ substr($req->tracking_number, -6) }}</code></td>
-                <td style="font-weight:600;">{{ $req->resident->full_name }}</td>
-                <td>{{ $req->certificate->name }}</td>
-                <td>
-                  <span class="badge bg-{{ $req->status === 'pending' ? 'warning' : ($req->status === 'processing' ? 'info' : ($req->status === 'approved' ? 'success' : ($req->status === 'rejected' ? 'danger' : 'primary'))) }}">
-                      {{ ucfirst($req->status) }}
-                  </span>
-                </td>
-              </tr>
-            @endforeach
-          @endif
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-</div>
-</div>
+</div>{{-- /.main-grid --}}
 
 @endsection
 
