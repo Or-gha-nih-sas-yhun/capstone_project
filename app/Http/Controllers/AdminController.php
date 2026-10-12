@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 namespace App\Http\Controllers;
 
@@ -126,9 +126,33 @@ class AdminController extends Controller
             ->limit(6)
             ->get();
 
+        // ── Demographics for Dashboard ────────────────────────────
+        $ageGroups = [
+            'Children (0-12)'     => Resident::whereNull('archived_at')->where('status', 'active')
+                ->where('birthdate', '>', now()->subYears(13)->format('Y-m-d'))->count(),
+            'Youth (13-17)'       => Resident::whereNull('archived_at')->where('status', 'active')
+                ->whereBetween('birthdate', [now()->subYears(18)->format('Y-m-d'), now()->subYears(13)->format('Y-m-d')])->count(),
+            'Young Adult (18-35)' => Resident::whereNull('archived_at')->where('status', 'active')
+                ->whereBetween('birthdate', [now()->subYears(36)->format('Y-m-d'), now()->subYears(18)->format('Y-m-d')])->count(),
+            'Adult (36-59)'       => Resident::whereNull('archived_at')->where('status', 'active')
+                ->whereBetween('birthdate', [now()->subYears(60)->format('Y-m-d'), now()->subYears(36)->format('Y-m-d')])->count(),
+            'Senior (60+)'        => $stats['senior'],
+        ];
+        $genderBreakdown = Resident::whereNull('archived_at')->where('status', 'active')
+            ->select('gender', DB::raw('count(*) as total'))
+            ->groupBy('gender')->pluck('total', 'gender')->toArray();
+        $demographics = [
+            'pwd'          => $stats['pwd'],
+            'senior'       => $stats['senior'],
+            'single_parent'=> $stats['single_parent'],
+            'total'        => $stats['residents'],
+            'gender'       => $genderBreakdown,
+            'age_groups'   => $ageGroups,
+        ];
+
         return view('admin.dashboard', compact(
             'stats', 'monthly', 'byType', 'recentRequests',
-            'revenueChart', 'topCert', 'recentActivity'
+            'revenueChart', 'topCert', 'recentActivity', 'demographics'
         ));
     }
 

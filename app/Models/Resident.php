@@ -17,15 +17,13 @@ class Resident extends Model
         'gender',
         'birthdate',
         'civil_status',
-<<<<<<< HEAD
         'is_pwd',
         'is_single_parent',
-=======
->>>>>>> origin/master
         'nationality',
         'religion',
         'occupation',
         'contact_number',
+        'phone_number',
         'email',
         'address',
         'purok',
@@ -37,14 +35,11 @@ class Resident extends Model
         'archived_by'
     ];
 
-<<<<<<< HEAD
     protected $casts = [
-        'is_pwd'          => 'boolean',
+        'is_pwd'           => 'boolean',
         'is_single_parent' => 'boolean',
     ];
 
-=======
->>>>>>> origin/master
     public function user()
     {
         return $this->hasOne(User::class, 'resident_id');
@@ -57,13 +52,6 @@ class Resident extends Model
 
     public function getFullNameAttribute()
     {
-<<<<<<< HEAD
-        return trim($this->first_name . ' ' . $this->middle_name . ' ' . $this->last_name . ' ' . $this->suffix);
-=======
-        // Drop the blank parts before joining: concatenating with spaces and
-        // trimming only the ends left a double space inside the name whenever
-        // a middle name or suffix was missing, which showed up on printed
-        // certificates.
         $parts = array_filter(
             array_map(
                 fn ($part) => trim((string) $part),
@@ -73,7 +61,6 @@ class Resident extends Model
         );
 
         return implode(' ', $parts);
->>>>>>> origin/master
     }
 
     public function getAgeAttribute()
