@@ -86,11 +86,7 @@
         <div class="grid-2">
           <div class="form-group">
             <label class="form-label">Purok</label>
-<<<<<<< HEAD
-            <input type="text" name="purok" class="form-control" value="{{ old('purok', $resident->purok) }}">
-=======
             @include('components.purok-select', ['value' => old('purok', $resident->purok)])
->>>>>>> origin/master
           </div>
           <div class="form-group">
             <label class="form-label">Occupation</label>
@@ -102,6 +98,13 @@
               @foreach (['Single','Married','Widowed','Separated'] as $cs)
               <option {{ old('civil_status', $resident->civil_status) === $cs ? 'selected' : '' }}>{{ $cs }}</option>
               @endforeach
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Person with Disability (PWD)</label>
+            <select name="is_pwd" class="form-select" required>
+              <option value="0" {{ (string) old('is_pwd', (int) $resident->is_pwd) === '0' ? 'selected' : '' }}>No</option>
+              <option value="1" {{ (string) old('is_pwd', (int) $resident->is_pwd) === '1' ? 'selected' : '' }}>Yes</option>
             </select>
           </div>
           <div class="form-group">

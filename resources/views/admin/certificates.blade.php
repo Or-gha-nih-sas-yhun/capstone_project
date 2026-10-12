@@ -107,8 +107,6 @@
           <label class="form-label">Description</label>
           <textarea name="description" class="form-control" rows="2" placeholder="Brief description of the document">{{ old('description', $editCertificate ? $editCertificate->description : '') }}</textarea>
         </div>
-<<<<<<< HEAD
-=======
 
         <hr style="margin:18px 0;border:none;border-top:1px solid #e5e7eb;">
 
@@ -157,7 +155,6 @@
             value="{{ old('signatory_position', $editCertificate ? $editCertificate->signatory_position : '') }}"
             placeholder="e.g. Punong Barangay">
         </div>
->>>>>>> origin/master
       </div>
       <div class="modal-footer">
         <a class="btn btn-secondary" style="text-decoration:none;" href="{{ route('admin.certificates', ['search' => $search]) }}">Cancel</a>

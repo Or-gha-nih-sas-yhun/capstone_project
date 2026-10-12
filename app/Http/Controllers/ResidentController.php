@@ -68,11 +68,7 @@ class ResidentController extends Controller
         $cert = Certificate::findOrFail($request->certificate_id);
 
         // Generate unique tracking number
-<<<<<<< HEAD
-        $trackingNumber = 'PILI-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -6));
-=======
         $trackingNumber = setting('system.tracking_prefix', 'BRGY') . '-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -6));
->>>>>>> origin/master
 
         // Create Request
         $certReq = CertificateRequest::create([
@@ -94,11 +90,7 @@ class ResidentController extends Controller
         ActivityLog::log('NEW_REQUEST', 'Requests', "Filed request $trackingNumber");
 
         return redirect()->route('resident.my_requests')
-<<<<<<< HEAD
-            ->with('success', "Request submitted! Tracking number: $trackingNumber. Please proceed to Barangay Pili Office for payment.");
-=======
             ->with('success', "Request submitted! Tracking number: $trackingNumber. Please proceed to the " . barangay_label() . " Office for payment.");
->>>>>>> origin/master
     }
 
     public function profileForm()
@@ -123,13 +115,10 @@ class ResidentController extends Controller
                 'middle_name' => 'nullable|string|regex:/^[a-zA-Z\s\-\.,]+$/',
                 'contact_number' => 'nullable|string|max:20',
                 'address' => 'required|string|max:255',
-<<<<<<< HEAD
-                'purok' => 'nullable|string|max:100',
-=======
                 'purok' => purok_rule(),
->>>>>>> origin/master
                 'occupation' => 'nullable|string|max:150',
                 'civil_status' => 'required|in:Single,Married,Widowed,Separated',
+                'is_pwd' => 'required|boolean',
                 'voter_status' => 'required|in:Registered,Not Registered',
             ], [
                 'first_name.regex' => 'First name must contain only letters, spaces, hyphens, and periods.',
@@ -139,7 +128,7 @@ class ResidentController extends Controller
 
             $resident->update($request->only([
                 'first_name', 'middle_name', 'last_name', 'contact_number',
-                'address', 'purok', 'occupation', 'civil_status', 'voter_status'
+                'address', 'purok', 'occupation', 'civil_status', 'is_pwd', 'voter_status'
             ]));
 
             ActivityLog::log('UPDATE_PROFILE', 'Profile', 'Resident updated profile info');
@@ -169,19 +158,11 @@ class ResidentController extends Controller
             $email = $user->email;
             try {
                 \Illuminate\Support\Facades\Mail::send('emails.password-otp', ['code' => $otp], function ($message) use ($email) {
-<<<<<<< HEAD
-                    $fromAddress = config('mail.from.address') ?: 'no-reply@brgypilieclearance.com';
-                    $fromName = config('mail.from.name') ?: 'Barangay Pili Clearance';
-                    $message->from($fromAddress, $fromName);
-                    $message->to($email);
-                    $message->subject('Confirm Password Change - Barangay Pili Clearance & Certificate System');
-=======
                     $fromAddress = config('mail.from.address') ?: 'no-reply@' . config('barangay.domain');
                     $fromName = config('mail.from.name') ?: setting('brand.app_title', barangay_label());
                     $message->from($fromAddress, $fromName);
                     $message->to($email);
                     $message->subject('Confirm Password Change - ' . setting('brand.app_title', barangay_label()));
->>>>>>> origin/master
                 });
                 \Illuminate\Support\Facades\Log::info("Password change OTP sent to {$email}: {$otp}");
             } catch (\Exception $e) {
