@@ -136,10 +136,7 @@ class RequestTest extends TestCase
             'request_id' => $certReq->id,
             'action' => 'approve',
             'remarks' => 'Approved after review',
-<<<<<<< HEAD
-=======
             'expected_release_date' => now()->addDay()->format('Y-m-d\TH:i'),
->>>>>>> origin/master
         ]);
         $response->assertRedirect(route('admin.requests'));
         
@@ -168,10 +165,7 @@ class RequestTest extends TestCase
         $this->actingAs($this->adminUser)->post('/admin/requests/update-status', [
             'request_id' => $certReq->id,
             'action' => 'approve',
-<<<<<<< HEAD
-=======
             'expected_release_date' => now()->addDay()->format('Y-m-d\TH:i'),
->>>>>>> origin/master
         ])->assertSessionHas('success');
 
         Http::assertSent(function ($request) {

@@ -68,7 +68,15 @@ class ResidentDemographicsReportTest extends TestCase
 
         $csvResponse->assertOk();
         $csv = $csvResponse->streamedContent();
-        $this->assertStringContainsString('Gender,Civil Status,PWD', $csv);
-        $this->assertStringContainsString('Female,Widowed,Yes', $csv);
+        $csvRows = array_map('str_getcsv', preg_split('/\r?\n/', trim($csv)));
+        $this->assertContains('Gender', $csvRows[0]);
+        $this->assertContains('Civil Status', $csvRows[0]);
+        $this->assertContains('PWD', $csvRows[0]);
+        $this->assertContains(['DEMO-REPORT-001', 'Alex Santos', 'Female', 'Widowed', 'Yes'], array_map(
+            function ($row) {
+                return array_slice($row, 0, 5);
+            },
+            array_slice($csvRows, 1)
+        ));
     }
 }

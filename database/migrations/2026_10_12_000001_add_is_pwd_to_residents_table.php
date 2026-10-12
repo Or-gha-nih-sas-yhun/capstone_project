@@ -8,15 +8,19 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::table('residents', function (Blueprint $table) {
-            $table->boolean('is_pwd')->default(false)->after('civil_status');
-        });
+        if (!Schema::hasColumn('residents', 'is_pwd')) {
+            Schema::table('residents', function (Blueprint $table) {
+                $table->boolean('is_pwd')->default(false)->after('civil_status');
+            });
+        }
     }
 
     public function down()
     {
-        Schema::table('residents', function (Blueprint $table) {
-            $table->dropColumn('is_pwd');
-        });
+        if (Schema::hasColumn('residents', 'is_pwd')) {
+            Schema::table('residents', function (Blueprint $table) {
+                $table->dropColumn('is_pwd');
+            });
+        }
     }
 };

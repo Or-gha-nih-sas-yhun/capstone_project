@@ -72,11 +72,7 @@
         @if ($borrows->isEmpty())
           <tr>
             <td colspan="7" class="text-center" style="padding:40px;">
-<<<<<<< HEAD
-              <div style="font-size:40px;margin-bottom:10px;">⛺🪑</div>
-=======
               <div style="font-size:40px;margin-bottom:10px;color:var(--primary);"><i class="fas fa-campground"></i> <i class="fas fa-chair"></i></div>
->>>>>>> origin/master
               <p class="text-muted">You have no active borrow requests yet.</p>
               <button type="button" class="btn btn-primary" onclick="openBorrowModal()" style="margin-top:8px;">
                 <i class="fas fa-plus"></i> Request Borrow Equipment
@@ -138,11 +134,7 @@
   <div class="borrow-cards mobile-card-list">
     @if ($borrows->isEmpty())
       <div style="text-align:center;padding:40px 16px;">
-<<<<<<< HEAD
-        <div style="font-size:40px;margin-bottom:10px;">⛺🪑</div>
-=======
         <div style="font-size:40px;margin-bottom:10px;color:var(--primary);"><i class="fas fa-campground"></i> <i class="fas fa-chair"></i></div>
->>>>>>> origin/master
         <p class="text-muted" style="margin-bottom:16px;">You have no active borrow requests yet.</p>
         <button type="button" class="btn btn-primary" onclick="openBorrowModal()">
           <i class="fas fa-plus"></i> Request Borrow Equipment
@@ -236,17 +228,6 @@
 
         <div style="margin:0; display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap:12px;" id="quantities_grid">
           <div class="form-group" style="margin:0;" id="tent_group">
-<<<<<<< HEAD
-            <label class="form-label">Tent Qty (Max 5) *</label>
-            <input type="number" name="tent_quantity" id="tent_quantity" class="form-control" value="0" min="0" max="5" required>
-          </div>
-          <div class="form-group" style="margin:0;" id="chair_group">
-            <label class="form-label">Chair Qty (Max 50) *</label>
-            <input type="number" name="chair_quantity" id="chair_quantity" class="form-control" value="0" min="0" max="50" required>
-          </div>
-          <div class="form-group" style="margin:0;" id="table_group">
-            <label class="form-label">Table Qty (Max 25) *</label>
-=======
             <label class="form-label">Tent Qty <span id="avail_tent" style="color:#6b7280; font-weight:bold; font-size:11px; float:right;">(Max 5)</span> *</label>
             <input type="number" name="tent_quantity" id="tent_quantity" class="form-control" value="0" min="0" max="5" required>
           </div>
@@ -256,7 +237,6 @@
           </div>
           <div class="form-group" style="margin:0;" id="table_group">
             <label class="form-label">Table Qty <span id="avail_table" style="color:#6b7280; font-weight:bold; font-size:11px; float:right;">(Max 25)</span> *</label>
->>>>>>> origin/master
             <input type="number" name="table_quantity" id="table_quantity" class="form-control" value="0" min="0" max="25" required>
           </div>
         </div>
@@ -340,9 +320,6 @@
   // Adjust return date min value to match borrow date selection
   document.getElementById('borrow_date').addEventListener('change', function() {
     document.getElementById('return_date').min = this.value;
-<<<<<<< HEAD
-  });
-=======
     checkAvailability();
   });
 
@@ -383,6 +360,5 @@
       document.getElementById('avail_table').style.color = '#6b7280';
     }
   }
->>>>>>> origin/master
 </script>
 @endsection

@@ -86,11 +86,7 @@
         <div class="grid-2">
           <div class="form-group">
             <label class="form-label">Purok</label>
-<<<<<<< HEAD
-            <input type="text" name="purok" class="form-control" value="{{ old('purok', $resident->purok) }}">
-=======
             @include('components.purok-select', ['value' => old('purok', $resident->purok)])
->>>>>>> origin/master
           </div>
           <div class="form-group">
             <label class="form-label">Occupation</label>

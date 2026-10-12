@@ -51,8 +51,6 @@ class SecurityHeaders
 
         // Content-Security-Policy
         // Allows: self, Google reCAPTCHA, Google Fonts, CDN assets, inline scripts (needed for Blade)
-<<<<<<< HEAD
-=======
         // Image sources are derived from the deployment's own domain so this
         // works for any barangay without editing the middleware.
         $domain = config('barangay.domain');
@@ -63,17 +61,12 @@ class SecurityHeaders
             ->unique()
             ->implode(' ');
 
->>>>>>> origin/master
         $csp = implode('; ', [
             "default-src 'self'",
             "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net",
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net",
             "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:",
-<<<<<<< HEAD
-            "img-src 'self' data: https://brgypilieclearance.com https://admin.brgypilieclearance.com https://www.google.com",
-=======
             trim("img-src 'self' data: {$imgHosts} https://www.google.com"),
->>>>>>> origin/master
             "frame-src https://www.google.com",
             "connect-src 'self' https://www.google.com",
             "object-src 'none'",

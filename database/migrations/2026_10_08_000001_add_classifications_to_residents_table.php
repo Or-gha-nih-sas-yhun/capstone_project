@@ -8,16 +8,19 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::table('residents', function (Blueprint $table) {
-            $table->boolean('is_pwd')->default(false)->after('civil_status');
-            $table->boolean('is_single_parent')->default(false)->after('is_pwd');
-        });
+        if (!Schema::hasColumn('residents', 'is_single_parent')) {
+            Schema::table('residents', function (Blueprint $table) {
+                $table->boolean('is_single_parent')->default(false)->after('civil_status');
+            });
+        }
     }
 
     public function down()
     {
-        Schema::table('residents', function (Blueprint $table) {
-            $table->dropColumn(['is_pwd', 'is_single_parent']);
-        });
+        if (Schema::hasColumn('residents', 'is_single_parent')) {
+            Schema::table('residents', function (Blueprint $table) {
+                $table->dropColumn('is_single_parent');
+            });
+        }
     }
 };

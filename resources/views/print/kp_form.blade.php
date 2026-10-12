@@ -64,15 +64,9 @@
   <!-- Official Header -->
   <div class="header">
     <h5>Republic of the Philippines</h5>
-<<<<<<< HEAD
-    <h5>Province of Camarines Sur</h5>
-    <h5>Municipality of Minalabac</h5>
-    <h3>Barangay Pili</h3>
-=======
     <h5>{{ barangay_province_line() }}</h5>
     <h5>{{ barangay_municipality_line() }}</h5>
     <h3>{{ barangay_label() }}</h3>
->>>>>>> origin/master
     <div class="divider"></div>
     <h4>Office of the Lupon Tagapamayapa / Punong Barangay</h4>
   </div>
@@ -83,11 +77,7 @@
       <strong>COMPLAINANT/S:</strong><br>
       <span class="sig-name">{{ $summon->complainant_name }}</span><br>
       @if($summon->complainantResident)
-<<<<<<< HEAD
-        <small style="color:#666;">Purok {{ $summon->complainantResident->purok ?? '—' }}, Barangay Pili</small><br>
-=======
         <small style="color:#666;">Purok {{ $summon->complainantResident->purok ?? '—' }}, {{ barangay_label() }}</small><br>
->>>>>>> origin/master
       @endif
       <small>Contact: {{ $summon->complainant_contact ?? 'N/A' }}</small>
     </div>
@@ -98,11 +88,7 @@
       <strong>RESPONDENT/S:</strong><br>
       <span class="sig-name">{{ $summon->respondent_name }}</span><br>
       @if($summon->respondentResident)
-<<<<<<< HEAD
-        <small style="color:#666;">Purok {{ $summon->respondentResident->purok ?? '—' }}, Barangay Pili</small><br>
-=======
         <small style="color:#666;">Purok {{ $summon->respondentResident->purok ?? '—' }}, {{ barangay_label() }}</small><br>
->>>>>>> origin/master
       @endif
       <small>Contact: {{ $summon->respondent_contact ?? 'N/A' }}</small>
     </div>
@@ -140,11 +126,7 @@
       </tr>
       <tr>
         <th>Location of Incident</th>
-<<<<<<< HEAD
-        <td>{{ $summon->incident_location ?? 'Barangay Pili' }}</td>
-=======
         <td>{{ $summon->incident_location ?? barangay_label() }}</td>
->>>>>>> origin/master
       </tr>
     </table>
     <p class="paragraph-content">
@@ -166,11 +148,7 @@
       </tr>
       <tr>
         <th>Venue of Hearing</th>
-<<<<<<< HEAD
-        <td>Barangay Pili Hall, Session Room</td>
-=======
         <td>{{ setting('barangay.session_room', barangay_label() . ' Hall') }}</td>
->>>>>>> origin/master
       </tr>
     </table>
     <p class="paragraph-content" style="font-weight: bold; color: #dc2626;">
@@ -196,11 +174,7 @@
       </tr>
       <tr>
         <th>Venue of Hearing</th>
-<<<<<<< HEAD
-        <td>Barangay Pili Hall, Session Room</td>
-=======
         <td>{{ setting('barangay.session_room', barangay_label() . ' Hall') }}</td>
->>>>>>> origin/master
       </tr>
     </table>
     <p class="paragraph-content" style="font-weight: bold; color: #dc2626;">
@@ -229,11 +203,7 @@
       @endif
     </div>
     <p class="paragraph-content">
-<<<<<<< HEAD
-      Given and signed this <u>{{ date('jS') }}</u> day of <u>{{ date('F, Y') }}</u> at Barangay Pili, Minalabac, Camarines Sur.
-=======
       Given and signed this <u>{{ date('jS') }}</u> day of <u>{{ date('F, Y') }}</u> at {{ barangay_location(true) }}.
->>>>>>> origin/master
     </p>
   @endif
 

@@ -1,27 +1,3 @@
-<<<<<<< HEAD
-# Barangay Pili Resident Portal Android App
-
-This is a Kotlin Android WebView app for the existing Laravel resident portal. It opens the live portal, so residents keep using the same login, certificate requests, borrow requests, summons, announcements, and profile pages.
-
-The Android app identifies itself as `BrgyPiliApp`. The Laravel login endpoint rejects staff and administrator accounts for that client, and the WebView blocks `/admin` navigation. Admin and staff functions remain available only through the web application.
-
-## Configure
-
-Before building the APK, update `PORTAL_URL` in `app/build.gradle.kts`:
-
-```kotlin
-buildConfigField(
-    "String",
-    "PORTAL_URL",
-    "\"https://your-domain.example.com/login\""
-)
-```
-
-Use the public URL of the Laravel app. For local emulator testing, a typical Laragon URL may be:
-
-```kotlin
-"\"http://10.0.2.2/Brgy.pili_clearance/login\""
-=======
 # Barangay Resident Portal Android App
 
 A Kotlin Android WebView app for the Laravel resident portal. It opens the live portal, so residents keep using the same login, certificate requests, borrow requests, summons, announcements, and profile pages.
@@ -55,20 +31,10 @@ For local emulator testing, point `brgyPortalUrl` at the host machine:
 
 ```properties
 brgyPortalUrl=http://10.0.2.2/
->>>>>>> origin/master
 ```
 
 ## Build APK
 
-<<<<<<< HEAD
-Open this folder in Android Studio and run:
-
-```powershell
-gradle assembleRelease
-```
-
-The APK will be generated in:
-=======
 Open this folder in Android Studio, or from the command line:
 
 ```powershell
@@ -76,15 +42,11 @@ Open this folder in Android Studio, or from the command line:
 ```
 
 The APK is written to:
->>>>>>> origin/master
 
 ```text
 app/build/outputs/apk/release/
 ```
 
-<<<<<<< HEAD
-After building, copy the signed APK to `public/downloads/resident-portal-app.apk` and update the download link in `resources/views/layouts/app.blade.php` if you want residents to download the APK directly.
-=======
 ## Publishing the download link
 
 Copy the signed APK into `public/downloads/`, then point the portal at it from
@@ -102,4 +64,3 @@ The Kotlin package is `com.barangayportal.residentportal`. That is an internal
 identifier used for `R` and `BuildConfig` generation and is never shown to
 residents — leave it alone when rebranding and change `brgyApplicationId`
 instead.
->>>>>>> origin/master

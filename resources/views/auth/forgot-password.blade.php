@@ -3,15 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<<<<<<< HEAD
-  <title>Barangay Pili — Forgot Password</title>
-  <meta name="description" content="Request a link to reset your account password.">
-  <link rel="icon" type="image/png" href="{{ asset('assets/images/pili_logo.png') }}">
-=======
   <title>{{ barangay_label() }} — Forgot Password</title>
   <meta name="description" content="Request a link to reset your account password.">
   <link rel="icon" type="image/png" href="{{ setting_image('brand.logo') }}">
->>>>>>> origin/master
   <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
   <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -23,19 +17,11 @@
       <!-- Left panel -->
       <div class="auth-left">
         <div class="brgy-seal" style="text-align: left; margin-bottom: 24px;">
-<<<<<<< HEAD
-          <img src="{{ asset('assets/images/pili_logo.png') }}" alt="Barangay Logo"
-            style="width: 120px; height: auto; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));">
-        </div>
-
-        <h1>Barangay Pili<br>Streamlined Clearance and Certificate </h1>
-=======
           <img src="{{ setting_image('brand.logo') }}" alt="Barangay Logo"
             style="width: 120px; height: auto; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));">
         </div>
 
         <h1>{{ barangay_label() }}<br>Streamlined Clearance and Certificate </h1>
->>>>>>> origin/master
         <p>Your one-stop portal for barangay clearances and certificates.</p>
         <div class="feature-list">
           <div class="feature-item"><i class="fas fa-file-shield"></i> Barangay Clearance</div>
@@ -45,11 +31,7 @@
           <div class="feature-item"><i class="fas fa-lock"></i> Secure &amp; Private</div>
         </div>
         <div style="margin-top:32px;padding-top:20px;border-top:1px solid rgba(255,255,255,.2);font-size:12px;opacity:.6;">
-<<<<<<< HEAD
-          Barangay Pili, Madridejos ,Cebu &bull; v1.0.0
-=======
           {{ barangay_location(true) }} &bull; v1.0.0
->>>>>>> origin/master
         </div>
       </div>
 
