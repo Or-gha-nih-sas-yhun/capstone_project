@@ -30,7 +30,7 @@
     <form method="GET" action="{{ route('admin.reports') }}" style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;">
       <div>
         <label class="form-label">Reporting Month</label>
-        <input type="month" name="month" class="form-control" value="{{ $month }}">
+        <input type="month" name="month" class="form-control" value="{{ $monthParam }}">
       </div>
       <button type="submit" class="btn btn-primary"><i class="fas fa-filter"></i> Generate</button>
       <button type="button" class="btn btn-success" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
