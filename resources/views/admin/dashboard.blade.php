@@ -4,10 +4,10 @@
 
 @section('styles')
 <style>
-  /* ── Viewport Lock: Completely non-scrollable dashboard ── */
+  /* ── 1-Page Layout Lock ── */
   html, body {
     overflow: hidden !important;
-    height: 100% !important;
+    height: 100vh !important;
     max-height: 100vh !important;
   }
   .wrapper {
@@ -29,21 +29,21 @@
   }
   .topbar {
     flex-shrink: 0 !important;
-    min-height: 48px !important;
-    height: 48px !important;
-    padding: 3px 16px !important;
+    min-height: 44px !important;
+    height: 44px !important;
+    padding: 2px 14px !important;
   }
   #flash-message {
-    margin: 4px 10px 0 !important;
+    margin: 2px 10px 0 !important;
     flex-shrink: 0 !important;
   }
   #flash-message .alert {
-    padding: 5px 12px !important;
-    font-size: 11.5px !important;
+    padding: 4px 10px !important;
+    font-size: 11px !important;
     margin-bottom: 0 !important;
   }
 
-  /* ── Override page-content for dashboard only ── */
+  /* ── Page Content (Fits exact 1 page) ── */
   .page-content {
     padding: 6px 10px !important;
     overflow: hidden !important;
@@ -52,29 +52,30 @@
     gap: 6px !important;
     box-sizing: border-box !important;
     flex: 1 !important;
-    height: calc(100vh - 48px) !important;
-    max-height: calc(100vh - 48px) !important;
+    height: calc(100vh - 44px) !important;
+    max-height: calc(100vh - 44px) !important;
   }
 
-  /* ── Row 1: KPI Cards ── */
-  .db-kpi-row {
-    display: flex;
+  /* ── Row 1: Unified Metrics Strip (Single Row of 5 Cards) ── */
+  .db-top-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
     gap: 6px;
     flex-shrink: 0;
   }
   .db-kpi-card {
-    flex: 1;
     background: #fff;
     border-radius: 8px;
     border: 1px solid #e5e7eb;
     padding: 6px 10px;
     display: flex;
     flex-direction: column;
-    gap: 1px;
+    justify-content: space-between;
     position: relative;
     overflow: hidden;
     box-shadow: 0 1px 3px rgba(0,0,0,0.03);
     min-width: 0;
+    height: 58px;
   }
   .db-kpi-card::after {
     content: '';
@@ -83,73 +84,39 @@
     height: 2.5px;
     background: var(--kc, #e5e7eb);
   }
-  .db-kpi-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1px; }
+  .db-kpi-top { display: flex; justify-content: space-between; align-items: center; }
   .db-kpi-icon {
-    width: 26px; height: 26px; border-radius: 6px;
+    width: 22px; height: 22px; border-radius: 5px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 11px;
+    font-size: 10px;
     background: var(--ki, #f1f5f9);
     color: var(--kc, #64748b);
   }
-  .db-kpi-badge { font-size: 9px; font-weight: 700; padding: 1px 6px; border-radius: 20px; white-space: nowrap; }
+  .db-kpi-badge { font-size: 8.5px; font-weight: 700; padding: 1px 5px; border-radius: 12px; white-space: nowrap; }
   .db-kpi-badge.up     { background:#f0fdf4; color:#15803d; }
   .db-kpi-badge.down   { background:#fef2f2; color:#b91c1c; }
   .db-kpi-badge.neutral{ background:#f1f5f9; color:#64748b; }
-  .db-kpi-val  { font-size: 17px; font-weight: 800; color: #111; line-height: 1.1; }
-  .db-kpi-lbl  { font-size: 9px; color: #6b7280; font-weight: 600; text-transform: uppercase; letter-spacing:.3px; }
+  .db-kpi-val  { font-size: 16px; font-weight: 800; color: #111; line-height: 1.1; margin-top: 1px; }
+  .db-kpi-lbl  { font-size: 8.5px; color: #6b7280; font-weight: 600; text-transform: uppercase; letter-spacing:.3px; }
+  .db-kpi-sub  { font-size: 8.5px; color: #64748b; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-  /* ── Row 2: Demographics Strip ── */
-  .db-demo-row {
-    display: flex;
-    gap: 6px;
-    flex-shrink: 0;
-  }
-  .db-demo-card {
-    flex: 1;
-    background: #fff;
-    border: 1px solid #e5e7eb;
-    border-left: 3px solid var(--dc, #e5e7eb);
-    border-radius: 7px;
-    padding: 5px 9px;
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    text-decoration: none;
-    transition: box-shadow .15s, transform .15s;
-    min-width: 0;
-  }
-  .db-demo-card:hover { box-shadow: 0 3px 8px rgba(0,0,0,.06); transform: translateY(-1px); }
-  .db-demo-icon {
-    width: 26px; height: 26px; border-radius: 6px; flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px;
-    background: var(--di, #f1f5f9);
-    color: var(--dc, #64748b);
-  }
-  .db-demo-val { font-size: 15px; font-weight: 800; line-height: 1; }
-  .db-demo-lbl { font-size: 9px; color: #6b7280; font-weight: 600; margin-top: 1px; }
-  .db-demo-pct { font-size: 8.5px; font-weight: 700; padding: 1px 4px; border-radius: 8px; margin-top: 1px; display: inline-block; }
-
-  /* ── Row 3: Main Grid ── */
+  /* ── Row 2: Main 3-Column Grid ── */
   .db-main {
     flex: 1;
     display: grid;
-    grid-template-columns: 1.1fr 1fr 0.9fr;
+    grid-template-columns: 1.15fr 1fr 0.95fr;
     gap: 6px;
     min-height: 0;
     overflow: hidden;
   }
-
-  /* Columns */
   .db-col {
     display: flex;
     flex-direction: column;
     gap: 6px;
     min-height: 0;
     overflow: hidden;
+    flex: 1;
   }
-
-  /* Cards */
   .db-card {
     background: #fff;
     border-radius: 8px;
@@ -178,21 +145,21 @@
     overflow: hidden;
   }
 
-  /* Interactive Clickable Chart Cards */
+  /* Clickable Chart Cards */
   .db-chart-card {
     cursor: pointer;
     transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
   }
   .db-chart-card:hover {
     border-color: #93c5fd;
-    box-shadow: 0 4px 12px rgba(37,99,235,0.08);
+    box-shadow: 0 3px 10px rgba(37,99,235,0.08);
     transform: translateY(-1px);
   }
   .db-expand-badge {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    font-size: 9px;
+    gap: 3px;
+    font-size: 8.5px;
     font-weight: 600;
     color: #64748b;
     background: #f8fafc;
@@ -218,29 +185,29 @@
   .db-chart canvas { position: absolute; inset: 0; width: 100% !important; height: 100% !important; }
 
   /* Doughnut layout */
-  .db-doughnut-wrap { display: flex; flex-direction: column; flex: 1; min-height: 0; gap: 3px; }
+  .db-doughnut-wrap { display: flex; flex-direction: column; flex: 1; min-height: 0; gap: 2px; }
   .db-doughnut-wrap .db-chart { flex: 1; }
-  .db-legend { display: flex; flex-wrap: wrap; gap: 2px 6px; flex-shrink: 0; }
-  .db-legend-item { display: flex; align-items: center; gap: 3px; font-size: 9px; color: #374151; font-weight: 600; }
+  .db-legend { display: flex; flex-wrap: wrap; gap: 2px 6px; flex-shrink: 0; max-height: 28px; overflow: hidden; }
+  .db-legend-item { display: flex; align-items: center; gap: 3px; font-size: 8.5px; color: #374151; font-weight: 600; }
   .db-legend-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
 
   /* Table */
   .db-tbl-wrap { overflow-y: auto; flex: 1; min-height: 0; }
   .db-tbl { width: 100%; border-collapse: collapse; }
-  .db-tbl th { background:#f9fafb; font-size:9px; font-weight:700; color:#6b7280; text-transform:uppercase; padding:4px 7px; border-bottom:1px solid #e5e7eb; position:sticky; top:0; z-index:1; }
-  .db-tbl td { padding:4px 7px; font-size:10.5px; color:#1f2937; border-bottom:1px solid #f3f4f6; }
+  .db-tbl th { background:#f9fafb; font-size:8.5px; font-weight:700; color:#6b7280; text-transform:uppercase; padding:4px 6px; border-bottom:1px solid #e5e7eb; position:sticky; top:0; z-index:1; }
+  .db-tbl td { padding:3.5px 6px; font-size:10px; color:#1f2937; border-bottom:1px solid #f3f4f6; }
   .db-tbl tr:hover td { background:#f9fafb; cursor:pointer; }
 
   /* Activity */
   .db-activity { list-style:none; margin:0; padding:0; overflow-y:auto; flex:1; min-height:0; }
   .db-activity li { display:flex; gap:6px; align-items:flex-start; padding:3px 0; border-bottom:1px solid #f3f4f6; }
   .db-activity li:last-child { border-bottom:none; }
-  .db-act-dot { width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:8.5px; flex-shrink:0; background:#eff6ff; color:#1d4ed8; }
-  .db-act-txt { font-size:10px; font-weight:600; color:#1e293b; line-height:1.25; }
-  .db-act-meta { font-size:8.5px; color:#9ca3af; margin-top:1px; }
+  .db-act-dot { width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:8px; flex-shrink:0; background:#eff6ff; color:#1d4ed8; }
+  .db-act-txt { font-size:9.5px; font-weight:600; color:#1e293b; line-height:1.2; }
+  .db-act-meta { font-size:8px; color:#9ca3af; margin-top:1px; }
 
   /* Status badges */
-  .db-badge { display:inline-flex; align-items:center; font-size:9px; font-weight:700; padding:1px 5px; border-radius:20px; white-space:nowrap; }
+  .db-badge { display:inline-flex; align-items:center; font-size:8.5px; font-weight:700; padding:1px 5px; border-radius:12px; white-space:nowrap; }
   .db-badge.pending    { background:#fffbeb; color:#92400e; }
   .db-badge.processing { background:#eff6ff; color:#1d4ed8; }
   .db-badge.approved   { background:#f0fdf4; color:#15803d; }
@@ -259,9 +226,7 @@
     justify-content: center;
     padding: 16px;
   }
-  .db-modal-overlay.show {
-    display: flex;
-  }
+  .db-modal-overlay.show { display: flex; }
   .db-modal-box {
     background: #fff;
     border-radius: 14px;
@@ -326,17 +291,6 @@
     line-height: 1.2;
     margin-top: 2px;
   }
-
-  /* Responsive fallback for smaller screens / tablets */
-  @media (max-width: 900px) {
-    html, body, .wrapper, .main-content, .page-content {
-      overflow-y: auto !important;
-      height: auto !important;
-      max-height: none !important;
-    }
-    .db-kpi-row, .db-demo-row { flex-wrap: wrap; }
-    .db-main { grid-template-columns: 1fr; height: auto; }
-  }
 </style>
 @endsection
 
@@ -344,129 +298,101 @@
 
 @php
   $totalRes   = max($stats['residents'] ?? 1, 1);
-  $pwdPct     = round(($demographics['pwd'] ?? 0) / $totalRes * 100, 1);
-  $seniorPct  = round(($demographics['senior'] ?? 0) / $totalRes * 100, 1);
-  $spPct      = round(($demographics['single_parent'] ?? 0) / $totalRes * 100, 1);
   $maleCount  = $demographics['gender']['Male']   ?? 0;
   $femaleCount= $demographics['gender']['Female'] ?? 0;
-  $malePct    = round($maleCount   / $totalRes * 100, 1);
-  $femalePct  = round($femaleCount / $totalRes * 100, 1);
+  $malePct    = round($maleCount   / $totalRes * 100);
+  $femalePct  = round($femaleCount / $totalRes * 100);
 @endphp
 
-{{-- ── ROW 1: KPI Cards ── --}}
-<div class="db-kpi-row">
+{{-- ── ROW 1: Consolidated Single Strip of 5 Metric Cards ── --}}
+<div class="db-top-row">
 
+  <!-- Card 1: Active Residents + Gender -->
   <div class="db-kpi-card" style="--kc:#1d4ed8;--ki:#eff6ff;">
     <div class="db-kpi-top">
+      <span class="db-kpi-lbl">Active Residents</span>
       <div class="db-kpi-icon"><i class="fas fa-users"></i></div>
-      <span class="db-kpi-badge neutral">Total</span>
     </div>
-    <div class="db-kpi-val">{{ number_format($stats['residents'] ?? 0) }}</div>
-    <div class="db-kpi-lbl">Active Residents</div>
+    <div style="display:flex;align-items:baseline;justify-content:space-between;">
+      <div class="db-kpi-val">{{ number_format($stats['residents'] ?? 0) }}</div>
+      <div class="db-kpi-sub">
+        <span style="color:#1d4ed8;font-weight:700;"><i class="fas fa-male"></i> {{ $maleCount }}</span>
+        <span style="color:#db2777;font-weight:700;margin-left:4px;"><i class="fas fa-female"></i> {{ $femaleCount }}</span>
+      </div>
+    </div>
   </div>
 
-  <div class="db-kpi-card" style="--kc:#d97706;--ki:#fffbeb;">
-    <div class="db-kpi-top">
-      <div class="db-kpi-icon"><i class="fas fa-clock"></i></div>
-      <span class="db-kpi-badge {{ ($stats['pending'] ?? 0) > 10 ? 'down' : 'neutral' }}">{{ ($stats['pending'] ?? 0) > 0 ? 'Action needed' : 'Clear' }}</span>
-    </div>
-    <div class="db-kpi-val">{{ number_format($stats['pending'] ?? 0) }}</div>
-    <div class="db-kpi-lbl">Pending Requests</div>
-  </div>
-
-  <div class="db-kpi-card" style="--kc:#0d9488;--ki:#f0fdfa;">
-    <div class="db-kpi-top">
-      <div class="db-kpi-icon"><i class="fas fa-check-circle"></i></div>
-      <span class="db-kpi-badge neutral">{{ $stats['completion_rate'] ?? 0 }}%</span>
-    </div>
-    <div class="db-kpi-val">{{ number_format($stats['released'] ?? 0) }}</div>
-    <div class="db-kpi-lbl">Released Docs</div>
-  </div>
-
+  <!-- Card 2: Priority Demographics (PWD, Senior, Solo Parent) -->
   <div class="db-kpi-card" style="--kc:#7c3aed;--ki:#f5f3ff;">
     <div class="db-kpi-top">
-      <div class="db-kpi-icon"><i class="fas fa-peso-sign"></i></div>
-      @if(($stats['revenue_trend'] ?? 0) >= 0)
-        <span class="db-kpi-badge up"><i class="fas fa-arrow-up"></i> {{ $stats['revenue_trend'] ?? 0 }}%</span>
-      @else
-        <span class="db-kpi-badge down"><i class="fas fa-arrow-down"></i> {{ abs($stats['revenue_trend'] ?? 0) }}%</span>
-      @endif
+      <span class="db-kpi-lbl">Priority Sectors</span>
+      <div class="db-kpi-icon"><i class="fas fa-hands-holding-child"></i></div>
     </div>
-    <div class="db-kpi-val" style="font-size:15px;">₱{{ number_format($stats['month_revenue'] ?? $stats['revenue'] ?? 0, 0) }}</div>
-    <div class="db-kpi-lbl">Revenue (Month)</div>
+    <div style="display:flex;gap:4px;margin-top:2px;">
+      <a href="{{ route('admin.residents', ['classification' => 'pwd']) }}" title="PWD Residents"
+         style="flex:1;background:#f5f3ff;border:1px solid #ede9fe;border-radius:4px;padding:2px 4px;text-align:center;text-decoration:none;">
+        <span style="display:block;font-size:7.5px;color:#7c3aed;font-weight:700;">PWD</span>
+        <strong style="font-size:11px;color:#6d28d9;">{{ $demographics['pwd'] ?? 0 }}</strong>
+      </a>
+      <a href="{{ route('admin.residents', ['classification' => 'senior']) }}" title="Senior Citizens"
+         style="flex:1;background:#fffbeb;border:1px solid #fef3c7;border-radius:4px;padding:2px 4px;text-align:center;text-decoration:none;">
+        <span style="display:block;font-size:7.5px;color:#d97706;font-weight:700;">SNR</span>
+        <strong style="font-size:11px;color:#b45309;">{{ $demographics['senior'] ?? 0 }}</strong>
+      </a>
+      <a href="{{ route('admin.residents', ['classification' => 'single_parent']) }}" title="Single Parents"
+         style="flex:1;background:#f0fdfa;border:1px solid #ccfbf1;border-radius:4px;padding:2px 4px;text-align:center;text-decoration:none;">
+        <span style="display:block;font-size:7.5px;color:#0d9488;font-weight:700;">SOLO</span>
+        <strong style="font-size:11px;color:#0f766e;">{{ $demographics['single_parent'] ?? 0 }}</strong>
+      </a>
+    </div>
   </div>
 
-  <div class="db-kpi-card" style="--kc:#b91c1c;--ki:#fef2f2;">
+  <!-- Card 3: Pending Requests -->
+  <div class="db-kpi-card" style="--kc:#d97706;--ki:#fffbeb;">
     <div class="db-kpi-top">
-      <div class="db-kpi-icon"><i class="fas fa-file-alt"></i></div>
-      <span class="db-kpi-badge neutral">{{ now()->format('M') }}</span>
+      <span class="db-kpi-lbl">Pending Requests</span>
+      <span class="db-kpi-badge {{ ($stats['pending'] ?? 0) > 0 ? 'down' : 'neutral' }}">
+        {{ ($stats['pending'] ?? 0) > 0 ? 'Action' : 'Clear' }}
+      </span>
     </div>
-    <div class="db-kpi-val">{{ number_format($stats['month_requests'] ?? $stats['total_req'] ?? 0) }}</div>
-    <div class="db-kpi-lbl">New Requests</div>
+    <div style="display:flex;align-items:baseline;justify-content:space-between;">
+      <div class="db-kpi-val" style="color:{{ ($stats['pending'] ?? 0) > 0 ? '#b45309' : '#111' }};">{{ number_format($stats['pending'] ?? 0) }}</div>
+      <div class="db-kpi-sub">Total Month: {{ number_format($stats['month_requests'] ?? $stats['total_req'] ?? 0) }}</div>
+    </div>
+  </div>
+
+  <!-- Card 4: Released Documents -->
+  <div class="db-kpi-card" style="--kc:#0d9488;--ki:#f0fdfa;">
+    <div class="db-kpi-top">
+      <span class="db-kpi-lbl">Released Docs</span>
+      <span class="db-kpi-badge up">{{ $stats['completion_rate'] ?? 0 }}% Rate</span>
+    </div>
+    <div style="display:flex;align-items:baseline;justify-content:space-between;">
+      <div class="db-kpi-val" style="color:#0f766e;">{{ number_format($stats['released'] ?? 0) }}</div>
+      <div class="db-kpi-sub">{{ now()->format('M') }} Completed</div>
+    </div>
+  </div>
+
+  <!-- Card 5: Collections & Revenue -->
+  <div class="db-kpi-card" style="--kc:#059669;--ki:#f0fdf4;">
+    <div class="db-kpi-top">
+      <span class="db-kpi-lbl">Collections ({{ now()->format('M') }})</span>
+      <div class="db-kpi-icon"><i class="fas fa-peso-sign"></i></div>
+    </div>
+    <div style="display:flex;align-items:baseline;justify-content:space-between;">
+      <div class="db-kpi-val" style="color:#059669;font-size:14.5px;">₱{{ number_format($stats['month_revenue'] ?? $stats['revenue'] ?? 0, 0) }}</div>
+      <a href="{{ route('admin.reports') }}" class="db-kpi-sub" style="color:#059669;font-weight:700;text-decoration:none;" title="View all-time report">
+        All: ₱{{ number_format($stats['revenue'] ?? 0, 0) }} →
+      </a>
+    </div>
   </div>
 
 </div>
 
-{{-- ── ROW 2: Demographics Strip ── --}}
-<div class="db-demo-row">
-
-  <a href="{{ route('admin.residents', ['classification' => 'pwd']) }}" class="db-demo-card" style="--dc:#7c3aed;--di:#f5f3ff;">
-    <div class="db-demo-icon"><i class="fas fa-wheelchair"></i></div>
-    <div style="min-width:0;">
-      <div class="db-demo-val" style="color:#7c3aed;">{{ number_format($demographics['pwd'] ?? 0) }}</div>
-      <div class="db-demo-lbl">PWD Residents</div>
-      <span class="db-demo-pct" style="background:#f5f3ff;color:#7c3aed;">{{ $pwdPct }}%</span>
-    </div>
-  </a>
-
-  <a href="{{ route('admin.residents', ['classification' => 'senior']) }}" class="db-demo-card" style="--dc:#d97706;--di:#fffbeb;">
-    <div class="db-demo-icon"><i class="fas fa-user-clock"></i></div>
-    <div style="min-width:0;">
-      <div class="db-demo-val" style="color:#d97706;">{{ number_format($demographics['senior'] ?? 0) }}</div>
-      <div class="db-demo-lbl">Senior Citizens</div>
-      <span class="db-demo-pct" style="background:#fffbeb;color:#d97706;">{{ $seniorPct }}%</span>
-    </div>
-  </a>
-
-  <a href="{{ route('admin.residents', ['classification' => 'single_parent']) }}" class="db-demo-card" style="--dc:#0d9488;--di:#f0fdfa;">
-    <div class="db-demo-icon"><i class="fas fa-child"></i></div>
-    <div style="min-width:0;">
-      <div class="db-demo-val" style="color:#0d9488;">{{ number_format($demographics['single_parent'] ?? 0) }}</div>
-      <div class="db-demo-lbl">Single Parents</div>
-      <span class="db-demo-pct" style="background:#f0fdfa;color:#0d9488;">{{ $spPct }}%</span>
-    </div>
-  </a>
-
-  <div class="db-demo-card" style="--dc:#1d4ed8;--di:#eff6ff; cursor:default;">
-    <div class="db-demo-icon"><i class="fas fa-venus-mars"></i></div>
-    <div style="min-width:0;flex:1;">
-      <div class="db-demo-lbl" style="margin-bottom:2px;">Gender Breakdown</div>
-      <div style="display:flex;gap:7px;font-size:9.5px;font-weight:700;">
-        <span style="color:#1d4ed8;"><i class="fas fa-male"></i> {{ $maleCount }} <span style="color:#9ca3af;font-weight:500;">({{ $malePct }}%)</span></span>
-        <span style="color:#db2777;"><i class="fas fa-female"></i> {{ $femaleCount }} <span style="color:#9ca3af;font-weight:500;">({{ $femalePct }}%)</span></span>
-      </div>
-      <div style="display:flex;height:3.5px;border-radius:3px;overflow:hidden;margin-top:3px;gap:1px;">
-        <div style="width:{{ $malePct }}%;background:#1d4ed8;"></div>
-        <div style="width:{{ $femalePct }}%;background:#db2777;"></div>
-      </div>
-    </div>
-  </div>
-
-  <a href="{{ route('admin.reports') }}" class="db-demo-card" style="--dc:#059669;--di:#f0fdf4;">
-    <div class="db-demo-icon"><i class="fas fa-coins"></i></div>
-    <div style="min-width:0;">
-      <div class="db-demo-val" style="color:#059669;font-size:14px;">₱{{ number_format($stats['revenue'] ?? 0, 0) }}</div>
-      <div class="db-demo-lbl">Total Collections</div>
-      <span class="db-demo-pct" style="background:#f0fdf4;color:#059669;">All time</span>
-    </div>
-  </a>
-
-</div>
-
-{{-- ── ROW 3: Main Charts Grid ── --}}
+{{-- ── ROW 2: Main 3-Column Grid (Charts + Tables) ── --}}
 <div class="db-main">
 
-  {{-- Column A: Bar + Line --}}
+  {{-- Column A: Bar + Line Charts --}}
   <div class="db-col">
     <!-- Chart 1: Monthly Requests vs Released -->
     <div class="db-card db-chart-card" data-chart="monthly" title="Click to view enlarged chart & breakdown">
@@ -491,7 +417,7 @@
     </div>
   </div>
 
-  {{-- Column B: Doughnut + Age Group --}}
+  {{-- Column B: Doughnut + Age Group Charts --}}
   <div class="db-col">
     <!-- Chart 3: Requests by Type -->
     <div class="db-card db-chart-card" data-chart="type" title="Click to view enlarged chart & breakdown">
@@ -521,10 +447,11 @@
 
   {{-- Column C: Recent Requests + Activity --}}
   <div class="db-col">
-    <div class="db-card" style="flex:1.35;">
+    <!-- Table: Recent Requests -->
+    <div class="db-card" style="flex:1.25;">
       <div class="db-card-hd">
         <h5><i class="fas fa-list" style="color:#b91c1c;margin-right:5px;"></i>Recent Requests</h5>
-        <a href="{{ route('admin.requests') }}" style="font-size:9.5px;color:#1d4ed8;font-weight:600;text-decoration:none;">View All →</a>
+        <a href="{{ route('admin.requests') }}" style="font-size:9px;color:#1d4ed8;font-weight:600;text-decoration:none;">View All →</a>
       </div>
       <div class="db-tbl-wrap">
         <table class="db-tbl">
@@ -532,9 +459,9 @@
             <tr><th>#</th><th>Resident</th><th>Document</th><th>Status</th></tr>
           </thead>
           <tbody>
-            @forelse ($recentRequests->take(7) as $req)
+            @forelse ($recentRequests->take(6) as $req)
               <tr onclick="window.location='{{ route('admin.requests', ['view' => $req->tracking_number]) }}'">
-                <td><code style="font-size:9px;">{{ substr($req->tracking_number,-6) }}</code></td>
+                <td><code style="font-size:8.5px;">{{ substr($req->tracking_number,-6) }}</code></td>
                 <td style="font-weight:600;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ $req->resident?->full_name }}</td>
                 <td style="color:#6b7280;max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ $req->certificate?->name }}</td>
                 <td><span class="db-badge {{ $req->status }}">{{ ucfirst($req->status) }}</span></td>
@@ -547,17 +474,18 @@
       </div>
     </div>
 
+    <!-- List: Recent Activity -->
     <div class="db-card" style="flex:1;">
       <div class="db-card-hd">
         <h5><i class="fas fa-history" style="color:#1d4ed8;margin-right:5px;"></i>Recent Activity</h5>
       </div>
       <div class="db-card-bd">
         <ul class="db-activity">
-          @forelse($recentActivity ?? [] as $log)
+          @forelse(($recentActivity ?? [])->take(5) as $log)
             <li>
               <div class="db-act-dot"><i class="fas fa-bolt"></i></div>
-              <div>
-                <div class="db-act-txt">{{ Str::limit($log->description ?: $log->action, 46) }}</div>
+              <div style="min-width:0;flex:1;">
+                <div class="db-act-txt" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ Str::limit($log->description ?: $log->action, 42) }}</div>
                 <div class="db-act-meta">{{ explode('@', $log->user?->email)[0] ?? 'System' }} · {{ $log->created_at->diffForHumans(null, true, true) }}</div>
               </div>
             </li>
@@ -571,7 +499,7 @@
 
 </div>
 
-{{-- ── Enlarged Chart Modal ── --}}
+{{-- ── Enlarged Chart Detail Modal ── --}}
 <div class="db-modal-overlay" id="chartModal">
   <div class="db-modal-box">
     <!-- Modal Header -->
@@ -630,7 +558,7 @@
   const ageData       = @json(array_values($demographics['age_groups'] ?? []));
 
   Chart.defaults.font.family = 'Inter, system-ui, sans-serif';
-  Chart.defaults.font.size   = 10;
+  Chart.defaults.font.size   = 9.5;
   Chart.defaults.color       = '#6b7280';
 
   const palette = ['#b91c1c','#0d9488','#7c3aed','#d97706','#0ea5e9','#db2777','#059669','#4f46e5'];
@@ -647,10 +575,10 @@
     },
     options: {
       responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{ position:'top', labels:{ boxWidth:8, font:{size:9.5,weight:'bold'}, padding:5 } }, tooltip:{ padding:7 } },
+      plugins:{ legend:{ position:'top', labels:{ boxWidth:8, font:{size:9,weight:'bold'}, padding:4 } }, tooltip:{ padding:6 } },
       scales:{
-        y:{ beginAtZero:true, grid:{color:'#f3f4f6'}, ticks:{stepSize:1,font:{size:9}} },
-        x:{ grid:{display:false}, ticks:{font:{size:9,weight:'600'}} }
+        y:{ beginAtZero:true, grid:{color:'#f3f4f6'}, ticks:{stepSize:1,font:{size:8.5}} },
+        x:{ grid:{display:false}, ticks:{font:{size:8.5,weight:'600'}} }
       }
     }
   });
@@ -662,14 +590,14 @@
       labels: revLabels.length ? revLabels : ['No Data'],
       datasets:[{ label:'Collections', data: revData.length ? revData : [0],
         borderColor:'#7c3aed', backgroundColor:'rgba(124,58,237,.1)',
-        fill:true, tension:0.4, pointRadius:3.5, pointHoverRadius:5, borderWidth:2.2 }]
+        fill:true, tension:0.4, pointRadius:3, pointHoverRadius:4.5, borderWidth:2 }]
     },
     options:{
       responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{display:false}, tooltip:{ padding:7, callbacks:{ label:ctx=>'₱'+Number(ctx.parsed.y).toLocaleString() } } },
+      plugins:{ legend:{display:false}, tooltip:{ padding:6, callbacks:{ label:ctx=>'₱'+Number(ctx.parsed.y).toLocaleString() } } },
       scales:{
-        y:{ beginAtZero:true, grid:{color:'#f3f4f6'}, ticks:{font:{size:9}, callback:v=>'₱'+Number(v).toLocaleString()} },
-        x:{ grid:{display:false}, ticks:{font:{size:9,weight:'600'}} }
+        y:{ beginAtZero:true, grid:{color:'#f3f4f6'}, ticks:{font:{size:8.5}, callback:v=>'₱'+Number(v).toLocaleString()} },
+        x:{ grid:{display:false}, ticks:{font:{size:8.5,weight:'600'}} }
       }
     }
   });
@@ -683,16 +611,16 @@
     },
     options:{
       responsive:true, maintainAspectRatio:false, cutout:'60%',
-      plugins:{ legend:{display:false}, tooltip:{padding:7} }
+      plugins:{ legend:{display:false}, tooltip:{padding:6} }
     }
   });
-  // Custom legend
+  // Compact Legend
   const legend = document.getElementById('typeLegend');
   if (typeLabels.length && legend) {
-    typeLabels.forEach((lbl,i) => {
+    typeLabels.slice(0, 4).forEach((lbl,i) => {
       const el = document.createElement('div');
       el.className = 'db-legend-item';
-      el.innerHTML = `<span class="db-legend-dot" style="background:${palette[i%palette.length]}"></span>${lbl} (${typeData[i]??0})`;
+      el.innerHTML = `<span class="db-legend-dot" style="background:${palette[i%palette.length]}"></span>${lbl}`;
       legend.appendChild(el);
     });
   }
@@ -704,14 +632,14 @@
       labels: ageLabels.length ? ageLabels : ['No Data'],
       datasets:[{ label:'Residents', data: ageData.length ? ageData : [0],
         backgroundColor:['#60a5fa','#34d399','#f59e0b','#f87171','#c084fc'],
-        borderRadius:3, barPercentage:0.7 }]
+        borderRadius:3, barPercentage:0.65 }]
     },
     options:{
       responsive:true, maintainAspectRatio:false, indexAxis:'y',
-      plugins:{ legend:{display:false}, tooltip:{padding:7} },
+      plugins:{ legend:{display:false}, tooltip:{padding:6} },
       scales:{
-        x:{ beginAtZero:true, grid:{color:'#f3f4f6'}, ticks:{font:{size:9}} },
-        y:{ grid:{display:false}, ticks:{font:{size:9,weight:'600'}} }
+        x:{ beginAtZero:true, grid:{color:'#f3f4f6'}, ticks:{font:{size:8.5}} },
+        y:{ grid:{display:false}, ticks:{font:{size:8.5,weight:'600'}} }
       }
     }
   });
@@ -730,7 +658,6 @@
 
     if (!modal || !canvas) return;
 
-    // Clean up previous modal chart instance
     if (modalChartInstance) {
       modalChartInstance.destroy();
       modalChartInstance = null;
@@ -1109,7 +1036,6 @@
       });
     }
 
-    // Show modal
     modal.classList.add('show');
   }
 
@@ -1125,14 +1051,13 @@
   // Attach click listener to all chart cards
   document.querySelectorAll('.db-chart-card').forEach(card => {
     card.addEventListener('click', function(e) {
-      // Don't trigger if clicked on an actual link
       if (e.target.closest('a')) return;
       const chartKey = this.dataset.chart;
       if (chartKey) openChartModal(chartKey);
     });
   });
 
-  // Close modal when clicking on overlay background
+  // Close modal when clicking overlay background
   const chartModalOverlay = document.getElementById('chartModal');
   if (chartModalOverlay) {
     chartModalOverlay.addEventListener('click', function(e) {
