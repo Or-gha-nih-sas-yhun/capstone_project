@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1200" viewBox="0 0 1600 1200" role="img" aria-labelledby="title desc">
+  <title id="title">System Development Life Cycle — Barangay Pili Clearance and Certificate Management System</title>
+  <desc id="desc">A lifecycle diagram for the Barangay Pili system, covering requirements, analysis, design, testing, implementation, and review.</desc>
+  <defs>
+    <style>
+      .page { fill:#fff; stroke:#20272b; stroke-width:2; }
+      .box { fill:#fff; stroke:#343b3f; stroke-width:2; }
+      .connector { fill:none; stroke:#343b3f; stroke-width:2.5; }
+      .arrow { fill:#343b3f; }
+      .title { fill:#171b1e; font:700 21px Arial,Helvetica,sans-serif; text-anchor:middle; }
+      .phase { fill:#171b1e; font:16px Arial,Helvetica,sans-serif; text-anchor:middle; }
+      .box-title { fill:#171b1e; font:700 18px Arial,Helvetica,sans-serif; text-anchor:middle; }
+      .body { fill:#171b1e; font:15px Arial,Helvetica,sans-serif; }
+      .body-bold { fill:#171b1e; font:700 15px Arial,Helvetica,sans-serif; }
+      .small { fill:#171b1e; font:14px Arial,Helvetica,sans-serif; }
+      .rule { stroke:#343b3f; stroke-width:1.4; }
+    </style>
+    <marker id="down" viewBox="0 0 10 10" refX="5" refY="8" markerWidth="8" markerHeight="8" orient="auto">
+      <path class="arrow" d="M0 0 L10 0 L5 9 Z"/>
+    </marker>
+  </defs>
+
+  <rect class="page" x="4" y="4" width="1592" height="1192"/>
+
+  <!-- Phase labels -->
+  <text class="phase" x="70" y="140">Requirements</text>
+  <text class="phase" x="70" y="337">Analysis</text>
+  <text class="phase" x="70" y="511">Design</text>
+  <text class="phase" x="70" y="731">Testing</text>
+  <text class="phase" x="70" y="921">Implementation</text>
+  <text class="phase" x="70" y="1081">Review</text>
+  <path class="connector" d="M145 210 V400 M145 400 V620 M145 620 V840 M145 840 V995 M145 995 V1123 H173"/>
+
+  <!-- Requirements -->
+  <text class="title" x="610" y="48">FUNCTIONAL REQUIREMENTS</text>
+  <text class="title" x="1270" y="48">NON-FUNCTIONAL REQUIREMENTS</text>
+  <rect class="box" x="220" y="65" width="780" height="145" rx="7"/>
+  <rect class="box" x="1020" y="65" width="505" height="145" rx="7"/>
+  <line class="rule" x1="610" y1="77" x2="610" y2="198"/>
+  <text class="body" x="245" y="98">
+    <tspan x="245" dy="0">• Resident registration, login &amp; email verification</tspan>
+    <tspan x="245" dy="23">• Staff/admin login with OTP and role access</tspan>
+    <tspan x="245" dy="23">• Clearance and certificate requests</tspan>
+    <tspan x="245" dy="23">• Request status tracking and payment recording</tspan>
+    <tspan x="245" dy="23">• Resident, purok and official records</tspan>
+  </text>
+  <text class="body" x="635" y="98">
+    <tspan x="635" dy="0">• Certificate and summons printing</tspan>
+    <tspan x="635" dy="23">• Katarungang Pambarangay summons</tspan>
+    <tspan x="635" dy="23">• Equipment borrowing requests</tspan>
+    <tspan x="635" dy="23">• Announcements and resident notices</tspan>
+    <tspan x="635" dy="23">• Reports, activity logs and system settings</tspan>
+  </text>
+  <text class="body" x="1045" y="98">
+    <tspan x="1045" dy="0">• Web portal and Android resident app</tspan>
+    <tspan x="1045" dy="23">• Responsive, accessible user interface</tspan>
+    <tspan x="1045" dy="23">• Authentication, authorization and OTP</tspan>
+    <tspan x="1045" dy="23">• Validated inputs and protected sessions</tspan>
+    <tspan x="1045" dy="23">• Relational database and activity records</tspan>
+  </text>
+
+  <!-- Analysis row -->
+  <text class="title" x="874" y="252">ANALYSIS</text>
+  <rect class="box" x="195" y="268" width="245" height="132" rx="5"/>
+  <rect class="box" x="452" y="268" width="190" height="132" rx="5"/>
+  <rect class="box" x="654" y="268" width="205" height="132" rx="5"/>
+  <rect class="box" x="871" y="268" width="205" height="132" rx="5"/>
+  <rect class="box" x="1088" y="268" width="185" height="132" rx="5"/>
+  <rect class="box" x="1285" y="268" width="240" height="132" rx="5"/>
+  <text class="box-title" x="317" y="294">DATA REQUIREMENTS</text>
+  <text class="small" x="209" y="318">
+    <tspan x="209" dy="0">• Residents and staff</tspan><tspan x="209" dy="18">• Certificates and fees</tspan>
+    <tspan x="209" dy="18">• Requests and payments</tspan><tspan x="209" dy="18">• Officials and puroks</tspan>
+    <tspan x="209" dy="18">• Summons, borrows, notices</tspan>
+  </text>
+  <text class="box-title" x="547" y="325"><tspan x="547">USER &amp; UI</tspan><tspan x="547" dy="23">DESIGN</tspan></text>
+  <text class="box-title" x="756" y="311"><tspan x="756">SECURITY &amp;</tspan><tspan x="756" dy="23">ACCESS</tspan></text>
+  <text class="small" x="670" y="363"><tspan x="670">• Roles, OTP, sessions</tspan></text>
+  <text class="box-title" x="973" y="311"><tspan x="973">DATA STORAGE &amp;</tspan><tspan x="973" dy="23">MANAGEMENT</tspan></text>
+  <text class="small" x="886" y="363"><tspan x="886">• Database, integrity, backup</tspan></text>
+  <text class="box-title" x="1180" y="337">REPORTS</text>
+  <text class="box-title" x="1405" y="337">DOCUMENTATION</text>
+
+  <!-- Flow into design -->
+  <path class="connector" marker-end="url(#down)" d="M317 400 V420"/>
+  <path class="connector" marker-end="url(#down)" d="M547 400 V420"/>
+  <path class="connector" marker-end="url(#down)" d="M756 400 V420"/>
+  <path class="connector" marker-end="url(#down)" d="M973 400 V420"/>
+  <path class="connector" marker-end="url(#down)" d="M1180 400 V420"/>
+  <path class="connector" marker-end="url(#down)" d="M1405 400 V420"/>
+
+  <!-- Design row -->
+  <rect class="box" x="195" y="423" width="245" height="170" rx="5"/>
+  <rect class="box" x="452" y="423" width="190" height="170" rx="5"/>
+  <rect class="box" x="654" y="423" width="205" height="170" rx="5"/>
+  <rect class="box" x="871" y="423" width="205" height="170" rx="5"/>
+  <rect class="box" x="1088" y="423" width="185" height="170" rx="5"/>
+  <rect class="box" x="1285" y="423" width="240" height="170" rx="5"/>
+  <text class="box-title" x="317" y="455">DATA MODELING</text>
+  <text class="small" x="210" y="482"><tspan x="210">• Relational tables</tspan><tspan x="210" dy="21">• Keys and relationships</tspan><tspan x="210" dy="21">• Request data flow</tspan><tspan x="210" dy="21">• Record retention</tspan></text>
+  <text class="box-title" x="547" y="493"><tspan x="547">PROTOTYPE</tspan></text>
+  <text class="small" x="468" y="526"><tspan x="468">• Resident portal</tspan><tspan x="468" dy="21">• Admin dashboard</tspan><tspan x="468" dy="21">• Android screens</tspan></text>
+  <text class="box-title" x="756" y="455"><tspan x="756">ROLE-BASED</tspan><tspan x="756" dy="22">ACCESS CONTROL</tspan></text>
+  <text class="small" x="670" y="506"><tspan x="670">• Resident, staff, admin</tspan><tspan x="670" dy="21">• OTP and permissions</tspan><tspan x="670" dy="21">• Secure records</tspan></text>
+  <text class="box-title" x="973" y="482"><tspan x="973">SYSTEM</tspan><tspan x="973" dy="23">INTEGRATION</tspan></text>
+  <text class="small" x="887" y="535"><tspan x="887">• Laravel web application</tspan><tspan x="887" dy="21">• MySQL and Android app</tspan></text>
+  <text class="box-title" x="1180" y="476"><tspan x="1180">API &amp; PAYMENT</tspan><tspan x="1180" dy="23">INTEGRATION</tspan></text>
+  <text class="small" x="1103" y="530"><tspan x="1103">• JWT mobile endpoints</tspan><tspan x="1103" dy="21">• Payment records</tspan><tspan x="1103" dy="21">• Email notices</tspan></text>
+  <text class="box-title" x="1405" y="482"><tspan x="1405">USER</tspan><tspan x="1405" dy="23">DOCUMENTATION</tspan></text>
+  <text class="small" x="1300" y="535"><tspan x="1300">• Resident guide</tspan><tspan x="1300" dy="21">• Staff and admin guide</tspan></text>
+
+  <!-- Join design workstreams into testing -->
+  <path class="connector" d="M317 593 V619 H1405 V593 M547 593 V619 M756 593 V619 M973 593 V619 M1180 593 V619"/>
+  <path class="connector" marker-end="url(#down)" d="M800 619 V641"/>
+
+  <!-- Testing -->
+  <rect class="box" x="225" y="644" width="1280" height="170" rx="7"/>
+  <line class="rule" x1="865" y1="660" x2="865" y2="798"/>
+  <text class="box-title" x="545" y="681">SYSTEM TESTING</text>
+  <text class="body" x="285" y="719"><tspan x="285">• Request, approval, tracking and printing workflows</tspan><tspan x="285" dy="25">• Account roles, OTP, validation and record integrity</tspan><tspan x="285" dy="25">• Web and Android compatibility</tspan></text>
+  <text class="box-title" x="1185" y="681">USER TESTING</text>
+  <text class="body" x="935" y="719"><tspan x="935">• Residents submit requests and track progress</tspan><tspan x="935" dy="25">• Staff process services, payments and records</tspan><tspan x="935" dy="25">• Admin checks reports and system settings</tspan></text>
+
+  <!-- Testing to deployment -->
+  <path class="connector" d="M545 814 V838 H1185 V814"/>
+  <path class="connector" marker-end="url(#down)" d="M865 838 V859"/>
+  <rect class="box" x="225" y="862" width="1280" height="110" rx="7"/>
+  <text class="box-title" x="865" y="906">IMPLEMENTATION &amp; DEPLOYMENT</text>
+  <text class="body" text-anchor="middle" x="865" y="938">Configure barangay details • Deploy web portal and database • Publish resident app • Train staff</text>
+
+  <!-- Deployment to review -->
+  <path class="connector" marker-end="url(#down)" d="M865 972 V1000"/>
+  <rect class="box" x="225" y="1003" width="1280" height="145" rx="7"/>
+  <text class="box-title" x="865" y="1042">REVIEW &amp; CONTINUOUS IMPROVEMENT</text>
+  <text class="body-bold" text-anchor="middle" x="865" y="1081">USER FEEDBACK   •   SYSTEM EVALUATION   •   ERROR CORRECTION</text>
+  <text class="body-bold" text-anchor="middle" x="865" y="1111">RESULT VALIDATION   •   RECOMMENDED IMPROVEMENTS</text>
+</svg>

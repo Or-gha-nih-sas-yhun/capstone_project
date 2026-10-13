@@ -46,6 +46,12 @@ body {
   line-height: 1.6;
 }
 
+@media (min-width: 769px) {
+  body:not(.native-mobile-app) {
+    zoom: 1.25;
+  }
+}
+
 a {
   color: var(--primary);
   text-decoration: none;

@@ -4,113 +4,123 @@
 
 @section('styles')
 <style>
-  html,
-  body {
-    overflow: hidden;
-  }
-
-  .wrapper,
-  .main-content {
-    height: 100vh;
-    overflow: hidden;
-  }
-
   .page-content {
-    height: calc(100vh - var(--topbar-h));
-    overflow: hidden;
-    padding: 12px 16px;
+    min-height: calc(100vh - var(--topbar-h));
+    height: auto;
+    overflow: visible;
+    padding: 24px clamp(18px, 2.4vw, 36px);
   }
 
   .dashboard-shell {
-    display: grid;
-    grid-template-rows: auto auto 1fr;
-    gap: 10px;
-    height: 100%;
-    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    min-height: calc(100vh - var(--topbar-h) - 48px);
+    max-width: 1760px;
+    margin: 0 auto;
   }
 
   .dashboard-hero {
-    background: #fff;
-    border: 1px solid var(--gray-light);
-    border-left: 6px solid var(--primary);
-    padding: 10px 14px;
-    box-shadow: var(--shadow);
+    background: linear-gradient(115deg, #fff 0%, #fff 72%, #fff7f7 100%);
+    border: 1px solid #e8ebf0;
+    border-left: 5px solid var(--primary);
+    border-radius: 12px;
+    padding: 18px 22px;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, .045);
     display: flex;
     justify-content: space-between;
-    gap: 16px;
+    gap: 24px;
     align-items: center;
   }
 
   .dashboard-hero h1 {
-    font-size: 18px;
+    font-size: clamp(20px, 2vw, 26px);
     margin: 0;
     color: #161616;
+    letter-spacing: -.4px;
   }
 
   .dashboard-hero p {
-    margin-top: 2px;
-    font-size: 12px;
+    margin: 5px 0 0;
+    font-size: 13px;
     color: var(--gray);
   }
 
   .dashboard-stats {
     display: grid;
-    grid-template-columns: repeat(5, minmax(150px, 1fr));
-    gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
   }
 
   .dashboard-stats .stat-card {
+    position: relative;
+    min-width: 0;
+    min-height: 98px;
+    padding: 16px 18px;
+    gap: 14px;
+    border: 1px solid #e8ebf0;
     border-top: 3px solid var(--primary);
-    min-height: 74px;
-    padding: 10px 12px;
-    gap: 10px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(15, 23, 42, .04);
   }
 
   .dashboard-stats .stat-icon {
-    width: 40px;
-    height: 40px;
-    font-size: 16px;
-    border-radius: 8px;
+    width: 46px;
+    height: 46px;
+    font-size: 18px;
+    border-radius: 11px;
   }
 
   .dashboard-stats .stat-value {
-    font-size: 20px;
+    font-size: 24px;
+    line-height: 1.15;
   }
 
   .dashboard-stats .stat-label {
-    font-size: 11px;
+    margin-top: 4px;
+    font-size: 12px;
   }
 
   .dashboard-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(360px, .85fr);
-    gap: 12px;
+    grid-template-columns: minmax(0, 1.55fr) minmax(390px, 1fr);
+    gap: 18px;
     align-items: stretch;
     min-height: 0;
-    overflow: hidden;
   }
 
   .chart-panel {
     display: grid;
-    grid-template-rows: repeat(3, minmax(0, 1fr));
-    gap: 12px;
-    min-height: 0;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: minmax(300px, 1.15fr) minmax(250px, .9fr);
+    gap: 18px;
+    min-width: 0;
+  }
+
+  .chart-panel .chart-primary {
+    grid-column: 1 / -1;
   }
 
   .dashboard-grid .card,
   .chart-panel .card {
     min-height: 0;
+    min-width: 0;
     display: flex;
     flex-direction: column;
+    border: 1px solid #e8ebf0;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, .045);
   }
 
   .dashboard-grid .card-header {
-    padding: 9px 14px;
+    min-height: 56px;
+    padding: 12px 18px;
     flex-shrink: 0;
+    border-bottom-color: #edf0f4;
   }
 
   .dashboard-grid .card-body {
-    padding: 10px 14px;
+    padding: 16px 18px;
     flex: 1;
     min-height: 0;
   }
@@ -119,23 +129,24 @@
     position: relative;
     width: 100%;
     height: 100%;
-    min-height: 90px;
+    min-height: 190px;
   }
 
   .dashboard-table th,
   .dashboard-table td {
-    padding: 8px 10px;
-    font-size: 12px;
+    padding: 12px 14px;
+    font-size: 12.5px;
   }
 
   .dashboard-grid .table-wrapper {
     flex: 1;
     min-height: 0;
-    overflow: hidden;
+    overflow: auto;
   }
 
   .dashboard-grid .table {
     table-layout: fixed;
+    min-width: 560px;
   }
 
   .dashboard-grid .table td,
@@ -146,23 +157,94 @@
   }
 
   .dashboard-grid .badge {
-    font-size: 10px;
-    padding: 3px 7px;
+    font-size: 11px;
+    padding: 5px 9px;
   }
 
   .dashboard-shell .alert {
-    margin-bottom: 0;
-    padding: 8px 12px;
+    margin: 0;
+    padding: 13px 16px;
+    border-radius: 10px;
   }
 
   @media (max-width: 1100px) {
-    .dashboard-stats { grid-template-columns: repeat(2, 1fr); }
-    .dashboard-grid { grid-template-columns: 1fr; }
+    .dashboard-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .dashboard-grid > .card {
+      min-height: 420px;
+    }
   }
 
   @media (max-width: 576px) {
-    .dashboard-stats { grid-template-columns: 1fr; }
-    .dashboard-hero { align-items: flex-start; flex-direction: column; }
+    .page-content {
+      padding: 16px 12px;
+    }
+
+    .dashboard-shell {
+      gap: 14px;
+    }
+
+    .dashboard-hero {
+      align-items: flex-start;
+      flex-direction: column;
+      padding: 16px;
+    }
+
+    .dashboard-hero .btn {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .dashboard-stats {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .dashboard-stats .stat-card {
+      min-height: 84px;
+      padding: 12px;
+      gap: 10px;
+    }
+
+    .dashboard-stats .stat-icon {
+      width: 38px;
+      height: 38px;
+      font-size: 15px;
+    }
+
+    .dashboard-stats .stat-value {
+      font-size: 20px;
+    }
+
+    .dashboard-stats .stat-label {
+      font-size: 10px;
+    }
+
+    .chart-panel {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: repeat(3, minmax(250px, auto));
+      gap: 14px;
+    }
+
+    .chart-panel .chart-primary {
+      grid-column: auto;
+    }
+
+    .dashboard-grid {
+      gap: 14px;
+    }
+
+    .dashboard-grid > .card {
+      min-height: 360px;
+    }
+
+    .dashboard-grid .card-header,
+    .dashboard-grid .card-body {
+      padding-left: 14px;
+      padding-right: 14px;
+    }
   }
 </style>
 @endsection
@@ -235,7 +317,7 @@
 
 <div class="dashboard-grid">
   <div class="chart-panel">
-    <div class="card">
+    <div class="card chart-primary">
       <div class="card-header">
         <h5><i class="fas fa-chart-bar" style="color:var(--primary);margin-right:8px;"></i>Monthly Requests</h5>
       </div>
