@@ -51,21 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// Prevent browser zoom shortcuts for kiosk-style deployment.
-document.addEventListener('wheel', e => {
-  if (e.ctrlKey) e.preventDefault();
-}, { passive: false });
 
-document.addEventListener('keydown', e => {
-  const key = e.key.toLowerCase();
-  if ((e.ctrlKey || e.metaKey) && ['+', '=', '-', '_', '0'].includes(key)) {
-    e.preventDefault();
-  }
-});
-
-document.addEventListener('gesturestart', e => e.preventDefault());
-document.addEventListener('gesturechange', e => e.preventDefault());
-document.addEventListener('gestureend', e => e.preventDefault());
 
 // ── Modal helpers ────────────────────────────────────────
 function openModal(id) {
