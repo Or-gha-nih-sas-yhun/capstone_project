@@ -127,8 +127,7 @@
 
         <div class="form-group">
           <label class="form-label">Body Text</label>
-          <textarea name="body_template" class="form-control" rows="6"
-            placeholder="This is to certify that {{ '{{full_name}}' }}, {{ '{{age}}' }} years of age, a resident of {{ '{{address}}' }}, {{ '{{barangay_label}}' }}, …">{{ old('body_template', $editCertificate ? $editCertificate->body_template : '') }}</textarea>
+          <textarea name="body_template" class="form-control" rows="6" placeholder="This is to certify that &#123;&#123;full_name&#125;&#125;, &#123;&#123;age&#125;&#125; years of age, a resident of &#123;&#123;address&#125;&#125;, &#123;&#123;barangay_label&#125;&#125;, …">{{ old('body_template', $editCertificate ? $editCertificate->body_template : '') }}</textarea>
           <small class="form-text">
             Wrap each paragraph in &lt;p&gt;…&lt;/p&gt;. You may use &lt;strong&gt;, &lt;em&gt;, &lt;u&gt; and &lt;br&gt;.
           </small>
@@ -142,7 +141,7 @@
             style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:4px 14px;margin-top:10px;font-size:12px;">
             @foreach ($tokens as $token => $description)
               <div>
-                <code style="background:#f3f4f6;padding:1px 4px;border-radius:3px;">{{ '{{' . $token . '}}' }}</code>
+                <code style="background:#f3f4f6;padding:1px 4px;border-radius:3px;">&#123;&#123;{{ $token }}&#125;&#125;</code>
                 <span style="color:#6b7280;"> — {{ $description }}</span>
               </div>
             @endforeach

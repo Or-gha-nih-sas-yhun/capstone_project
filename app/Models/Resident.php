@@ -18,12 +18,16 @@ class Resident extends Model
         'birthdate',
         'civil_status',
         'is_pwd',
+        'is_single_parent',
         'nationality',
         'religion',
         'occupation',
         'contact_number',
+        'phone_number',
         'email',
         'address',
+        'latitude',
+        'longitude',
         'purok',
         'voter_status',
         'years_of_residency',
@@ -31,6 +35,13 @@ class Resident extends Model
         'status',
         'archived_at',
         'archived_by'
+    ];
+
+    protected $casts = [
+        'is_pwd'           => 'boolean',
+        'is_single_parent' => 'boolean',
+        'latitude'         => 'float',
+        'longitude'        => 'float',
     ];
 
     public function user()
@@ -45,10 +56,6 @@ class Resident extends Model
 
     public function getFullNameAttribute()
     {
-        // Drop the blank parts before joining: concatenating with spaces and
-        // trimming only the ends left a double space inside the name whenever
-        // a middle name or suffix was missing, which showed up on printed
-        // certificates.
         $parts = array_filter(
             array_map(
                 fn ($part) => trim((string) $part),

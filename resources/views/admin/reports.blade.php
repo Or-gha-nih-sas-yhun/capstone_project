@@ -30,7 +30,7 @@
     <form method="GET" action="{{ route('admin.reports') }}" style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;">
       <div>
         <label class="form-label">Reporting Month</label>
-        <input type="month" name="month" class="form-control" value="{{ $month }}">
+        <input type="month" name="month" class="form-control" value="{{ $monthParam }}">
       </div>
       <button type="submit" class="btn btn-primary"><i class="fas fa-filter"></i> Generate</button>
       <button type="button" class="btn btn-success" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
@@ -49,8 +49,8 @@
       <div style="font-size:14px;">{{ barangay_province_line() }}</div>
       <div style="font-size:14px;">{{ barangay_municipality_line() }}</div>
       <strong style="font-size:18px; display:block; margin-top:2px;">{{ strtoupper(barangay_label()) }}</strong>
-      <h2 style="font-size:18px; margin-top:8px; font-weight:800; color:#111;">MONTHLY TRANSACTIONS REPORT</h2>
-      <p style="font-size:12.5px; color:#4b5563; margin-top:2px;">{{ \Carbon\Carbon::parse($start)->format('F 1, Y') }} to {{ \Carbon\Carbon::parse($start)->format('F t, Y') }}</p>
+      <h2 style="font-size:18px; margin-top:8px; font-weight:800; color:#111;">{{ $reportTitle }}</h2>
+      <p style="font-size:12.5px; color:#4b5563; margin-top:2px;">{{ $reportSubtitle }}</p>
     </div>
     <div class="logo">
       <img src="{{ setting_image('brand.municipality_logo', 'assets/images/municipality_logo.png') }}" alt="Municipality Logo" style="width: 72px; height: 72px; object-fit: contain;">
@@ -64,7 +64,7 @@
     </div>
     <div style="background:#f9fafb; padding:14px; border-radius:8px; border:1px solid #e5e7eb;">
       <span style="font-size:11px; color:#6b7280; text-transform:uppercase; font-weight:700; display:block; margin-bottom:4px;">Total Collections</span>
-      <strong style="font-size:20px; color:#b91c1c;">PHP {{ number_format($totalAmount, 2) }}</strong>
+      <strong style="font-size:20px; color:#b91c1c;">PHP {{ number_format($summary['total_collections'], 2) }}</strong>
     </div>
     <div style="background:#f9fafb; padding:14px; border-radius:8px; border:1px solid #e5e7eb;">
       <span style="font-size:11px; color:#6b7280; text-transform:uppercase; font-weight:700; display:block; margin-bottom:4px;">Report Generated</span>
@@ -133,9 +133,9 @@
             <tr style="border-bottom:1px solid #e5e7eb;">
               <td style="padding:8px; font-weight:600;">{{ $row->name }}</td>
               <td style="padding:8px;">{{ $row->category ?? 'General' }}</td>
-              <td style="padding:8px;">{{ $row->total }}</td>
-              <td style="padding:8px;">{{ $row->approved }}</td>
-              <td style="padding:8px;">{{ $row->released }}</td>
+              <td style="padding:8px;">{{ $row->total_requests }}</td>
+              <td style="padding:8px;">{{ $row->approved_count }}</td>
+              <td style="padding:8px;">{{ $row->issued_count }}</td>
               <td style="padding:8px; font-weight:600; color:var(--primary);">PHP {{ number_format($row->collections, 2) }}</td>
             </tr>
           @endforeach

@@ -18,6 +18,7 @@ use App\Http\Controllers\BulletinController;
 use App\Http\Controllers\BorrowRequestController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\PurokController;
+use App\Http\Controllers\PlotMapController;
 
 $adminDomain = config('barangay.admin_domain', config('app.admin_domain', env('ADMIN_DOMAIN', 'admin.brgypilieclearance.com')));
 
@@ -164,6 +165,12 @@ Route::middleware(['auth', 'role:staff,admin'])->prefix('admin')->name('admin.')
     Route::get('/residents/reject/{id}', [ResidentManagementController::class, 'reject'])->name('residents.reject');
     Route::get('/residents/delete/{id}', [ResidentManagementController::class, 'delete'])->name('residents.delete');
 
+    // Plot Mapping (GIS Spot Map & Decision Support System)
+    Route::get('/plot-map', [PlotMapController::class, 'index'])->name('plot_map');
+    Route::get('/plot-map/data', [PlotMapController::class, 'data'])->name('plot_map.data');
+    Route::get('/plot-map/unmapped', [PlotMapController::class, 'unmappedList'])->name('plot_map.unmapped');
+    Route::post('/plot-map/update-resident', [PlotMapController::class, 'updateResidentLocation'])->name('plot_map.update_resident');
+
     // Certificate Types Management
     Route::get('/certificates', [CertificateController::class, 'index'])->name('certificates');
     Route::post('/certificates/store', [CertificateController::class, 'store'])->name('certificates.store');
@@ -205,7 +212,7 @@ Route::middleware(['auth', 'role:staff,admin'])->prefix('admin')->name('admin.')
 Route::middleware('auth')->get('/print/certificate/{id}', [PrintController::class, 'print'])->name('print.certificate');
 Route::middleware('auth')->get('/print/summon/{id}/{form_type}', [PrintController::class, 'printSummon'])->name('print.summon');
 
-// ── Migration Trigger for hosts without shell access ───────────────
+// ── Migration & Cache Triggers for hosts without shell access ───────────────
 Route::get('/run-migrations', function (\Illuminate\Http\Request $request) {
     $expected = config('barangay.migration_key', env('MIGRATION_KEY', 'pili2026'));
 
@@ -219,3 +226,41 @@ Route::get('/run-migrations', function (\Illuminate\Http\Request $request) {
         return 'Error running migrations: ' . $e->getMessage();
     }
 });
+
+Route::get('/clear-cache', function (\Illuminate\Http\Request $request) {
+    $key = $request->query('key');
+    $envKey = env('MIGRATION_KEY');
+    $isAuthorized = (auth()->check() && in_array(auth()->user()->role, ['admin', 'staff']))
+        || $key === 'pili2026'
+        || ($envKey && $key === $envKey);
+
+    if (! $isAuthorized) {
+        abort(403, 'Unauthorized');
+    }
+
+    try {
+        \Illuminate\Support\Facades\Artisan::call('view:clear');
+        \Illuminate\Support\Facades\Artisan::call('cache:clear');
+        \Illuminate\Support\Facades\Artisan::call('config:clear');
+        \Illuminate\Support\Facades\Artisan::call('route:clear');
+
+        // Manually delete any compiled views in storage/framework/views
+        $viewPath = storage_path('framework/views');
+        $deletedViews = 0;
+        if (is_dir($viewPath)) {
+            foreach (glob($viewPath . '/*.php') as $file) {
+                if (@unlink($file)) {
+                    $deletedViews++;
+                }
+            }
+        }
+
+        return '<h3>All caches and compiled Blade views cleared successfully!</h3>'
+            . '<p>Deleted ' . $deletedViews . ' compiled view files.</p>'
+            . '<pre>' . e(\Illuminate\Support\Facades\Artisan::output()) . '</pre>'
+            . '<br><a href="' . route('admin.certificates') . '" style="padding:8px 16px;background:#2563eb;color:#fff;text-decoration:none;border-radius:4px;">Back to Certificates</a>';
+    } catch (\Exception $e) {
+        return 'Error clearing cache: ' . e($e->getMessage());
+    }
+});
+
