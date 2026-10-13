@@ -18,7 +18,12 @@ class Purok extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'sort_order', 'status'];
+    protected $fillable = ['name', 'sort_order', 'status', 'latitude', 'longitude', 'color'];
+
+    protected $casts = [
+        'latitude'  => 'float',
+        'longitude' => 'float',
+    ];
 
     public function scopeActive($query)
     {

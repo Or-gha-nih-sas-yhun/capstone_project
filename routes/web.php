@@ -18,6 +18,7 @@ use App\Http\Controllers\BulletinController;
 use App\Http\Controllers\BorrowRequestController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\PurokController;
+use App\Http\Controllers\PlotMapController;
 
 $adminDomain = config('barangay.admin_domain', config('app.admin_domain', env('ADMIN_DOMAIN', 'admin.brgypilieclearance.com')));
 
@@ -163,6 +164,12 @@ Route::middleware(['auth', 'role:staff,admin'])->prefix('admin')->name('admin.')
     Route::get('/residents/approve/{id}', [ResidentManagementController::class, 'approve'])->name('residents.approve');
     Route::get('/residents/reject/{id}', [ResidentManagementController::class, 'reject'])->name('residents.reject');
     Route::get('/residents/delete/{id}', [ResidentManagementController::class, 'delete'])->name('residents.delete');
+
+    // Plot Mapping (GIS Spot Map & Decision Support System)
+    Route::get('/plot-map', [PlotMapController::class, 'index'])->name('plot_map');
+    Route::get('/plot-map/data', [PlotMapController::class, 'data'])->name('plot_map.data');
+    Route::get('/plot-map/unmapped', [PlotMapController::class, 'unmappedList'])->name('plot_map.unmapped');
+    Route::post('/plot-map/update-resident', [PlotMapController::class, 'updateResidentLocation'])->name('plot_map.update_resident');
 
     // Certificate Types Management
     Route::get('/certificates', [CertificateController::class, 'index'])->name('certificates');

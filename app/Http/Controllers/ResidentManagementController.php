@@ -74,6 +74,8 @@ class ResidentManagementController extends Controller
             'occupation' => 'nullable|string|max:150',
             'voter_status' => 'required|in:Registered,Not Registered',
             'years_of_residency' => 'required|integer|min:0',
+            'latitude' => 'nullable|numeric|between:-90,90',
+            'longitude' => 'nullable|numeric|between:-180,180',
         ], [
             'first_name.regex' => 'First name must contain only letters, spaces, hyphens, and periods.',
             'last_name.regex' => 'Last name must contain only letters, spaces, hyphens, and periods.',
@@ -83,7 +85,7 @@ class ResidentManagementController extends Controller
         $data = $request->only([
             'first_name', 'middle_name', 'last_name', 'gender', 'birthdate',
             'civil_status', 'is_pwd', 'contact_number', 'email', 'address', 'purok',
-            'occupation', 'voter_status', 'years_of_residency'
+            'occupation', 'voter_status', 'years_of_residency', 'latitude', 'longitude'
         ]);
 
         $id = $request->resident_id;

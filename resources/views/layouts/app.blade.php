@@ -91,6 +91,9 @@
           <a href="{{ route('admin.residents') }}" class="nav-link {{ Route::is('admin.residents') ? 'active' : '' }}">
             <i class="fas fa-users"></i> Residents
           </a>
+          <a href="{{ route('admin.plot_map') }}" class="nav-link {{ Route::is('admin.plot_map') ? 'active' : '' }}">
+            <i class="fas fa-map-location-dot"></i> Plot Mapping
+          </a>
           <a href="{{ route('admin.certificates') }}" class="nav-link {{ Route::is('admin.certificates') ? 'active' : '' }}">
             <i class="fas fa-certificate"></i> Certificate Types
           </a>

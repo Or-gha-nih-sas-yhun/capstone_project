@@ -26,6 +26,8 @@ class Resident extends Model
         'phone_number',
         'email',
         'address',
+        'latitude',
+        'longitude',
         'purok',
         'voter_status',
         'years_of_residency',
@@ -38,6 +40,8 @@ class Resident extends Model
     protected $casts = [
         'is_pwd'           => 'boolean',
         'is_single_parent' => 'boolean',
+        'latitude'         => 'float',
+        'longitude'        => 'float',
     ];
 
     public function user()
