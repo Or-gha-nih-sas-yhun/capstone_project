@@ -127,8 +127,7 @@
 
         <div class="form-group">
           <label class="form-label">Body Text</label>
-          <textarea name="body_template" class="form-control" rows="6"
-            placeholder="This is to certify that {{ '{{full_name}}' }}, {{ '{{age}}' }} years of age, a resident of {{ '{{address}}' }}, {{ '{{barangay_label}}' }}, …">{{ old('body_template', $editCertificate ? $editCertificate->body_template : '') }}</textarea>
+          <textarea name="body_template" class="form-control" rows="6" placeholder="This is to certify that @{{full_name}}, @{{age}} years of age, a resident of @{{address}}, @{{barangay_label}}, …">{{ old('body_template', $editCertificate ? $editCertificate->body_template : '') }}</textarea>
           <small class="form-text">
             Wrap each paragraph in &lt;p&gt;…&lt;/p&gt;. You may use &lt;strong&gt;, &lt;em&gt;, &lt;u&gt; and &lt;br&gt;.
           </small>

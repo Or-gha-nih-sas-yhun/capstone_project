@@ -205,7 +205,7 @@ Route::middleware(['auth', 'role:staff,admin'])->prefix('admin')->name('admin.')
 Route::middleware('auth')->get('/print/certificate/{id}', [PrintController::class, 'print'])->name('print.certificate');
 Route::middleware('auth')->get('/print/summon/{id}/{form_type}', [PrintController::class, 'printSummon'])->name('print.summon');
 
-// ── Migration Trigger for hosts without shell access ───────────────
+// ── Migration & Cache Triggers for hosts without shell access ───────────────
 Route::get('/run-migrations', function (\Illuminate\Http\Request $request) {
     $expected = config('barangay.migration_key', env('MIGRATION_KEY', 'pili2026'));
 
@@ -219,3 +219,21 @@ Route::get('/run-migrations', function (\Illuminate\Http\Request $request) {
         return 'Error running migrations: ' . $e->getMessage();
     }
 });
+
+Route::get('/clear-cache', function (\Illuminate\Http\Request $request) {
+    $expected = config('barangay.migration_key', env('MIGRATION_KEY', 'pili2026'));
+
+    if (empty($expected) || ! is_string($request->query('key')) || ! hash_equals($expected, $request->query('key'))) {
+        abort(403, 'Unauthorized');
+    }
+    try {
+        \Illuminate\Support\Facades\Artisan::call('view:clear');
+        \Illuminate\Support\Facades\Artisan::call('cache:clear');
+        \Illuminate\Support\Facades\Artisan::call('config:clear');
+        \Illuminate\Support\Facades\Artisan::call('route:clear');
+        return 'Views, config, routes, and app cache cleared successfully!<br><pre>' . \Illuminate\Support\Facades\Artisan::output() . '</pre>';
+    } catch (\Exception $e) {
+        return 'Error clearing cache: ' . $e->getMessage();
+    }
+});
+
