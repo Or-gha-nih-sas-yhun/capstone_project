@@ -185,12 +185,6 @@
           <span class="topbar-title">@yield('title', 'Dashboard')</span>
         </div>
         <div class="topbar-right">
-          <!-- System Zoom Controls -->
-          <div class="zoom-controls" style="display:flex; align-items:center; gap: 4px; margin-right: 12px; background: #f3f4f6; padding: 2px 4px; border-radius: 6px; border: 1px solid #e5e7eb;">
-            <button type="button" class="btn btn-sm" onclick="adjustZoom(-0.1)" title="Zoom Out" style="padding: 4px 8px; background:transparent; border:none; color: #374151; cursor:pointer;"><i class="fas fa-search-minus"></i></button>
-            <button type="button" class="btn btn-sm" onclick="resetZoom()" title="Reset Zoom (100%)" style="padding: 4px 8px; background:transparent; border:none; color: #374151; cursor:pointer; font-weight:600; font-size:11px;"><i class="fas fa-undo"></i> 100%</button>
-            <button type="button" class="btn btn-sm" onclick="adjustZoom(0.1)" title="Zoom In" style="padding: 4px 8px; background:transparent; border:none; color: #374151; cursor:pointer;"><i class="fas fa-search-plus"></i></button>
-          </div>
 
           @if(is_mobile_app() && Auth::user()->role === 'resident')
             <button type="button" class="btn btn-outline-secondary btn-sm" title="Log out"
@@ -328,26 +322,11 @@
   <script src="{{ asset('assets/js/main.js') }}"></script>
   @yield('scripts')
 
-  <!-- Zoom Logic -->
   <script>
-    let currentZoom = parseFloat(localStorage.getItem('appZoom')) || 1;
-    function applyZoom() {
-      document.body.style.zoom = currentZoom;
+    if (localStorage.getItem('appZoom')) {
+      localStorage.removeItem('appZoom');
+      document.body.style.zoom = '';
     }
-    function adjustZoom(step) {
-      currentZoom = Math.round((currentZoom + step) * 10) / 10;
-      if (currentZoom < 0.6) currentZoom = 0.6;
-      if (currentZoom > 1.8) currentZoom = 1.8;
-      localStorage.setItem('appZoom', currentZoom);
-      applyZoom();
-    }
-    function resetZoom() {
-      currentZoom = 1;
-      localStorage.setItem('appZoom', currentZoom);
-      applyZoom();
-    }
-    // Apply immediately
-    applyZoom();
   </script>
 
   {{-- Logout Confirmation Modal (works in all WebViews / APK) --}}
