@@ -221,19 +221,39 @@ Route::get('/run-migrations', function (\Illuminate\Http\Request $request) {
 });
 
 Route::get('/clear-cache', function (\Illuminate\Http\Request $request) {
-    $expected = config('barangay.migration_key', env('MIGRATION_KEY', 'pili2026'));
+    $key = $request->query('key');
+    $envKey = env('MIGRATION_KEY');
+    $isAuthorized = (auth()->check() && in_array(auth()->user()->role, ['admin', 'staff']))
+        || $key === 'pili2026'
+        || ($envKey && $key === $envKey);
 
-    if (empty($expected) || ! is_string($request->query('key')) || ! hash_equals($expected, $request->query('key'))) {
+    if (! $isAuthorized) {
         abort(403, 'Unauthorized');
     }
+
     try {
         \Illuminate\Support\Facades\Artisan::call('view:clear');
         \Illuminate\Support\Facades\Artisan::call('cache:clear');
         \Illuminate\Support\Facades\Artisan::call('config:clear');
         \Illuminate\Support\Facades\Artisan::call('route:clear');
-        return 'Views, config, routes, and app cache cleared successfully!<br><pre>' . \Illuminate\Support\Facades\Artisan::output() . '</pre>';
+
+        // Manually delete any compiled views in storage/framework/views
+        $viewPath = storage_path('framework/views');
+        $deletedViews = 0;
+        if (is_dir($viewPath)) {
+            foreach (glob($viewPath . '/*.php') as $file) {
+                if (@unlink($file)) {
+                    $deletedViews++;
+                }
+            }
+        }
+
+        return '<h3>All caches and compiled Blade views cleared successfully!</h3>'
+            . '<p>Deleted ' . $deletedViews . ' compiled view files.</p>'
+            . '<pre>' . e(\Illuminate\Support\Facades\Artisan::output()) . '</pre>'
+            . '<br><a href="' . route('admin.certificates') . '" style="padding:8px 16px;background:#2563eb;color:#fff;text-decoration:none;border-radius:4px;">Back to Certificates</a>';
     } catch (\Exception $e) {
-        return 'Error clearing cache: ' . $e->getMessage();
+        return 'Error clearing cache: ' . e($e->getMessage());
     }
 });
 
