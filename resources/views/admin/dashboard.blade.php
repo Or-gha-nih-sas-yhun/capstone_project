@@ -67,22 +67,15 @@
     background: #fff;
     border-radius: 8px;
     border: 1px solid #e5e7eb;
+    border-top: 3px solid var(--kc, #e5e7eb);
     padding: 6px 10px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     position: relative;
-    overflow: hidden;
     box-shadow: 0 1px 3px rgba(0,0,0,0.03);
     min-width: 0;
-    height: 58px;
-  }
-  .db-kpi-card::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 2.5px;
-    background: var(--kc, #e5e7eb);
+    height: 68px;
   }
   .db-kpi-top { display: flex; justify-content: space-between; align-items: center; }
   .db-kpi-icon {
@@ -92,13 +85,13 @@
     background: var(--ki, #f1f5f9);
     color: var(--kc, #64748b);
   }
-  .db-kpi-badge { font-size: 8.5px; font-weight: 700; padding: 1px 5px; border-radius: 12px; white-space: nowrap; }
+  .db-kpi-badge { font-size: 9px; font-weight: 700; padding: 1px 6px; border-radius: 12px; white-space: nowrap; }
   .db-kpi-badge.up     { background:#f0fdf4; color:#15803d; }
   .db-kpi-badge.down   { background:#fef2f2; color:#b91c1c; }
   .db-kpi-badge.neutral{ background:#f1f5f9; color:#64748b; }
-  .db-kpi-val  { font-size: 16px; font-weight: 800; color: #111; line-height: 1.1; margin-top: 1px; }
-  .db-kpi-lbl  { font-size: 8.5px; color: #6b7280; font-weight: 600; text-transform: uppercase; letter-spacing:.3px; }
-  .db-kpi-sub  { font-size: 8.5px; color: #64748b; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .db-kpi-val  { font-size: 17px; font-weight: 800; color: #111; line-height: 1.1; margin-top: 1px; }
+  .db-kpi-lbl  { font-size: 9px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing:.3px; }
+  .db-kpi-sub  { font-size: 9px; color: #64748b; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
   /* ── Row 2: Main 3-Column Grid ── */
   .db-main {
@@ -316,8 +309,8 @@
     <div style="display:flex;align-items:baseline;justify-content:space-between;">
       <div class="db-kpi-val">{{ number_format($stats['residents'] ?? 0) }}</div>
       <div class="db-kpi-sub">
-        <span style="color:#1d4ed8;font-weight:700;"><i class="fas fa-male"></i> {{ $maleCount }}</span>
-        <span style="color:#db2777;font-weight:700;margin-left:4px;"><i class="fas fa-female"></i> {{ $femaleCount }}</span>
+        <span style="color:#1d4ed8;font-weight:800;font-size:10px;"><i class="fas fa-male"></i> {{ $maleCount }}</span>
+        <span style="color:#db2777;font-weight:800;font-size:10px;margin-left:5px;"><i class="fas fa-female"></i> {{ $femaleCount }}</span>
       </div>
     </div>
   </div>
@@ -328,21 +321,21 @@
       <span class="db-kpi-lbl">Priority Sectors</span>
       <div class="db-kpi-icon"><i class="fas fa-hands-holding-child"></i></div>
     </div>
-    <div style="display:flex;gap:4px;margin-top:2px;">
-      <a href="{{ route('admin.residents', ['classification' => 'pwd']) }}" title="PWD Residents"
-         style="flex:1;background:#f5f3ff;border:1px solid #ede9fe;border-radius:4px;padding:2px 4px;text-align:center;text-decoration:none;">
-        <span style="display:block;font-size:7.5px;color:#7c3aed;font-weight:700;">PWD</span>
-        <strong style="font-size:11px;color:#6d28d9;">{{ $demographics['pwd'] ?? 0 }}</strong>
+    <div style="display:flex;gap:4px;margin-top:auto;">
+      <a href="{{ route('admin.residents', ['classification' => 'pwd']) }}" title="PWD Residents (Click to filter)"
+         style="flex:1;background:#f5f3ff;border:1px solid #ddd6fe;border-radius:5px;padding:2px 3px;text-align:center;text-decoration:none;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+        <span style="display:block;font-size:8px;color:#7c3aed;font-weight:800;letter-spacing:.3px;line-height:1;">PWD</span>
+        <strong style="display:block;font-size:13px;color:#5b21b6;font-weight:800;line-height:1.2;margin-top:1px;">{{ $demographics['pwd'] ?? 0 }}</strong>
       </a>
-      <a href="{{ route('admin.residents', ['classification' => 'senior']) }}" title="Senior Citizens"
-         style="flex:1;background:#fffbeb;border:1px solid #fef3c7;border-radius:4px;padding:2px 4px;text-align:center;text-decoration:none;">
-        <span style="display:block;font-size:7.5px;color:#d97706;font-weight:700;">SNR</span>
-        <strong style="font-size:11px;color:#b45309;">{{ $demographics['senior'] ?? 0 }}</strong>
+      <a href="{{ route('admin.residents', ['classification' => 'senior']) }}" title="Senior Citizens (Click to filter)"
+         style="flex:1;background:#fffbeb;border:1px solid #fde68a;border-radius:5px;padding:2px 3px;text-align:center;text-decoration:none;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+        <span style="display:block;font-size:8px;color:#d97706;font-weight:800;letter-spacing:.3px;line-height:1;">SNR</span>
+        <strong style="display:block;font-size:13px;color:#92400e;font-weight:800;line-height:1.2;margin-top:1px;">{{ $demographics['senior'] ?? 0 }}</strong>
       </a>
-      <a href="{{ route('admin.residents', ['classification' => 'single_parent']) }}" title="Single Parents"
-         style="flex:1;background:#f0fdfa;border:1px solid #ccfbf1;border-radius:4px;padding:2px 4px;text-align:center;text-decoration:none;">
-        <span style="display:block;font-size:7.5px;color:#0d9488;font-weight:700;">SOLO</span>
-        <strong style="font-size:11px;color:#0f766e;">{{ $demographics['single_parent'] ?? 0 }}</strong>
+      <a href="{{ route('admin.residents', ['classification' => 'single_parent']) }}" title="Single Parents (Click to filter)"
+         style="flex:1;background:#f0fdfa;border:1px solid #99f6e4;border-radius:5px;padding:2px 3px;text-align:center;text-decoration:none;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+        <span style="display:block;font-size:8px;color:#0d9488;font-weight:800;letter-spacing:.3px;line-height:1;">SOLO</span>
+        <strong style="display:block;font-size:13px;color:#115e59;font-weight:800;line-height:1.2;margin-top:1px;">{{ $demographics['single_parent'] ?? 0 }}</strong>
       </a>
     </div>
   </div>
