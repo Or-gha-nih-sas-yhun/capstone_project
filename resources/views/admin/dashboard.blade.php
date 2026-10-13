@@ -4,129 +4,18 @@
 
 @section('styles')
 <style>
-<<<<<<< HEAD
-  .page-content {
-    min-height: calc(100vh - var(--topbar-h));
-    height: auto;
-    overflow: visible;
-    padding: 24px clamp(18px, 2.4vw, 36px);
-  }
-
-  .dashboard-shell {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    min-height: calc(100vh - var(--topbar-h) - 48px);
-    max-width: 1760px;
-    margin: 0 auto;
-  }
-
-  .dashboard-hero {
-    background: linear-gradient(115deg, #fff 0%, #fff 72%, #fff7f7 100%);
-    border: 1px solid #e8ebf0;
-    border-left: 5px solid var(--primary);
-    border-radius: 12px;
-    padding: 18px 22px;
-    box-shadow: 0 4px 16px rgba(15, 23, 42, .045);
-    display: flex;
-    justify-content: space-between;
-    gap: 24px;
-    align-items: center;
-  }
-
-  .dashboard-hero h1 {
-    font-size: clamp(20px, 2vw, 26px);
-    margin: 0;
-    color: #161616;
-    letter-spacing: -.4px;
-  }
-
-  .dashboard-hero p {
-    margin: 5px 0 0;
-    font-size: 13px;
-    color: var(--gray);
-  }
-
-  .dashboard-stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 14px;
-  }
-
-  .dashboard-stats .stat-card {
-    position: relative;
-    min-width: 0;
-    min-height: 98px;
-    padding: 16px 18px;
-    gap: 14px;
-    border: 1px solid #e8ebf0;
-    border-top: 3px solid var(--primary);
-    border-radius: 12px;
-    box-shadow: 0 3px 12px rgba(15, 23, 42, .04);
-  }
-
-  .dashboard-stats .stat-icon {
-    width: 46px;
-    height: 46px;
-    font-size: 18px;
-    border-radius: 11px;
-  }
-
-  .dashboard-stats .stat-value {
-    font-size: 24px;
-    line-height: 1.15;
-  }
-
-  .dashboard-stats .stat-label {
-    margin-top: 4px;
-    font-size: 12px;
-  }
-
-  .dashboard-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.55fr) minmax(390px, 1fr);
-    gap: 18px;
-    align-items: stretch;
-    min-height: 0;
-  }
-
-  .chart-panel {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: minmax(300px, 1.15fr) minmax(250px, .9fr);
-    gap: 18px;
-    min-width: 0;
-  }
-
-  .chart-panel .chart-primary {
-    grid-column: 1 / -1;
-  }
-
-  .dashboard-grid .card,
-  .chart-panel .card {
-    min-height: 0;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    border: 1px solid #e8ebf0;
-    border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(15, 23, 42, .045);
-  }
-
-  .dashboard-grid .card-header {
-    min-height: 56px;
-    padding: 12px 18px;
-=======
-  /* ── 1-Page Layout Lock ── */
+  /* Keep the dashboard scrollable at higher browser scales. */
   html, body {
-    overflow: hidden !important;
-    height: 100vh !important;
-    max-height: 100vh !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    height: auto !important;
+    max-height: none !important;
   }
   .wrapper {
-    height: 100vh !important;
-    max-height: 100vh !important;
-    overflow: hidden !important;
+    min-height: 100vh !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
   }
   .sidebar {
     height: 100vh !important;
@@ -134,9 +23,10 @@
     overflow-y: auto !important;
   }
   .main-content {
-    height: 100vh !important;
-    max-height: 100vh !important;
-    overflow: hidden !important;
+    min-height: 100vh !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
     display: flex !important;
     flex-direction: column !important;
   }
@@ -159,14 +49,15 @@
   /* ── Page Content (Fits exact 1 page) ── */
   .page-content {
     padding: 6px 10px !important;
-    overflow: hidden !important;
+    overflow: visible !important;
     display: flex !important;
     flex-direction: column !important;
     gap: 6px !important;
     box-sizing: border-box !important;
     flex: 1 !important;
-    height: calc(100vh - 44px) !important;
-    max-height: calc(100vh - 44px) !important;
+    min-height: calc(100vh - 44px) !important;
+    height: auto !important;
+    max-height: none !important;
   }
 
   /* ── Row 1: Unified Metrics Strip (Single Row of 5 Cards) ── */
@@ -174,30 +65,8 @@
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 6px;
->>>>>>> cc4640ce57fd512525470b9980d35f0afbd49bee
     flex-shrink: 0;
-    border-bottom-color: #edf0f4;
   }
-<<<<<<< HEAD
-
-  .dashboard-grid .card-body {
-    padding: 16px 18px;
-    flex: 1;
-    min-height: 0;
-  }
-
-  .chart-box {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    min-height: 190px;
-  }
-
-  .dashboard-table th,
-  .dashboard-table td {
-    padding: 12px 14px;
-    font-size: 12.5px;
-=======
   .db-kpi-card {
     background: #fff;
     border-radius: 8px;
@@ -219,7 +88,6 @@
     font-size: 10px;
     background: var(--ki, #f1f5f9);
     color: var(--kc, #64748b);
->>>>>>> cc4640ce57fd512525470b9980d35f0afbd49bee
   }
   .db-kpi-badge { font-size: 9px; font-weight: 700; padding: 1px 6px; border-radius: 12px; white-space: nowrap; }
   .db-kpi-badge.up     { background:#f0fdf4; color:#15803d; }
@@ -235,15 +103,15 @@
     display: grid;
     grid-template-columns: 1.15fr 1fr 0.95fr;
     gap: 6px;
-    min-height: 0;
-    overflow: hidden;
+    min-height: 620px;
+    overflow: visible;
   }
   .db-col {
     display: flex;
     flex-direction: column;
     gap: 6px;
     min-height: 0;
-    overflow: hidden;
+    overflow: visible;
     flex: 1;
   }
   .db-card {
@@ -271,14 +139,9 @@
     display: flex;
     flex-direction: column;
     min-height: 0;
-    overflow: auto;
+    overflow: hidden;
   }
 
-<<<<<<< HEAD
-  .dashboard-grid .table {
-    table-layout: fixed;
-    min-width: 560px;
-=======
   /* Clickable Chart Cards */
   .db-chart-card {
     cursor: pointer;
@@ -307,7 +170,6 @@
     background: #eff6ff;
     color: #1d4ed8;
     border-color: #bfdbfe;
->>>>>>> cc4640ce57fd512525470b9980d35f0afbd49bee
   }
 
   /* Chart canvas wrappers */
@@ -374,98 +236,6 @@
     box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.35);
     animation: dbModalIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
-<<<<<<< HEAD
-
-  .dashboard-grid .badge {
-    font-size: 11px;
-    padding: 5px 9px;
-  }
-
-  .dashboard-shell .alert {
-    margin: 0;
-    padding: 13px 16px;
-    border-radius: 10px;
-  }
-
-  @media (max-width: 1100px) {
-    .dashboard-grid {
-      grid-template-columns: minmax(0, 1fr);
-    }
-
-    .dashboard-grid > .card {
-      min-height: 420px;
-    }
-  }
-
-  @media (max-width: 576px) {
-    .page-content {
-      padding: 16px 12px;
-    }
-
-    .dashboard-shell {
-      gap: 14px;
-    }
-
-    .dashboard-hero {
-      align-items: flex-start;
-      flex-direction: column;
-      padding: 16px;
-    }
-
-    .dashboard-hero .btn {
-      width: 100%;
-      justify-content: center;
-    }
-
-    .dashboard-stats {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    .dashboard-stats .stat-card {
-      min-height: 84px;
-      padding: 12px;
-      gap: 10px;
-    }
-
-    .dashboard-stats .stat-icon {
-      width: 38px;
-      height: 38px;
-      font-size: 15px;
-    }
-
-    .dashboard-stats .stat-value {
-      font-size: 20px;
-    }
-
-    .dashboard-stats .stat-label {
-      font-size: 10px;
-    }
-
-    .chart-panel {
-      grid-template-columns: minmax(0, 1fr);
-      grid-template-rows: repeat(3, minmax(250px, auto));
-      gap: 14px;
-    }
-
-    .chart-panel .chart-primary {
-      grid-column: auto;
-    }
-
-    .dashboard-grid {
-      gap: 14px;
-    }
-
-    .dashboard-grid > .card {
-      min-height: 360px;
-    }
-
-    .dashboard-grid .card-header,
-    .dashboard-grid .card-body {
-      padding-left: 14px;
-      padding-right: 14px;
-    }
-=======
   @keyframes dbModalIn {
     from { opacity: 0; transform: scale(0.96) translateY(-8px); }
     to { opacity: 1; transform: scale(1) translateY(0); }
@@ -517,7 +287,27 @@
     color: #0f172a;
     line-height: 1.2;
     margin-top: 2px;
->>>>>>> cc4640ce57fd512525470b9980d35f0afbd49bee
+  }
+
+  @media (max-width: 1100px) {
+    .db-main {
+      grid-template-columns: minmax(0, 1fr);
+      min-height: 1200px;
+    }
+
+    .db-col {
+      min-height: 380px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .db-top-row {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .db-main {
+      min-height: 1500px;
+    }
   }
 </style>
 @endsection
@@ -617,13 +407,6 @@
 
 </div>
 
-<<<<<<< HEAD
-<div class="dashboard-grid">
-  <div class="chart-panel">
-    <div class="card chart-primary">
-      <div class="card-header">
-        <h5><i class="fas fa-chart-bar" style="color:var(--primary);margin-right:8px;"></i>Monthly Requests</h5>
-=======
 {{-- ── ROW 2: Main 3-Column Grid (Charts + Tables) ── --}}
 <div class="db-main">
 
@@ -634,7 +417,6 @@
       <div class="db-card-hd">
         <h5><i class="fas fa-chart-bar" style="color:#b91c1c;margin-right:5px;"></i>Monthly Requests vs Released</h5>
         <span class="db-expand-badge"><i class="fas fa-up-right-and-down-left-from-center"></i> Expand</span>
->>>>>>> cc4640ce57fd512525470b9980d35f0afbd49bee
       </div>
       <div class="db-card-bd">
         <div class="db-chart"><canvas id="monthlyChart"></canvas></div>
