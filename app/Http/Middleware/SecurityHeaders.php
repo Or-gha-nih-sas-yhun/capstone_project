@@ -51,11 +51,13 @@ class SecurityHeaders
 
         // Content-Security-Policy
         // Allows: self, Google reCAPTCHA, Google Fonts, CDN assets, inline scripts (needed for Blade)
-        // Image sources are derived from the deployment's own domain so this
-        // works for any barangay without editing the middleware.
+        // Own-domain hosts are derived from the deployment's config so this
+        // works for any barangay without editing the middleware. The admin
+        // subdomain serves /assets by redirecting to the main domain, so the
+        // main domain must be allowed for scripts, styles and fonts too.
         $domain = config('barangay.domain');
         $adminDomain = config('barangay.admin_domain');
-        $imgHosts = collect([$domain, $adminDomain])
+        $appHosts = collect([$domain, $adminDomain])
             ->filter()
             ->map(fn ($host) => 'https://' . $host)
             ->unique()
@@ -63,12 +65,14 @@ class SecurityHeaders
 
         $csp = implode('; ', [
             "default-src 'self'",
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net",
-            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net",
-            "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:",
-            trim("img-src 'self' data: {$imgHosts} https://www.google.com"),
+            trim("script-src 'self' 'unsafe-inline' 'unsafe-eval' {$appHosts} https://www.google.com https://www.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://unpkg.com"),
+            trim("style-src 'self' 'unsafe-inline' {$appHosts} https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://unpkg.com"),
+            trim("font-src 'self' {$appHosts} https://fonts.gstatic.com https://cdnjs.cloudflare.com data:"),
+            // Map tiles for the admin Plot Mapping page
+            trim("img-src 'self' data: blob: {$appHosts} https://www.google.com https://*.tile.openstreetmap.org https://*.tile.opentopomap.org https://server.arcgisonline.com https://unpkg.com"),
             "frame-src https://www.google.com",
-            "connect-src 'self' https://www.google.com",
+            // PSGC address lookups on the admin Settings page
+            "connect-src 'self' https://www.google.com https://psgc.gitlab.io",
             "object-src 'none'",
             "base-uri 'self'",
             "form-action 'self'",
